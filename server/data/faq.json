@@ -1,0 +1,110 @@
+[
+  {
+    "id": "faq_001",
+    "question": "What is OptionSmart and how does it work?",
+    "answer": "OptionSmart is India's institutional-grade algorithmic options trading platform built on the GoAlgoTrade infrastructure. It is a systematic quantitative investment and algo trading company combining 26 quantitative strategy engines, the GoAlgoTrade execution platform, and broker enablement. Key stats: 1,300+ B2B partners, 99.9% uptime SLA, NSE/BSE/MCX coverage, kill switch under 1 second. SEBI Framework Aligned, NSE & BSE Registered, SEBI Algo Vendor.",
+    "tags": ["overview", "platform", "intro"]
+  },
+  {
+    "id": "faq_002",
+    "question": "What are the capital tiers and minimum investment?",
+    "answer": "OptionSmart has 5 capital tiers:\n1. Core – ₹9 Lakh: Entry-level. Non-Directional Strategy, AI/ML exit intelligence, basic risk management.\n2. Alpha – ₹25 Lakh: All Core + Increased Directional Strategies, Advanced risk controls.\n3. Pro – ₹50 Lakh (Most Popular): All Alpha + Directional and Non-Directional combination, Enhanced Risk Management, Adaptive Strategy Selection.\n4. Elite – ₹1 Crore: All Pro + Custom strategy allocation, Auto Delta Risk Management System.\n5. Institutional – ₹5 Crore+: Full suite of multiple strategies, Adaptive Non-Correlated Strategies, enterprise solutions.",
+    "tags": ["pricing", "tiers", "investment", "capital", "minimum"]
+  },
+  {
+    "id": "faq_003",
+    "question": "What is the minimum capital or minimum investment to start with OptionSmart?",
+    "answer": "The minimum capital to get started with OptionSmart is ₹9 Lakh under the Core tier. This entry-level plan gives you access to Non-Directional Strategies, AI/ML exit intelligence, and basic risk management. The next tier, Alpha, requires ₹25 Lakh. If you're looking for the most popular plan, the Pro tier at ₹50 Lakh includes both Directional and Non-Directional strategies.",
+    "tags": ["minimum", "investment", "capital", "start", "onboarding"]
+  },
+  {
+    "id": "faq_004",
+    "question": "What is the Market Regime Engine?",
+    "answer": "The Market Regime Engine is OptionSmart's proprietary algorithm that continuously analyzes market microstructure and classifies the market into three regimes:\n- Trending: Directional momentum. Algorithms deploy adaptive position sizing and trailing stops.\n- Range-Bound: Mean-reverting market. Theta-harvesting strategies — straddles, strangles. IV Rank is key.\n- Volatility Expansion: Event-driven, high uncertainty. Conservative positioning, wider stops, gamma-aware structures. 15+ volatility filters run continuously.",
+    "tags": ["market regime", "engine", "trending", "range-bound", "volatility"]
+  },
+  {
+    "id": "faq_005",
+    "question": "What are the algo strategies — Saturn, Venus, and Pluto?",
+    "answer": "OptionSmart runs three core algo strategies:\n- Saturn: Theta-decay harvesting. Premium capture in range-bound regimes. Short options structures.\n- Venus: Balanced risk-reward using defined-risk spreads. Adapts across trending and range-bound regimes.\n- Pluto: Aggressive directional strategy for trending regimes. Higher risk-return profile.",
+    "tags": ["saturn", "venus", "pluto", "strategies", "algo"]
+  },
+  {
+    "id": "faq_006",
+    "question": "What risk management safeguards does OptionSmart have?",
+    "answer": "OptionSmart's risk management includes: 2% MTM cap per session (auto-exit on breach), kill switch that squares off the entire portfolio in under 1 second, 15+ volatility filters running continuously, 100% intraday square-off (zero overnight positional risk), and SEBI White Box architecture (fully auditable, documented logic).",
+    "tags": ["risk", "mtm", "kill switch", "stop loss", "safety"]
+  },
+  {
+    "id": "faq_007",
+    "question": "How does AI/ML exit intelligence work?",
+    "answer": "OptionSmart's AI/ML Exit Intelligence is an adaptive exit layer that evaluates in real-time: Price Momentum, Volatility Behavior, Option Premium Dynamics, and Intraday Probability Shifts. Unlike fixed stop-loss systems, it responds to changing probability distributions throughout the session. It is explainable and auditable — not a black box.",
+    "tags": ["ai", "ml", "exit", "intelligence", "stop loss"]
+  },
+  {
+    "id": "faq_008",
+    "question": "Who are the founders of OptionSmart?",
+    "answer": "OptionSmart has two co-founders:\n- Madhur Dahale (Co-Founder): 20+ years in Indian financial markets at Religare, Sharekhan, and Indiabulls. Leads quantitative research and fintech strategy. MBA – Pune University | MDP – IIM Lucknow.\n- Aakash Gupta (Co-Founder): Quant trading specialist from Kotak Securities, PNB Paribas, HDFC Securities. Leads product strategy, GTM, and broker partnerships. MBA Finance – University of Wales, UK (2013).",
+    "tags": ["founders", "madhur", "aakash", "team"]
+  },
+  {
+    "id": "faq_009",
+    "question": "Is OptionSmart SEBI regulated and compliant?",
+    "answer": "Yes. OptionSmart is SEBI Framework Aligned, NSE & BSE Registered, and a SEBI Algo Vendor. The platform uses a White Box architecture — fully auditable with documented logic. This means regulators and clients can trace every decision made by the algorithms.",
+    "tags": ["sebi", "compliance", "regulation", "nse", "bse", "legal"]
+  },
+  {
+    "id": "faq_010",
+    "question": "What is the GoAlgo platform and what does it offer?",
+    "answer": "GoAlgoTrade (goalgotrade.tech) is the execution platform underlying OptionSmart. It offers: Multi-Broker Execution (Zerodha, Angel One, Motilal Oswal, and more), Real-Time Risk Controls, Performance Analytics (PnL, Sharpe ratio, drawdowns, win rate), Smart Order Execution (slippage control, retry logic), Option Greeks & Analytics (live Delta, Gamma, Theta, Vega), Strategy Builder & Backtesting, Compliance-Ready Audit Logs, Multi-Asset Coverage (NSE/BSE/MCX), Broker & Client Enablement.",
+    "tags": ["goalgo", "platform", "execution", "features"]
+  },
+  {
+    "id": "faq_011",
+    "question": "What is the kill switch and how fast does it work?",
+    "answer": "The kill switch is an emergency safety mechanism that instantly squares off the entire portfolio across all positions in under 1 second. It is triggered automatically when the 2% MTM (Mark-to-Market) loss cap is breached, or can be triggered manually by the operator. This ensures complete protection against runaway losses.",
+    "tags": ["kill switch", "emergency", "safety", "mtm", "square off"]
+  },
+  {
+    "id": "faq_012",
+    "question": "How do I get started or sign up with OptionSmart?",
+    "answer": "To get started with OptionSmart, you can talk to an advisor. The minimum capital is ₹9 Lakh for the Core tier. The onboarding process involves selecting a capital tier, completing KYC, and connecting your broker account through the GoAlgoTrade platform. Contact the team via the advisor chat or WhatsApp for personalized onboarding.",
+    "tags": ["get started", "signup", "onboarding", "how to start"]
+  },
+  {
+    "id": "faq_013",
+    "question": "What is IV Rank and how is it used?",
+    "answer": "IV Rank (Implied Volatility Rank) is a measure of current implied volatility relative to its historical range over the past 52 weeks. A high IV Rank (above 50) means options are expensive — ideal for selling strategies like straddles and strangles (Saturn strategy). A low IV Rank means options are cheap — favoring buying strategies. OptionSmart's Market Regime Engine continuously monitors IV Rank as one of its 15+ volatility filters.",
+    "tags": ["iv rank", "implied volatility", "options", "theta"]
+  },
+  {
+    "id": "faq_014",
+    "question": "Does OptionSmart have overnight positions?",
+    "answer": "No. OptionSmart operates 100% intraday square-off — all positions are closed before market close every day. This means zero overnight positional risk. The strategies are purely intraday, eliminating gap risk from overnight news or global events.",
+    "tags": ["overnight", "positional", "intraday", "risk"]
+  },
+  {
+    "id": "faq_015",
+    "question": "What brokers are supported?",
+    "answer": "OptionSmart's GoAlgoTrade platform supports multiple brokers including Zerodha, Angel One, Motilal Oswal, and more. Multi-broker execution is a core feature, allowing clients to connect their existing broker accounts.",
+    "tags": ["brokers", "zerodha", "angel one", "motilal", "connect"]
+  },
+  {
+    "id": "faq_016",
+    "question": "What is theta decay and how does OptionSmart use it?",
+    "answer": "Theta decay (time decay) is the daily erosion in value of options contracts as they approach expiry. OptionSmart's Saturn strategy specifically harvests theta decay by writing (selling) options in range-bound regimes — collecting premium as time erodes option value. This is most effective on Thursday (weekly expiry day) when theta burn accelerates.",
+    "tags": ["theta", "theta decay", "premium", "saturn", "expiry"]
+  },
+  {
+    "id": "faq_017",
+    "question": "What is delta hedging?",
+    "answer": "Delta hedging is a risk management technique used to neutralize the directional exposure (delta) of an options portfolio. OptionSmart's Elite tier includes Auto Delta Risk Management System, which automatically hedges portfolio delta in real-time to maintain market-neutral exposure even as underlying prices move.",
+    "tags": ["delta", "delta hedging", "elite", "risk management"]
+  },
+  {
+    "id": "faq_018",
+    "question": "How many partners does OptionSmart have?",
+    "answer": "OptionSmart has over 1,300 B2B partners. The platform operates with a 99.9% uptime SLA and covers NSE, BSE, and MCX exchanges.",
+    "tags": ["partners", "b2b", "scale", "uptime"]
+  }
+]

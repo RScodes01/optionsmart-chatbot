@@ -1,0 +1,61 @@
+{
+  "folders": [
+    {
+      "name": "🖥 Backend (Express)",
+      "path": "./server"
+    },
+    {
+      "name": "⚛️ Frontend (React + Vite)",
+      "path": "./frontend"
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "files.exclude": {
+      "**/node_modules": true
+    }
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "▶ Start Backend",
+        "program": "${workspaceFolder:🖥 Backend (Express)}/index.js",
+        "envFile": "${workspaceFolder:🖥 Backend (Express)}/.env",
+        "console": "integratedTerminal"
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "🚀 Start Backend",
+        "type": "shell",
+        "command": "node index.js",
+        "options": { "cwd": "${workspaceFolder:🖥 Backend (Express)}" },
+        "group": "build",
+        "presentation": { "panel": "new", "name": "Backend" }
+      },
+      {
+        "label": "⚛️ Start Frontend",
+        "type": "shell",
+        "command": "npm run dev",
+        "options": { "cwd": "${workspaceFolder:⚛️ Frontend (React + Vite)}" },
+        "group": "build",
+        "presentation": { "panel": "new", "name": "Frontend" }
+      },
+      {
+        "label": "🌱 Seed FAQ to Redis",
+        "type": "shell",
+        "command": "node scripts/seedFaq.js",
+        "options": { "cwd": "${workspaceFolder:🖥 Backend (Express)}" },
+        "group": "test",
+        "presentation": { "panel": "new", "name": "Seed FAQ" }
+      }
+    ]
+  }
+}
