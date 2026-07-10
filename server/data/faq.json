@@ -3,7 +3,7 @@
     "id": "faq_001",
     "question": "What is OptionSmart and how does it work?",
     "answer": "OptionSmart is India's institutional-grade algorithmic options trading platform built on the GoAlgoTrade infrastructure. It is a systematic quantitative investment and algo trading company combining 26 quantitative strategy engines, the GoAlgoTrade execution platform, and broker enablement. Key stats: 1,300+ B2B partners, 99.9% uptime SLA, NSE/BSE/MCX coverage, kill switch under 1 second. SEBI Framework Aligned, NSE & BSE Registered, SEBI Algo Vendor.",
-    "tags": ["overview", "platform", "intro"]
+    "tags": ["overview", "platform", "intro", "what is optionsmart"]
   },
   {
     "id": "faq_002",
@@ -30,6 +30,24 @@
     "tags": ["saturn", "venus", "pluto", "strategies", "algo"]
   },
   {
+    "id": "faq_005a",
+    "question": "What is the Pluto strategy and how does it work?",
+    "answer": "Pluto is OptionSmart's most aggressive directional algo strategy, specifically designed for trending market regimes. It targets high momentum moves in the market with a higher risk-return profile compared to Saturn and Venus. Pluto is deployed when the Market Regime Engine detects a strong trending regime — directional momentum with clear price direction. It uses adaptive position sizing and trailing stops to capture large directional moves. Due to its aggressive nature, Pluto is best suited for experienced traders who understand directional risk. It is available from the Alpha tier (₹25 Lakh) and above.",
+    "tags": ["pluto", "directional", "trending", "aggressive", "strategy", "momentum"]
+  },
+  {
+    "id": "faq_005b",
+    "question": "What is the Saturn strategy and how does it work?",
+    "answer": "Saturn is OptionSmart's theta-decay harvesting strategy. It is designed for range-bound market regimes where IV Rank is high and options premiums are elevated. Saturn writes (sells) short options structures — primarily straddles and strangles — and collects premium as time erodes option value (theta decay). It is most effective on Thursdays (weekly expiry day) when theta burn accelerates significantly. Saturn is the most conservative of the three strategies and is available from the Core tier (₹9 Lakh). Key metric: IV Rank above 50 triggers Saturn deployment.",
+    "tags": ["saturn", "theta", "premium", "range-bound", "straddle", "strangle", "strategy", "expiry"]
+  },
+  {
+    "id": "faq_005c",
+    "question": "What is the Venus strategy and how does it work?",
+    "answer": "Venus is OptionSmart's balanced risk-reward strategy. It uses defined-risk spreads (such as bull/bear spreads and iron condors) that cap both maximum profit and maximum loss. Venus is versatile — it adapts across both trending and range-bound market regimes, making it the most flexible of the three strategies. It offers a middle ground between Saturn's conservative theta-harvesting and Pluto's aggressive directional trading. Venus is available from the Alpha tier (₹25 Lakh) and is often recommended alongside Saturn for a balanced portfolio approach.",
+    "tags": ["venus", "spreads", "defined-risk", "balanced", "iron condor", "strategy", "flexible"]
+  },
+  {
     "id": "faq_006",
     "question": "What risk management safeguards does OptionSmart have?",
     "answer": "OptionSmart's risk management includes: 2% MTM cap per session (auto-exit on breach), kill switch that squares off the entire portfolio in under 1 second, 15+ volatility filters running continuously, 100% intraday square-off (zero overnight positional risk), and SEBI White Box architecture (fully auditable, documented logic).",
@@ -46,6 +64,18 @@
     "question": "Who are the founders of OptionSmart?",
     "answer": "OptionSmart has two co-founders:\n- Madhur Dahale (Co-Founder): 20+ years in Indian financial markets at Religare, Sharekhan, and Indiabulls. Leads quantitative research and fintech strategy. MBA – Pune University | MDP – IIM Lucknow.\n- Aakash Gupta (Co-Founder): Quant trading specialist from Kotak Securities, PNB Paribas, HDFC Securities. Leads product strategy, GTM, and broker partnerships. MBA Finance – University of Wales, UK (2013).",
     "tags": ["founders", "madhur", "aakash", "team"]
+  },
+  {
+    "id": "faq_008a",
+    "question": "Who is Madhur Dahale?",
+    "answer": "Madhur Dahale is the Co-Founder of OptionSmart with 20+ years of experience in Indian financial markets. He has worked at Religare, Sharekhan, and Indiabulls. He leads quantitative research and fintech strategy at OptionSmart. Educational background: MBA from Pune University and MDP (Management Development Programme) from IIM Lucknow.",
+    "tags": ["madhur", "dahale", "founder", "co-founder", "team"]
+  },
+  {
+    "id": "faq_008b",
+    "question": "Who is Aakash Gupta?",
+    "answer": "Aakash Gupta is the Co-Founder of OptionSmart and a quant trading specialist. He has worked at Kotak Securities, PNB Paribas, and HDFC Securities. At OptionSmart, he leads product strategy, go-to-market (GTM), and broker partnerships. Educational background: MBA Finance from University of Wales, UK (2013).",
+    "tags": ["aakash", "gupta", "founder", "co-founder", "team"]
   },
   {
     "id": "faq_009",
@@ -106,5 +136,137 @@
     "question": "How many partners does OptionSmart have?",
     "answer": "OptionSmart has over 1,300 B2B partners. The platform operates with a 99.9% uptime SLA and covers NSE, BSE, and MCX exchanges.",
     "tags": ["partners", "b2b", "scale", "uptime"]
+  },
+  {
+    "id": "faq_019",
+    "question": "What is the Core tier and what does ₹9 Lakh give me?",
+    "answer": "The Core tier is OptionSmart's entry-level plan at ₹9 Lakh minimum capital. It includes: Non-Directional Strategy access (Saturn), AI/ML Exit Intelligence, Basic Risk Management with 2% MTM cap per session, and 100% intraday square-off (zero overnight risk). It is ideal for traders who are new to algo trading and want to start with a conservative, theta-harvesting approach.",
+    "tags": ["core", "tier", "9 lakh", "entry level", "non-directional"]
+  },
+  {
+    "id": "faq_020",
+    "question": "What is the Alpha tier and what does ₹25 Lakh give me?",
+    "answer": "The Alpha tier at ₹25 Lakh includes everything in Core plus: Increased Directional Strategies (Venus and Pluto added), Advanced risk controls, and access to more strategy combinations. Alpha is suited for traders who want both non-directional income (Saturn) and directional upside (Pluto/Venus) in a single managed account.",
+    "tags": ["alpha", "tier", "25 lakh", "directional", "strategies"]
+  },
+  {
+    "id": "faq_021",
+    "question": "What is the Pro tier and what does ₹50 Lakh give me?",
+    "answer": "The Pro tier at ₹50 Lakh is OptionSmart's most popular plan. It includes everything in Alpha plus: Directional and Non-Directional strategy combination running simultaneously, Enhanced Risk Management, and Adaptive Strategy Selection (the Market Regime Engine dynamically switches between Saturn, Venus, and Pluto based on live conditions). The Pro tier is the best balance of performance and risk for serious traders.",
+    "tags": ["pro", "tier", "50 lakh", "popular", "adaptive", "strategy selection"]
+  },
+  {
+    "id": "faq_022",
+    "question": "What is the Elite tier and what does ₹1 Crore give me?",
+    "answer": "The Elite tier at ₹1 Crore includes everything in Pro plus: Custom strategy allocation tailored to your risk preferences, Auto Delta Risk Management System (automatic delta-neutral hedging in real-time), and priority support. Elite is for high-net-worth individuals (HNIs) who want institutional-grade control and custom risk configuration.",
+    "tags": ["elite", "tier", "1 crore", "hni", "custom", "delta", "risk management"]
+  },
+  {
+    "id": "faq_023",
+    "question": "What is the Institutional tier and what does ₹5 Crore give me?",
+    "answer": "The Institutional tier starts at ₹5 Crore and is OptionSmart's highest offering. It includes: Full suite of all strategies running simultaneously, Adaptive Non-Correlated Strategies (portfolio-level diversification across regimes), enterprise-grade solutions, dedicated relationship manager, custom API integrations, and white-label options for B2B partners. Designed for family offices, corporates, and proprietary trading desks.",
+    "tags": ["institutional", "tier", "5 crore", "enterprise", "b2b", "white label", "family office"]
+  },
+  {
+    "id": "faq_024",
+    "question": "What is the MTM cap and how does it protect me?",
+    "answer": "MTM (Mark-to-Market) cap is a daily loss limit set at 2% of your deployed capital per trading session. If the live portfolio loss crosses this threshold at any point during the session, the system automatically triggers the kill switch — squaring off all positions instantly in under 1 second. This ensures you never lose more than 2% on any single trading day, providing a hard floor on daily drawdown.",
+    "tags": ["mtm", "mark to market", "loss limit", "drawdown", "protection", "2%"]
+  },
+  {
+    "id": "faq_025",
+    "question": "What is the uptime guarantee of OptionSmart?",
+    "answer": "OptionSmart guarantees 99.9% uptime SLA on the GoAlgoTrade execution platform. This means less than 8.7 hours of downtime per year. The infrastructure is designed for zero-latency order execution with smart retry logic to handle broker-side failures without missing trades.",
+    "tags": ["uptime", "sla", "99.9%", "reliability", "infrastructure"]
+  },
+  {
+    "id": "faq_026",
+    "question": "What exchanges does OptionSmart trade on?",
+    "answer": "OptionSmart trades across NSE (National Stock Exchange), BSE (Bombay Stock Exchange), and MCX (Multi Commodity Exchange). The GoAlgoTrade platform provides multi-asset coverage, enabling strategies across equity derivatives (F&O), commodity derivatives, and currency derivatives.",
+    "tags": ["nse", "bse", "mcx", "exchanges", "f&o", "equity", "commodity"]
+  },
+  {
+    "id": "faq_027",
+    "question": "How does the Market Regime Engine decide which strategy to use?",
+    "answer": "The Market Regime Engine continuously analyzes multiple market microstructure signals and classifies the current regime as Trending, Range-Bound, or Volatility Expansion. Based on this classification:\n- Trending regime → Pluto (directional) is activated, Venus may run alongside.\n- Range-Bound regime → Saturn (theta harvesting) is primary, Venus as supplementary.\n- Volatility Expansion → Conservative positioning: Saturn and Venus with wider stops, Pluto is paused.\nThis automatic switching happens in real-time throughout the trading session.",
+    "tags": ["regime", "engine", "strategy selection", "adaptive", "trending", "range-bound", "volatility expansion"]
+  },
+  {
+    "id": "faq_028",
+    "question": "What is the difference between directional and non-directional strategies?",
+    "answer": "Non-Directional strategies (like Saturn) do not bet on market direction. They profit from time decay and range-bound price action — ideal when the market moves sideways. Directional strategies (like Pluto) take a view on market direction — they profit when the market moves strongly up or down. Venus is a hybrid — it uses defined-risk spreads that can be structured for either directional or non-directional outcomes. OptionSmart's Pro tier and above run both types simultaneously for diversified returns.",
+    "tags": ["directional", "non-directional", "strategy", "difference", "saturn", "pluto", "venus"]
+  },
+  {
+    "id": "faq_029",
+    "question": "Is there a lock-in period or can I withdraw anytime?",
+    "answer": "OptionSmart operates intraday strategies with 100% square-off every day, meaning there are no open positions overnight. Since the capital remains in your own broker account at all times, you retain full control and can withdraw at any time. There is no lock-in period imposed by OptionSmart. The capital is never transferred to or held by OptionSmart — it stays in your personal demat/trading account.",
+    "tags": ["lock-in", "withdraw", "withdrawal", "capital", "freedom", "broker account"]
+  },
+  {
+    "id": "faq_030",
+    "question": "Is my capital safe with OptionSmart? Who holds my money?",
+    "answer": "Your capital is always held in your own broker account (Zerodha, Angel One, Motilal Oswal, etc.). OptionSmart never takes custody of your funds. The algo strategies run via API access to your broker account — they can place and exit trades, but cannot transfer money out. Your capital is protected by your broker's SEBI-regulated framework and insurance (up to ₹15 Lakh by SEBI's Investor Protection Fund).",
+    "tags": ["safety", "capital safe", "money", "broker account", "custody", "sebi", "investor protection"]
+  },
+  {
+    "id": "faq_031",
+    "question": "What returns can I expect from OptionSmart?",
+    "answer": "OptionSmart does not guarantee returns as per SEBI regulations. However, the strategies are designed to generate consistent risk-adjusted returns through systematic, rule-based execution. The Saturn strategy targets steady theta income. Pluto targets larger gains in trending markets. Past performance data is available on request for each strategy. Risk: all algo trading involves market risk and capital can be at risk.",
+    "tags": ["returns", "performance", "profit", "income", "expected returns", "consistent"]
+  },
+  {
+    "id": "faq_032",
+    "question": "What is Sharpe ratio and does OptionSmart track it?",
+    "answer": "The Sharpe ratio measures risk-adjusted return — how much return you earn per unit of risk taken. A Sharpe ratio above 1 is considered good; above 2 is excellent. OptionSmart's GoAlgoTrade platform tracks Sharpe ratio in its Performance Analytics dashboard alongside PnL, drawdowns, and win rate. This allows clients to evaluate strategy efficiency, not just absolute returns.",
+    "tags": ["sharpe ratio", "risk-adjusted", "performance", "analytics", "drawdown", "win rate"]
+  },
+  {
+    "id": "faq_033",
+    "question": "What is backtesting and does OptionSmart offer it?",
+    "answer": "Backtesting is the process of testing a trading strategy on historical market data to evaluate its past performance before deploying real capital. GoAlgoTrade includes a Strategy Builder & Backtesting module that allows OptionSmart clients and B2B partners to test and validate strategies on NSE/BSE/MCX historical data. This is critical for verifying strategy logic before live deployment.",
+    "tags": ["backtesting", "historical", "strategy builder", "testing", "validation"]
+  },
+  {
+    "id": "faq_034",
+    "question": "What are option Greeks and does OptionSmart monitor them?",
+    "answer": "Option Greeks measure the sensitivity of an option's price to various factors:\n- Delta: sensitivity to underlying price movement.\n- Gamma: rate of change of delta.\n- Theta: daily time decay (most important for Saturn strategy).\n- Vega: sensitivity to implied volatility changes.\nGoAlgoTrade provides live Delta, Gamma, Theta, and Vega analytics for all open positions. The AI/ML exit intelligence uses these Greeks in real-time to make exit decisions.",
+    "tags": ["greeks", "delta", "gamma", "theta", "vega", "options", "analytics"]
+  },
+  {
+    "id": "faq_035",
+    "question": "How does OptionSmart handle F&O expiry?",
+    "answer": "F&O expiry — especially weekly Nifty/BankNifty expiry on Thursdays — is a high-priority event for OptionSmart. On expiry days, the Saturn strategy benefits most from accelerated theta burn (options lose value rapidly in final hours). The Market Regime Engine applies additional volatility filters on expiry days to manage IV crush risk. All positions are squared off before market close regardless — zero expiry-day overnight exposure.",
+    "tags": ["expiry", "f&o", "weekly expiry", "thursday", "nifty", "banknifty", "theta burn", "iv crush"]
+  },
+  {
+    "id": "faq_036",
+    "question": "Can I use OptionSmart with Zerodha?",
+    "answer": "Yes. Zerodha is one of the primary supported brokers on the GoAlgoTrade platform. You connect your existing Zerodha account via the Kite API. Once connected, OptionSmart's algorithms can place, monitor, and exit trades in your Zerodha account automatically. Your funds stay in your Zerodha account at all times.",
+    "tags": ["zerodha", "kite", "api", "broker", "connect", "integration"]
+  },
+  {
+    "id": "faq_037",
+    "question": "What is White Box architecture?",
+    "answer": "White Box architecture means all algorithmic decision logic is fully transparent, documented, and auditable — the opposite of a black box. Every trade decision made by OptionSmart's algorithms can be traced, explained, and reviewed by clients and regulators. SEBI mandates White Box architecture for registered algo vendors. This ensures accountability, compliance, and client trust.",
+    "tags": ["white box", "transparent", "auditable", "sebi", "black box", "compliance", "logic"]
+  },
+  {
+    "id": "faq_038",
+    "question": "How many strategies does OptionSmart run simultaneously?",
+    "answer": "OptionSmart has 26 quantitative strategy engines in total. The three primary named strategies are Saturn, Venus, and Pluto. Depending on your capital tier, multiple strategies run simultaneously — the Pro tier and above run both Directional and Non-Directional strategies together. The Market Regime Engine dynamically allocates capital between strategies based on live market conditions.",
+    "tags": ["26 strategies", "simultaneous", "quantitative", "engines", "multiple strategies"]
+  },
+  {
+    "id": "faq_039",
+    "question": "What is smart order execution?",
+    "answer": "Smart Order Execution is GoAlgoTrade's order management layer that minimizes slippage (the difference between expected and actual execution price). It includes: intelligent order routing, retry logic for failed orders, partial fill handling, and latency optimization. This ensures trade execution as close to the algorithm's target price as possible — critical for options strategies where slippage directly impacts profitability.",
+    "tags": ["smart order", "execution", "slippage", "order routing", "latency", "retry"]
+  },
+  {
+    "id": "faq_040",
+    "question": "Does OptionSmart work for B2B partners or sub-brokers?",
+    "answer": "Yes. OptionSmart has over 1,300 B2B partners including sub-brokers, financial advisors, and wealth managers. The GoAlgoTrade platform offers Broker & Client Enablement tools and white-label options for Institutional tier clients. B2B partners can offer OptionSmart's algo strategies to their own clients under their brand, with full compliance and audit trails.",
+    "tags": ["b2b", "sub-broker", "partner", "white label", "wealth manager", "financial advisor"]
   }
 ]

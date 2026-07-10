@@ -26,6 +26,50 @@ function StrategyBadge({ cls, icon, name }) {
   );
 }
 
+function MarketMorningBrief({ brief }) {
+  if (!brief) return null;
+  return (
+    <div className="os-market-brief">
+      <div className="os-market-brief-header">
+        <span className="os-market-brief-flag">🇮🇳</span>
+        <span className="os-market-brief-title">Market Morning</span>
+      </div>
+
+      {brief.headline && (
+        <div className="os-market-brief-headline">{brief.headline}</div>
+      )}
+
+      {brief.events && brief.events.length > 0 && (
+        <div className="os-market-brief-events">
+          {brief.events.map((ev, i) => (
+            <div key={i} className="os-market-brief-event">
+              <div className="os-market-brief-event-title">
+                <span className="os-market-brief-pin">📌</span>
+                {ev.title}
+              </div>
+              <div className="os-market-brief-event-detail">{ev.detail}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {brief.technicals && (
+        <div className="os-market-brief-section">
+          <div className="os-market-brief-section-label">📈 Technical Picture</div>
+          <div className="os-market-brief-section-text">{brief.technicals}</div>
+        </div>
+      )}
+
+      {brief.strategy && (
+        <div className="os-market-brief-section os-market-brief-section--strategy">
+          <div className="os-market-brief-section-label">⚡ Today's Strategy</div>
+          <div className="os-market-brief-section-text">{brief.strategy}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function CoachContent({ data, dateStr, dayName }) {
   const riskClass = data.riskLevel || 'medium';
   const riskLabel = { low: 'Low Risk', medium: 'Medium Risk', high: 'High Risk' }[riskClass];
@@ -106,6 +150,9 @@ function CoachContent({ data, dateStr, dayName }) {
         <div className="os-coach-card-title">⚠ Watch Out For</div>
         <div className="os-coach-insight os-coach-insight--warn">{data.watchOut}</div>
       </div>
+
+      {/* Market Morning Brief */}
+      <MarketMorningBrief brief={data.marketBrief} />
     </div>
   );
 }

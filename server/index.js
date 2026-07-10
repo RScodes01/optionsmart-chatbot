@@ -38,6 +38,10 @@ const zerodhaRoutes = require('./routes/zerodha');
 const { loadEnvToken } = require('./routes/zerodha');
 const { warmInstrumentsCache } = require('./services/marketService');
 const journalRoutes = require('./routes/journal');
+const ragService         = require('./services/ragService');
+const faqDoc             = require('./models/faqDocument');
+const faqs               = require('./data/faq.json');
+const { startScheduler, runRefresh, RAG_STATUS_KEY, RAG_STATUS_TTL } = require('./services/refreshScheduler');
 
 app.use('/api/chat',    chatRoutes);
 app.use('/api/zerodha', zerodhaRoutes);
@@ -66,6 +70,30 @@ async function start() {
     await mongoClient.connect();
     app.locals.db = mongoClient.db(process.env.MONGO_DB_NAME || 'optionsmart_chat');
     logger.info('[MongoDB] Connected ✓');
+
+    // ── RAG Initialisation ──────────────────────────────────────────────
+    // Runs in background — server starts immediately, seeding/scraping happens async.
+    (async () => {
+      try {
+        const existing = await faqDoc.count(app.locals.db);
+
+        if (existing === 0) {
+          // Fresh install or post-midnight clear: run full scrape → fallback to FAQ
+          logger.info('[RAG] faq_documents is empty — running initial knowledge base load…');
+          logger.info('[RAG] (First run may download the ~25 MB MiniLM model — allow ~30 s)');
+          await runRefresh(app.locals.db, redis);
+        } else {
+          // Collection already has data: mark ready and let the cron handle nightly refresh
+          logger.info(`[RAG] MongoDB ready ✓  (${existing} docs indexed)`);
+          await redis.setEx(RAG_STATUS_KEY, RAG_STATUS_TTL, 'ready');
+        }
+      } catch (initErr) {
+        logger.error('[RAG] Initialisation failed:', initErr.message);
+      }
+    })();
+
+    // ── Daily Midnight Refresh Scheduler ───────────────────────────────────
+    startScheduler(app.locals.db, redis);
 
     app.listen(PORT, () => {
       logger.info(`[Server] OptionSmart Chatbot API running on http://localhost:${PORT}`);

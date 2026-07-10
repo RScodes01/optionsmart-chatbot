@@ -231,14 +231,53 @@
 .os-bubble { padding:12px 15px; border-radius:12px; font-size:14px; line-height:1.68; word-break:break-word; }
 .os-bubble--bot  { background:var(--os-surface); border:1px solid var(--os-border); border-top-left-radius:3px; }
 .os-bubble--user { background:var(--os-accent); color:#fff; border-top-right-radius:3px; }
-.os-bubble--bot strong,.os-bubble-h3 { color:var(--os-accent2); }
-.os-bubble-p { margin-bottom:7px; }
+
+/* ── Typography ── */
+.os-bubble--bot strong { color:var(--os-accent2); }
+.os-bubble-p  { margin-bottom:7px; }
 .os-bubble-p:last-child { margin-bottom:0; }
-.os-bubble-ul { padding-left:17px; }
-.os-bubble-ul li { margin-bottom:4px; }
-.os-bubble-h3 { font-size:13.5px; font-weight:700; margin:10px 0 5px; }
+.os-bubble-h2 { font-size:15px; font-weight:700; color:#fff; margin:14px 0 6px; border-bottom:1px solid var(--os-border); padding-bottom:5px; }
+.os-bubble-h3 { font-size:13.5px; font-weight:700; color:var(--os-accent2); margin:12px 0 5px; }
+.os-bubble-h4 { font-size:12.5px; font-weight:700; color:var(--os-text); margin:10px 0 4px; text-transform:uppercase; letter-spacing:.04em; opacity:.85; }
+
+/* ── Lists ── */
+.os-bubble-ul { padding-left:18px; margin:6px 0 10px; list-style:none; }
+.os-bubble-ul li { margin-bottom:5px; position:relative; padding-left:4px; }
+.os-bubble-ul li::before { content:'▸'; position:absolute; left:-14px; color:var(--os-accent2); font-size:11px; top:2px; }
+.os-bubble-ol { padding-left:20px; margin:6px 0 10px; counter-reset:ol-counter; list-style:none; }
+.os-bubble-ol li { margin-bottom:5px; position:relative; counter-increment:ol-counter; padding-left:4px; }
+.os-bubble-ol li::before { content:counter(ol-counter) '.'; position:absolute; left:-18px; color:var(--os-accent2); font-size:12px; font-weight:700; }
+
+/* ── Tables ── */
+.os-table-wrap { overflow-x:auto; margin:10px 0; border-radius:10px; border:1px solid var(--os-border2); }
+.os-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+.os-table th { background:rgba(99,102,241,0.15); color:#c7d2fe; font-weight:700; padding:9px 13px; text-align:left; font-size:11px; letter-spacing:.05em; text-transform:uppercase; border-bottom:1px solid var(--os-border2); white-space:nowrap; }
+.os-table td { padding:8px 13px; border-bottom:1px solid rgba(255,255,255,0.04); color:var(--os-text); vertical-align:top; }
+.os-table tr:last-child td { border-bottom:none; }
+.os-table tr:nth-child(even) td { background:rgba(255,255,255,0.025); }
+.os-table tr:hover td { background:rgba(99,102,241,0.06); }
+
+/* ── Code ── */
+.os-code-block { background:#0d1117; border:1px solid var(--os-border2); border-radius:10px; overflow:hidden; margin:10px 0; }
+.os-code-lang { background:rgba(255,255,255,0.05); padding:5px 12px; font-size:10px; font-weight:700; letter-spacing:.08em; color:var(--os-faint); text-transform:uppercase; border-bottom:1px solid var(--os-border2); }
+.os-code-block pre { margin:0; padding:12px 14px; overflow-x:auto; }
+.os-code-block code { font-family:'JetBrains Mono','Fira Code',monospace; font-size:12px; color:#e6edf3; line-height:1.65; }
+.os-inline-code { background:rgba(99,102,241,0.15); color:#c7d2fe; font-family:'JetBrains Mono','Fira Code',monospace; font-size:12px; padding:1px 6px; border-radius:4px; border:1px solid rgba(99,102,241,0.25); }
+
+/* ── Blockquote ── */
+.os-blockquote { border-left:3px solid var(--os-accent2); margin:8px 0; padding:8px 12px; background:rgba(34,197,94,0.05); border-radius:0 8px 8px 0; color:var(--os-text); font-style:italic; font-size:13px; }
+
+/* ── Horizontal rule ── */
+.os-hr { border:none; border-top:1px solid var(--os-border2); margin:12px 0; }
+
+/* ── Price & percentage highlights ── */
+.os-highlight-price { color:#fbbf24; font-weight:700; }
+.os-pct-up   { color:var(--os-accent2); font-weight:700; }
+.os-pct-down { color:#f87171; font-weight:700; }
+
 .os-cursor { display:inline-block; animation:os-blink 1s step-start infinite; }
 @keyframes os-blink { 50% { opacity:0; } }
+
 
 .os-msg-meta { display:flex; align-items:center; gap:8px; opacity:0; transition:opacity .2s; }
 .os-msg--bot:hover .os-msg-meta { opacity:1; }
@@ -386,6 +425,24 @@
 .os-risk-badge--low    { background:rgba(34,197,94,0.1); color:var(--os-accent2); border:1px solid rgba(34,197,94,0.25); }
 .os-risk-badge--medium { background:rgba(251,191,36,0.1); color:#fbbf24; border:1px solid rgba(251,191,36,0.25); }
 .os-risk-badge--high   { background:rgba(239,68,68,0.1); color:#f87171; border:1px solid rgba(239,68,68,0.25); }
+
+/* ── MARKET MORNING BRIEF ────────────────────── */
+.os-market-brief { background:var(--os-surface2); border:1px solid rgba(99,102,241,0.25); border-radius:14px; padding:16px; display:flex; flex-direction:column; gap:14px; margin-top:4px; }
+.os-market-brief-header { display:flex; align-items:center; gap:8px; }
+.os-market-brief-flag { font-size:20px; line-height:1; }
+.os-market-brief-title { font-size:13px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#a5b4fc; }
+.os-market-brief-headline { font-size:14px; font-weight:700; color:#fff; line-height:1.5; padding:10px 12px; background:rgba(99,102,241,0.1); border-left:3px solid #6366f1; border-radius:0 8px 8px 0; }
+.os-market-brief-events { display:flex; flex-direction:column; gap:10px; }
+.os-market-brief-event { padding:10px 12px; background:var(--os-bg); border-radius:10px; border:1px solid var(--os-border); }
+.os-market-brief-event-title { display:flex; align-items:flex-start; gap:6px; font-size:13px; font-weight:700; color:#e2e8f0; margin-bottom:5px; line-height:1.4; }
+.os-market-brief-pin { font-size:12px; flex-shrink:0; margin-top:1px; }
+.os-market-brief-event-detail { font-size:12px; color:var(--os-muted); line-height:1.65; padding-left:18px; }
+.os-market-brief-section { padding:10px 12px; border-radius:10px; background:var(--os-bg); border:1px solid var(--os-border); }
+.os-market-brief-section--strategy { border-color:rgba(34,197,94,0.2); background:rgba(34,197,94,0.04); }
+.os-market-brief-section-label { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--os-faint); margin-bottom:6px; }
+.os-market-brief-section--strategy .os-market-brief-section-label { color:rgba(34,197,94,0.8); }
+.os-market-brief-section-text { font-size:12.5px; color:var(--os-text); line-height:1.7; }
+
 
 /* ── TRADE JOURNAL ───────────────────────────── */
 .os-journal-tabs { display:flex; border-bottom:1px solid var(--os-border); flex-shrink:0; background:var(--os-surface); }
