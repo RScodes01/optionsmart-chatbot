@@ -12,7 +12,6 @@ import ChatWindow    from '../components/chat/ChatWindow';
 import InputBar      from '../components/chat/InputBar';
 import MorningCoach  from '../components/chat/MorningCoach';
 import TradeJournal  from '../components/chat/TradeJournal';
-import ZerodhaSetup  from '../components/chat/ZerodhaSetup';
 import LeadModal     from '../components/chat/LeadModal';
 
 import { useChatStream } from '../hooks/useChatStream';
@@ -44,9 +43,8 @@ function Toast() {
 }
 
 // ── Header ───────────────────────────────────────────
-function ChatHeader({ onMenuToggle, onCoach, onJournal, onZerodha, onExport }) {
+function ChatHeader({ onMenuToggle, onCoach, onJournal, onExport }) {
   const lang    = useSelector(s => s.chat.lang);
-  const zerodha = useSelector(s => s.chat.zerodha);
   const dispatch = useDispatch();
 
   return (
@@ -84,14 +82,6 @@ function ChatHeader({ onMenuToggle, onCoach, onJournal, onZerodha, onExport }) {
 
         <button className="os-hbtn os-hbtn--coach" onClick={onCoach}>☀ Morning Coach</button>
         <button className="os-hbtn os-hbtn--journal" onClick={onJournal}>📒 Trade Journal</button>
-        <button
-          className={`os-hbtn os-hbtn--zerodha${zerodha.connected ? ' os-hbtn--zerodha-on' : ''}`}
-          onClick={onZerodha}
-          title={zerodha.connected ? 'Zerodha connected' : 'Connect Zerodha'}
-        >
-          <span className={`os-z-dot os-z-dot--${zerodha.connected ? 'on' : zerodha.apiKeyConfigured ? 'partial' : 'off'}`} />
-          Zerodha
-        </button>
         <button className="os-hbtn" onClick={onExport}>↓ Export</button>
       </div>
     </header>
@@ -125,7 +115,6 @@ export default function ChatPage() {
   const [sidebarOpen,   setSidebarOpen]   = useState(false);
   const [coachOpen,     setCoachOpen]     = useState(false);
   const [journalOpen,   setJournalOpen]   = useState(false);
-  const [zerodhaOpen,   setZerodhaOpen]   = useState(false);
   const [leadOpen,      setLeadOpen]      = useState(false);
   const [ctaDismissed,  setCtaDismissed]  = useState(false);
 
@@ -190,7 +179,6 @@ export default function ChatPage() {
         onMenuToggle={() => setSidebarOpen(o => !o)}
         onCoach={() => setCoachOpen(true)}
         onJournal={() => setJournalOpen(true)}
-        onZerodha={() => setZerodhaOpen(true)}
         onExport={handleExport}
       />
 
@@ -228,7 +216,6 @@ export default function ChatPage() {
       {/* Drawers & Modals */}
       <MorningCoach isOpen={coachOpen} onClose={() => setCoachOpen(false)} onAskCoach={handleCoachToChat} />
       <TradeJournal isOpen={journalOpen} onClose={() => setJournalOpen(false)} />
-      <ZerodhaSetup isOpen={zerodhaOpen} onClose={() => setZerodhaOpen(false)} />
       <LeadModal    isOpen={leadOpen}    onClose={() => setLeadOpen(false)} />
 
       <Toast />

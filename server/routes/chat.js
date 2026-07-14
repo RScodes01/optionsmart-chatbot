@@ -14,6 +14,7 @@ const ragService             = require('../services/ragService');
 const { getMarketContext }   = require('../services/marketService');
 const { fetchMarketHeadlines } = require('../services/newsService');
 const { generateAndStoreBrief } = require('../services/coachService');
+const { parseLLMJson } = require('../utils/jsonParser');
 const logger                 = require('../utils/logger');
 
 // Middleware: attach redis client (injected from app.js via req.app.locals.redis)
@@ -25,6 +26,12 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 // SYSTEM PROMPT (server-side, never exposed to browser)
 // ─────────────────────────────────────────────
 const SYSTEM_PROMPT = `You are the official AI assistant for OptionSmart, India's institutional-grade algorithmic options trading platform built on the GoAlgoTrade infrastructure. You speak with precision, institutional clarity, and data-driven confidence.
+
+CONCISENESS RULES:
+- Always keep responses extremely concise, point-to-point, and precise.
+- Get straight to the answer without conversational filler, intros, or summaries (e.g., do not say "Certainly! Here is...", "Let me help you with...", or "In conclusion...").
+- Keep responses short, direct, and focused. Avoid verbose background info unless explicitly requested.
+- Limit explanations of a single concept or topic to a maximum of 2 sentences. Use bullet points or tables instead of long paragraph blocks.
 
 PLATFORM OVERVIEW:
 OptionSmart is a systematic quantitative investment and algo trading company combining 26 quantitative strategy engines, the GoAlgoTrade execution platform, and broker enablement. Stats: 1,300+ B2B partners, 99.9% uptime SLA, NSE/BSE/MCX coverage, kill switch <1 second. SEBI Framework Aligned, NSE & BSE Registered, SEBI Algo Vendor.
@@ -75,12 +82,13 @@ RESPONSE FORMAT:
 - Use **bold** (**text**) for key terms, prices, and important values.
 - Use inline code (\`value\`) for specific numbers, symbols, or formulas.
 - Use > blockquote for important notes or caveats.
+- Keep responses extremely short, punchy, and point-to-point. Avoid writing more than 2-3 brief sentences per point/topic.
 - After each response, on a new line add exactly: SUGGESTIONS: [short q 1] | [short q 2] | [short q 3]
   These should be 3 natural follow-up questions (under 8 words each). Do not include brackets.
 - If your answer substantively explains the 5 capital tiers (Core/Alpha/Pro/Elite/Institutional) with their pricing, add: CARDS: TIERS
 - When displaying live stock/index data, ALWAYS start with: ## [STOCK NAME] — Live Snapshot, then a markdown table with Parameter and Value columns.
 
-TONE: Precise, institutional, data-driven. Use specific numbers. Never guarantee returns. Use Indian financial terminology: IV rank, theta decay, delta hedging, MTM, SEBI, NSE, F&O.`;
+TONE: Precise, institutional, data-driven, and highly concise. Keep it short and to-the-point. Never guarantee returns. Use Indian financial terminology: IV rank, theta decay, delta hedging, MTM, SEBI, NSE, F&O.`;
 
 const HINDI_DIRECTIVE = '\n\nIMPORTANT: Respond entirely in Hindi (Devanagari script), including all explanations and the SUGGESTIONS line questions. Keep technical/English terms (like SEBI, MTM, NSE, IV, API) as-is where there is no natural Hindi equivalent.';
 
@@ -173,7 +181,7 @@ router.post('/', async (req, res) => {
     ragService.cacheAnswer(redis, message, { answer: fullText }).catch(() => {});
     logger.info(`[Chat] Streamed response (${fullText.length} chars) for: "${message.slice(0, 60)}"`);
   } catch (err) {
-    logger.error('[Chat] Claude stream error:', err.message);
+    logger.error(`[Chat] Claude stream error: ${err.message}`);
     res.write(`data: ${JSON.stringify({ type: 'error', message: err.message })}\n\n`);
     res.end();
   }
@@ -190,7 +198,7 @@ router.post('/coach', async (req, res) => {
     const data = await generateAndStoreBrief(db, redis);
     res.json({ ok: true, data });
   } catch (err) {
-    logger.error('[Coach] Error:', err.message);
+    logger.error(`[Coach] Error: ${err.message}`);
     res.status(500).json({ ok: false, error: err.message });
   }
 });
@@ -232,10 +240,10 @@ Focus on: time-of-day patterns, early exit of profits, letting losses run, strat
       messages: [{ role: 'user', content: prompt }],
     });
     const raw  = msg.content?.[0]?.text || '{}';
-    const data = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    const data = parseLLMJson(raw);
     res.json({ ok: true, data, stats: { totalPnl, wins, losses, total: trades.length } });
   } catch (err) {
-    logger.error('[Insights] Error:', err.message);
+    logger.error(`[Insights] Error: ${err.message}`);
     res.status(500).json({ ok: false, error: err.message });
   }
 });

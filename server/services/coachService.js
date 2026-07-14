@@ -7,6 +7,7 @@
 const Anthropic = require('@anthropic-ai/sdk');
 const logger = require('../utils/logger');
 const { fetchMarketHeadlines } = require('./newsService');
+const { parseLLMJson } = require('../utils/jsonParser');
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -36,7 +37,7 @@ async function generateAndStoreBrief(db, redis, force = false) {
         return existing.data;
       }
     } catch (err) {
-      logger.warn('[Coach] MongoDB check failed (will generate):', err.message);
+      logger.warn(`[Coach] MongoDB check failed (will generate): ${err.message}`);
     }
   }
 
@@ -56,7 +57,7 @@ async function generateAndStoreBrief(db, redis, force = false) {
   try {
     headlines = await fetchMarketHeadlines(redis, force); // pass force to skip headlines cache if regenerating forced
   } catch (err) {
-    logger.warn('[Coach] News fetch failed (non-fatal):', err.message);
+    logger.warn(`[Coach] News fetch failed (non-fatal): ${err.message}`);
   }
 
   const newsSection = headlines
@@ -102,11 +103,11 @@ ${dayName === 'Monday' ? 'Monday often has gap opens — factor in weekend premi
 
   const msg = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 1200,
+    max_tokens: 4096,
     messages: [{ role: 'user', content: prompt }],
   });
   const raw  = msg.content?.[0]?.text || '{}';
-  const data = JSON.parse(raw.replace(/```json|```/g, '').trim());
+  const data = parseLLMJson(raw);
 
   // ── 5. Save to MongoDB (ONLY keep today's, delete others) ──
   try {
@@ -123,7 +124,7 @@ ${dayName === 'Monday' ? 'Monday often has gap opens — factor in weekend premi
     );
     logger.info(`[Coach] Brief saved to MongoDB (morning_briefs) for ${today}`);
   } catch (dbErr) {
-    logger.warn('[Coach] MongoDB write failed:', dbErr.message);
+    logger.warn(`[Coach] MongoDB write failed: ${dbErr.message}`);
   }
 
   return data;

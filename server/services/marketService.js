@@ -19,6 +19,7 @@
 const axios     = require('axios');
 const Anthropic = require('@anthropic-ai/sdk');
 const logger    = require('../utils/logger');
+const { parseLLMJson } = require('../utils/jsonParser');
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -490,7 +491,7 @@ Return ONLY the JSON array — no explanation, no markdown.`;
     });
 
     const raw   = msg.content?.[0]?.text?.trim() || '[]';
-    const names = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    const names = parseLLMJson(raw, []);
 
     if (!Array.isArray(names) || names.length === 0) return [];
 

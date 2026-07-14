@@ -104,7 +104,7 @@ async function query(redisClient, db, question) {
       // Lazy-require avoids circular dependency at module load time
       const { runRefresh } = require('./refreshScheduler');
       runRefresh(db, redisClient).catch(err =>
-        logger.error('[RAG] Background refresh failed:', err.message)
+        logger.error(`[RAG] Background refresh failed: ${err.message}`)
       );
       return { hit: false, context: [], refreshing: true };
     }

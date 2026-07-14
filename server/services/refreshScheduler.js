@@ -35,7 +35,7 @@ async function clearKnowledgeBase(db, redis) {
     const { deletedCount } = await db.collection('faq_documents').deleteMany({});
     logger.info(`[Refresh] Cleared ${deletedCount} documents from MongoDB`);
   } catch (err) {
-    logger.error('[Refresh] MongoDB clear failed:', err.message);
+    logger.error(`[Refresh] MongoDB clear failed: ${err.message}`);
     throw err;
   }
 
@@ -46,7 +46,7 @@ async function clearKnowledgeBase(db, redis) {
       logger.info(`[Refresh] Flushed ${cacheKeys.length} Redis answer-cache entries`);
     }
   } catch (err) {
-    logger.warn('[Refresh] Redis cache flush failed (non-fatal):', err.message);
+    logger.warn(`[Refresh] Redis cache flush failed (non-fatal): ${err.message}`);
   }
 }
 
@@ -74,7 +74,7 @@ async function runRefresh(db, redis) {
   try {
     webDocs = await scrapeAllSites();
   } catch (err) {
-    logger.error('[Refresh] scrapeAllSites() threw:', err.message);
+    logger.error(`[Refresh] scrapeAllSites() threw: ${err.message}`);
   }
 
   // ── Phase 4a: Index scraped docs (success path) ─────────────────────────
@@ -86,7 +86,7 @@ async function runRefresh(db, redis) {
       logger.info('[Refresh] ─────────────────────────────────────────');
       return;
     } catch (indexErr) {
-      logger.error('[Refresh] Indexing web docs failed:', indexErr.message);
+      logger.error(`[Refresh] Indexing web docs failed: ${indexErr.message}`);
     }
   } else {
     logger.warn('[Refresh] Web scraping returned 0 documents — using fallback');
@@ -99,7 +99,7 @@ async function runRefresh(db, redis) {
     await redis.setEx(RAG_STATUS_KEY, RAG_STATUS_TTL, 'ready');
     logger.info(`[Refresh] ✓ Fallback complete — ${faqs.length} static FAQ docs indexed`);
   } catch (fallbackErr) {
-    logger.error('[Refresh] Fallback indexing failed:', fallbackErr.message);
+    logger.error(`[Refresh] Fallback indexing failed: ${fallbackErr.message}`);
     await redis.setEx(RAG_STATUS_KEY, RAG_STATUS_TTL, 'error').catch(() => {});
   }
 
@@ -149,7 +149,7 @@ async function checkForNewsUpdates(db, redis) {
       logger.info('[Coach] No news updates (headlines unchanged)');
     }
   } catch (err) {
-    logger.warn('[Coach] News update check failed:', err.message);
+    logger.warn(`[Coach] News update check failed: ${err.message}`);
   }
 }
 
@@ -173,7 +173,7 @@ function startScheduler(db, redis) {
       // Run the full refresh immediately (not waiting for a user query)
       await runRefresh(db, redis);
     } catch (err) {
-      logger.error('[Refresh] Cron handler error:', err.message);
+      logger.error(`[Refresh] Cron handler error: ${err.message}`);
     }
   }, {
     timezone: 'Asia/Kolkata',
@@ -192,7 +192,7 @@ function startScheduler(db, redis) {
       await generateAndStoreBrief(db, redis, true);
       logger.info('[Coach] Proactive brief generated successfully ✓');
     } catch (err) {
-      logger.error('[Coach] 9 AM proactive brief generation failed:', err.message);
+      logger.error(`[Coach] 9 AM proactive brief generation failed: ${err.message}`);
     }
   }, {
     timezone: 'Asia/Kolkata',
@@ -205,7 +205,7 @@ function startScheduler(db, redis) {
     try {
       await checkForNewsUpdates(db, redis);
     } catch (err) {
-      logger.error('[Coach] News update check scheduler error:', err.message);
+      logger.error(`[Coach] News update check scheduler error: ${err.message}`);
     }
   }, {
     timezone: 'Asia/Kolkata',
