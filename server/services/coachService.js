@@ -4,12 +4,12 @@
  * and stores it in MongoDB, replacing any previous days' briefs.
  */
 
-const Anthropic = require('@anthropic-ai/sdk');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const logger = require('../utils/logger');
 const { fetchMarketHeadlines } = require('./newsService');
 const { parseLLMJson } = require('../utils/jsonParser');
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 /**
  * Generates the Morning Market Coach brief using real news + live Nifty/VIX data
@@ -101,12 +101,12 @@ When displaying live stock/index data, ALWAYS start with: ## [STOCK NAME] — Li
 ${dayName === 'Thursday' ? 'Thursday is weekly expiry — factor in theta burn and IV crush.' : ''} 
 ${dayName === 'Monday' ? 'Monday often has gap opens — factor in weekend premium.' : ''}`;
 
-  const msg = await anthropic.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 4096,
-    messages: [{ role: 'user', content: prompt }],
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-3.5-flash',
+    generationConfig: { responseMimeType: 'application/json' },
   });
-  const raw  = msg.content?.[0]?.text || '{}';
+  const result = await model.generateContent(prompt);
+  const raw  = result.response.text() || '{}';
   const data = parseLLMJson(raw);
 
   // ── 5. Save to MongoDB (ONLY keep today's, delete others) ──

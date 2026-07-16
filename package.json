@@ -17,7 +17,10 @@
     "dotenv": "^16.4.5"
   },
   "scripts": {
-    "seed-faq": "node server/scripts/seedFaq.js",
-    "test-rag":  "node server/scripts/testRag.js"
+    "seed-faq":     "node server/scripts/seedMongo.js",
+    "seed-scraped": "node server/scripts/seedScraped.js",
+    "seed-all":     "node server/scripts/seedMongo.js && node server/scripts/seedScraped.js",
+    "test-rag":     "node server/scripts/testRag.js",
+    "server":       "node server/index.js"
   }
 }

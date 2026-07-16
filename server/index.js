@@ -1,9 +1,9 @@
-/**
+﻿/**
  * index.js — Express server entry point for the OptionSmart Chatbot
  * Run: node server/index.js
  */
 
-require('dotenv').config();
+require('dotenv').config({ path: require('path').join(__dirname, '.env') });
 
 const express    = require('express');
 const cors       = require('cors');

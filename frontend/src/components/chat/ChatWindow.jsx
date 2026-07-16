@@ -8,12 +8,12 @@ import MessageBubble from './MessageBubble';
 import { selectCurrentMessages } from '../../store/chatSlice';
 
 const WELCOME_CHIPS = [
-  { label: 'What is OptionSmart?',    q: 'What is OptionSmart and how does it work?' },
-  { label: 'Capital tiers',           q: 'What are the capital tiers and minimum investment?' },
-  { label: 'Market Regime Engine',    q: 'What is the Market Regime Engine?' },
-  { label: 'Algo strategies',         q: 'Explain the Saturn, Venus, and Pluto strategies' },
-  { label: 'Risk management',         q: 'What risk management safeguards does OptionSmart have?' },
-  { label: 'About the founders',      q: 'Who are the founders of OptionSmart?' },
+  { label: 'What is OptionSmart?',    q: 'What is OptionSmart and how does it work?',              faqId: 'faq_002' },
+  { label: 'Capital tiers',           q: 'What are the capital tiers and minimum investment?',      faqId: 'faq_001' },
+  { label: 'Market Regime Engine',    q: 'What is the Market Regime Engine?',                       faqId: 'faq_005' },
+  { label: 'Algo strategies',         q: 'Explain the Saturn, Venus, and Pluto strategies',         faqId: 'faq_003' },
+  { label: 'Risk management',         q: 'What risk management safeguards does OptionSmart have?',  faqId: 'faq_006' },
+  { label: 'About the founders',      q: 'Who are the founders of OptionSmart?',                   faqId: 'faq_037' },
 ];
 
 function TypingIndicator() {
@@ -37,8 +37,8 @@ function WelcomeScreen({ onChipClick }) {
         Regime Engine, risk controls, SEBI compliance, or how to get started.
       </p>
       <div className="os-welcome-chips">
-        {WELCOME_CHIPS.map(({ label, q }) => (
-          <button key={label} className="os-wchip" onClick={() => onChipClick(q)}>
+        {WELCOME_CHIPS.map(({ label, q, faqId }) => (
+          <button key={label} className="os-wchip" onClick={() => onChipClick({ q, faqId })}>
             {label}
           </button>
         ))}

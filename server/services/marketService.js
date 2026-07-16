@@ -17,11 +17,11 @@
  */
 
 const axios     = require('axios');
-const Anthropic = require('@anthropic-ai/sdk');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const logger    = require('../utils/logger');
 const { parseLLMJson } = require('../utils/jsonParser');
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 const INSTRUMENTS_CACHE_KEY = 'zerodha:instruments:nse';
 const INSTRUMENTS_TTL       = 24 * 60 * 60; // 24 hours
@@ -484,13 +484,13 @@ Examples of correct output: ["RELIANCE"] or ["TCS", "INFY"] or ["NIFTY 50"]
 If no specific stock is mentioned, return: []
 Return ONLY the JSON array — no explanation, no markdown.`;
 
-    const msg = await anthropic.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 150,
-      messages: [{ role: 'user', content: prompt }],
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-3.5-flash',
+      generationConfig: { responseMimeType: 'application/json' },
     });
+    const result = await model.generateContent(prompt);
 
-    const raw   = msg.content?.[0]?.text?.trim() || '[]';
+    const raw   = result.response.text()?.trim() || '[]';
     const names = parseLLMJson(raw, []);
 
     if (!Array.isArray(names) || names.length === 0) return [];

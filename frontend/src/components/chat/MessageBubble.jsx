@@ -7,9 +7,25 @@
  * - Copy button
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { showToast } from '../../store/chatSlice';
+
+// Maps common follow-up chip questions → FAQ IDs for instant MongoDB lookup
+const FAQ_CHIP_MAP = {
+  'What are the capital tiers and minimum investment?':          'faq_001',
+  'What are the algo strategies — Saturn, Venus, and Pluto?':   'faq_003',
+  'What is the Market Regime Engine?':                          'faq_005',
+  'What risk management safeguards does OptionSmart have?':     'faq_006',
+  'How does AI/ML exit intelligence work?':                     'faq_007',
+  'Is OptionSmart SEBI regulated and compliant?':               'faq_009',
+  'What is the kill switch and how fast does it work?':         'faq_011',
+  'How do I get started or sign up with OptionSmart?':          'faq_012',
+  'Does OptionSmart have overnight positions?':                 'faq_014',
+  'What brokers are supported?':                                'faq_015',
+  'Is there a lock-in period or can I withdraw anytime?':       'faq_029',
+  'Is my capital safe with OptionSmart?':                       'faq_030',
+};
 
 // ─────────────────────────────────────────
 // Tier data (mirrored from HTML)
@@ -232,10 +248,14 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
     return d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
   }, [message.ts]);
 
+  const [copied, setCopied] = useState(false);
+
   function handleCopy() {
-    navigator.clipboard.writeText(text).then(() =>
-      dispatch(showToast({ message: '✓ Copied to clipboard', type: 'info' }))
-    );
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      dispatch(showToast({ message: '✓ Copied to clipboard', type: 'info' }));
+      setTimeout(() => setCopied(false), 2000);
+    });
   }
 
   const BUYING_INTENT_RX = /\b(pricing|price|cost|how much|minimum capital|minimum investment|get started|how to start|onboard|sign up|signup|demo|book a call|talk to (someone|advisor|sales|team)|invest|deposit|open an account)\b/i;
@@ -265,10 +285,24 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
         {/* Copy + timestamp */}
         {isBot && !message.streaming && (
           <div className="os-msg-meta">
-            <button className="os-maction" onClick={handleCopy} title="Copy">Copy</button>
+            <button className="os-maction" onClick={handleCopy} title="Copy response">
+              {copied ? (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle' }}>
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              ) : (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle' }}>
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              )}
+            </button>
             <span className="os-ts">{ts}</span>
             {message.source === 'cache' && (
               <span className="os-cache-badge" title="Served from Redis cache">⚡ cached</span>
+            )}
+            {message.source === 'mongodb' && (
+              <span className="os-mongodb-badge" title="Answered directly from Knowledge Base — no AI used">📚 Knowledge Base</span>
             )}
           </div>
         )}
@@ -278,7 +312,7 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
         {chips.length > 0 && !message.streaming && (
           <div className="os-follow-chips">
             {chips.map((c) => (
-              <button key={c} className="os-fchip" onClick={() => onChipClick?.(c)}>{c}</button>
+              <button key={c} className="os-fchip" onClick={() => onChipClick?.({ q: c, faqId: FAQ_CHIP_MAP[c] || null })}>{c}</button>
             ))}
           </div>
         )}
