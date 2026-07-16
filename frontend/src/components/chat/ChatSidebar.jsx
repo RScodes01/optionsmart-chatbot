@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ChatSidebar.jsx — Conversation sessions list + quick questions
  */
 
@@ -10,17 +10,19 @@ import {
 } from '../../store/chatSlice';
 
 const QUICK_QUESTIONS = [
-  { label: '📊 Capital requirements', q: 'What capital do I need to start with OptionSmart?' },
-  { label: '🤖 How algos work', q: 'How do the algo strategies work?' },
-  { label: '⚡ Kill switch', q: 'How does the kill switch protect my investment?' },
-  { label: '📈 Market regime', q: 'What is the Market Regime Engine?' },
-  { label: '🛡 Risk management', q: 'Explain all the risk management features' },
-  { label: '🧠 AI exit', q: 'How does AI/ML exit intelligence decide when to exit?' },
-  { label: '✅ SEBI compliance', q: 'Is OptionSmart SEBI regulated?' },
-  { label: '🔗 Broker support', q: 'Which brokers does OptionSmart support?' },
+  { label: '💰 Capital requirements', q: 'What are the capital tiers and minimum investment?',      faqId: 'faq_001' },
+  { label: '🤖 Algo strategies',      q: 'What are the algo strategies — Saturn, Venus, and Pluto?', faqId: 'faq_003' },
+  { label: '🛑 Kill switch',          q: 'What is the kill switch and how fast does it work?',       faqId: 'faq_011' },
+  { label: '📊 Market regime',        q: 'What is the Market Regime Engine?',                        faqId: 'faq_005' },
+  { label: '🛡️ Risk management',      q: 'What risk management safeguards does OptionSmart have?',   faqId: 'faq_006' },
+  { label: '🧠 AI exit',              q: 'How does AI/ML exit intelligence work?',                   faqId: 'faq_007' },
+  { label: '✅ SEBI compliance',      q: 'Is OptionSmart SEBI regulated and compliant?',             faqId: 'faq_009' },
+  { label: '🏦 Broker support',       q: 'What brokers are supported?',                              faqId: 'faq_015' },
+  { label: '🔒 Capital safety',       q: 'Is my capital safe with OptionSmart?',                     faqId: 'faq_030' },
+  { label: '💸 Withdraw anytime',     q: 'Is there a lock-in period or can I withdraw anytime?',     faqId: 'faq_029' },
 ];
 
-export default function ChatSidebar({ isOpen, onClose, onQuickQ, onNewChat }) {
+export default function ChatSidebar({ isOpen, onClose, onFaqQ, onQuickQ, onNewChat }) {
   const dispatch = useDispatch();
   const sessions = useSelector((s) => s.chat.sessions);
   const currentSessionId = useSelector((s) => s.chat.currentSessionId);
@@ -51,13 +53,22 @@ export default function ChatSidebar({ isOpen, onClose, onQuickQ, onNewChat }) {
           </button>
         </div>
 
-        {/* Quick questions dropdown */}
+        {/* Quick questions dropdown — answered from MongoDB, no Claude API */}
         <div className="os-sidebar-section">
           <div className="os-s-label">Quick Questions</div>
           <select
             className="os-qselect"
             defaultValue=""
-            onChange={(e) => { if (e.target.value) { onQuickQ(e.target.value); e.target.value = ''; } }}
+            onChange={(e) => {
+              const selectedQ = e.target.value;
+              if (selectedQ) {
+                const match = QUICK_QUESTIONS.find(qq => qq.q === selectedQ);
+                const handler = onFaqQ || onQuickQ;
+                // Pass { q, faqId } object so the hook can do exact ID lookup
+                handler?.({ q: selectedQ, faqId: match?.faqId });
+                e.target.value = '';
+              }
+            }}
           >
             <option value="" disabled>Select a question…</option>
             {QUICK_QUESTIONS.map(({ label, q }) => (

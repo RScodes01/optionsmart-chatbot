@@ -77,25 +77,62 @@ async function runRefresh(db, redis) {
     logger.error(`[Refresh] scrapeAllSites() threw: ${err.message}`);
   }
 
-  // ── Phase 4a: Index scraped docs (success path) ─────────────────────────
+  // ── Phase 4a: Generate Q&A pairs from scraped chunks ───────────────────
+  let qaDocs = [];
   if (webDocs.length > 0) {
+    logger.info(`[Refresh] Crawl complete. Generating structured Q&A pairs using Gemini...`);
+    const { generateQAPairs } = require('./qaGeneratorService');
+    let generatedCount = 0;
+
+    for (const doc of webDocs) {
+      const title = doc.question.split(' — ')[0] || 'Web Page';
+      const url = doc.tags.includes('goalgotrade.tech') ? 'https://goalgotrade.tech' : 'https://optionsmart.in';
+
+      try {
+        const pairs = await generateQAPairs(title, url, doc.answer);
+        for (let i = 0; i < pairs.length; i++) {
+          generatedCount++;
+          qaDocs.push({
+            id: `${doc.id}_qa_${i + 1}`,
+            question: pairs[i].question,
+            answer: pairs[i].answer,
+            type: 'scraped',
+            sourceUrl: url,
+            tags: doc.tags,
+          });
+        }
+      } catch (err) {
+        logger.error(`[Refresh] Q&A generation failed for chunk ${doc.id}: ${err.message}`);
+      }
+    }
+    logger.info(`[Refresh] Generated ${generatedCount} Q&A pairs from ${webDocs.length} web page chunks.`);
+  }
+
+  // ── Phase 4b: Index curated FAQs + generated Q&As ──────────────────────
+  logger.info('[Refresh] Seeding static curated FAQs into MongoDB...');
+  const curatedDocs = faqs.map(f => ({ ...f, type: 'curated' }));
+  
+  const allDocsToIndex = [...curatedDocs, ...qaDocs];
+
+  if (allDocsToIndex.length > 0) {
     try {
-      await ragService.indexFAQs(db, webDocs);
+      await ragService.indexFAQs(db, allDocsToIndex);
       await redis.setEx(RAG_STATUS_KEY, RAG_STATUS_TTL, 'ready');
-      logger.info(`[Refresh] ✓ Knowledge base refreshed — ${webDocs.length} web chunks indexed`);
+      logger.info(`[Refresh] ✓ Knowledge base refreshed — ${allDocsToIndex.length} total Q&As indexed (${curatedDocs.length} curated, ${qaDocs.length} scraped)`);
       logger.info('[Refresh] ─────────────────────────────────────────');
       return;
     } catch (indexErr) {
-      logger.error(`[Refresh] Indexing web docs failed: ${indexErr.message}`);
+      logger.error(`[Refresh] Indexing total Q&As failed: ${indexErr.message}`);
     }
   } else {
-    logger.warn('[Refresh] Web scraping returned 0 documents — using fallback');
+    logger.warn('[Refresh] No documents to index — using fallback');
   }
 
-  // ── Phase 4b: Fallback to static faq.json ──────────────────────────────
+  // ── Phase 4c: Fallback to static faq.json only ────────────────────────
   logger.info(`[Refresh] Falling back to static faq.json (${faqs.length} entries)…`);
   try {
-    await ragService.indexFAQs(db, faqs);
+    const fallbackCuratedDocs = faqs.map(f => ({ ...f, type: 'curated' }));
+    await ragService.indexFAQs(db, fallbackCuratedDocs);
     await redis.setEx(RAG_STATUS_KEY, RAG_STATUS_TTL, 'ready');
     logger.info(`[Refresh] ✓ Fallback complete — ${faqs.length} static FAQ docs indexed`);
   } catch (fallbackErr) {

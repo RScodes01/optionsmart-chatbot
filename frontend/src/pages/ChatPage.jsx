@@ -15,6 +15,7 @@ import TradeJournal  from '../components/chat/TradeJournal';
 import LeadModal     from '../components/chat/LeadModal';
 
 import { useChatStream } from '../hooks/useChatStream';
+import { useFaqLookup }  from '../hooks/useFaqLookup';
 import {
   setLang, startNewSession, createSession,
   fetchZerodhaStatus, fetchMarketData,
@@ -107,6 +108,7 @@ function CtaBar({ onTalkAdvisor, onDismiss }) {
 export default function ChatPage() {
   const dispatch    = useDispatch();
   const { sendMessage, isStreaming } = useChatStream();
+  const { sendFaqMessage, isFaqLoading } = useFaqLookup();
 
   const sessions         = useSelector(s => s.chat.sessions);
   const currentSessionId = useSelector(s => s.chat.currentSessionId);
@@ -186,13 +188,14 @@ export default function ChatPage() {
         <ChatSidebar
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
+          onFaqQ={(q) => { setSidebarOpen(false); sendFaqMessage(q); }}
           onQuickQ={(q) => { setSidebarOpen(false); sendMessage(q); }}
           onNewChat={handleNewChat}
         />
 
         <div className="os-chat-area">
           <ChatWindow
-            onChipClick={(q) => sendMessage(q)}
+            onChipClick={(input) => sendFaqMessage(input)}
             onAdvisorClick={() => setLeadOpen(true)}
           />
 
