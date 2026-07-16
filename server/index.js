@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 
 // ── Redis ───────────────────────────────────────────
 const redis = createClient({ url: process.env.REDIS_URL || 'redis://localhost:6379' });
-redis.on('error', (err) => logger.error('[Redis] Error:', err.message));
+redis.on('error', (err) => logger.error(`[Redis] Error: ${err.message || err}`));
 
 // ── MongoDB ─────────────────────────────────────────
 let mongoClient;
