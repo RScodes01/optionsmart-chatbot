@@ -12,9 +12,8 @@ const { ObjectId } = require('mongodb');
 const logger    = require('../utils/logger');
 
 function requireAuth(req, res, next) {
-  const uid = req.user?.uid || req.headers['x-uid'];
-  if (!uid) return res.status(401).json({ error: 'Unauthorized' });
-  req.uid = uid;
+  // req.uid is set by the global middleware in index.js (falls back to 'dev-user' in dev)
+  if (!req.uid) return res.status(401).json({ error: 'Unauthorized' });
   next();
 }
 

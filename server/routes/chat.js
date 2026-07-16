@@ -7,7 +7,6 @@
  */
 
 const express = require('express');
-const Anthropic = require('@anthropic-ai/sdk');
 const router = express.Router();
 
 const ragService             = require('../services/ragService');
@@ -16,11 +15,10 @@ const { fetchMarketHeadlines } = require('../services/newsService');
 const { generateAndStoreBrief } = require('../services/coachService');
 const { parseLLMJson } = require('../utils/jsonParser');
 const logger                 = require('../utils/logger');
+const { generateText, streamText } = require('../services/geminiService');
 
 // Middleware: attach redis client (injected from app.js via req.app.locals.redis)
 const getRedis = (req) => req.app.locals.redis;
-
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 // ─────────────────────────────────────────────
 // SYSTEM PROMPT (server-side, never exposed to browser)
@@ -110,21 +108,24 @@ router.post('/', async (req, res) => {
   const db = req.app.locals.db;
   const ragResult = await ragService.query(redis, db, message);
 
-  // 2. If strong RAG hit → stream it directly (zero Claude tokens)
-  if (ragResult.hit && ragResult.cached) {
+  // 2. If strong RAG hit → stream it directly (zero Gemini tokens)
+  if (ragResult.hit) {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
     res.setHeader('Access-Control-Allow-Origin', '*');
 
-    const payload = typeof ragResult.answer === 'string' ? ragResult.answer : ragResult.answer;
-    const chunks = payload.match(/.{1,40}/g) || [payload];
+    const payload = ragResult.answer;
+    const chunks = String(payload || '').match(/.{1,40}/g) || [String(payload || '')];
     for (const chunk of chunks) {
       res.write(`data: ${JSON.stringify({ type: 'delta', text: chunk })}\n\n`);
       await new Promise(r => setTimeout(r, 8));
     }
-    res.write(`data: ${JSON.stringify({ type: 'done', source: 'cache' })}\n\n`);
+    res.write(`data: ${JSON.stringify({ type: 'done', source: ragResult.cached ? 'cache' : 'rag' })}\n\n`);
     res.end();
+
+    ragService.cacheAnswer(redis, message, { answer: payload }).catch(() => {});
+    logger.info(`[Chat] Streamed RAG answer for: "${message.slice(0, 60)}"`);
     return;
   }
 
@@ -151,7 +152,7 @@ router.post('/', async (req, res) => {
     systemWithContext += HINDI_DIRECTIVE;
   }
 
-  // 5. Stream from Claude
+  // 5. Stream from Gemini
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
@@ -160,28 +161,22 @@ router.post('/', async (req, res) => {
   let fullText = '';
 
   try {
-    const stream = anthropic.messages.stream({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1024,
-      system: systemWithContext,
-      messages,
-    });
+    const prompt = `SYSTEM:\n${systemWithContext}\n\nCONVERSATION:\n${messages.map(m => `${m.role.toUpperCase()}: ${m.content}`).join('\n')}`;
 
-    stream.on('text', (text) => {
-      fullText += text;
-      res.write(`data: ${JSON.stringify({ type: 'delta', text })}\n\n`);
-    });
+    // 5. Real SSE stream from Gemini — yields chunks as they arrive
+    for await (const chunk of streamText(prompt, { maxTokens: 1024, temperature: 0.3 })) {
+      fullText += chunk;
+      res.write(`data: ${JSON.stringify({ type: 'delta', text: chunk })}\n\n`);
+    }
 
-    await stream.finalMessage();
-
-    res.write(`data: ${JSON.stringify({ type: 'done', source: 'claude' })}\n\n`);
+    res.write(`data: ${JSON.stringify({ type: 'done', source: 'gemini' })}\n\n`);
     res.end();
 
     // 6. Cache the result for future identical questions
     ragService.cacheAnswer(redis, message, { answer: fullText }).catch(() => {});
     logger.info(`[Chat] Streamed response (${fullText.length} chars) for: "${message.slice(0, 60)}"`);
   } catch (err) {
-    logger.error(`[Chat] Claude stream error: ${err.message}`);
+    logger.error(`[Chat] Gemini stream error: ${err.message}`);
     res.write(`data: ${JSON.stringify({ type: 'error', message: err.message })}\n\n`);
     res.end();
   }
@@ -234,12 +229,7 @@ Return ONLY this JSON (no markdown):
 Focus on: time-of-day patterns, early exit of profits, letting losses run, strategy performance differences, exit reason quality, emotional signals in notes. Generate 4-5 insights. Be specific — no generic advice.`;
 
   try {
-    const msg = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 800,
-      messages: [{ role: 'user', content: prompt }],
-    });
-    const raw  = msg.content?.[0]?.text || '{}';
+    const raw = await generateText(prompt, { maxTokens: 800, temperature: 0.2 });
     const data = parseLLMJson(raw);
     res.json({ ok: true, data, stats: { totalPnl, wins, losses, total: trades.length } });
   } catch (err) {

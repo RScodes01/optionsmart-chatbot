@@ -40,10 +40,13 @@ async function clearKnowledgeBase(db, redis) {
   }
 
   try {
-    const cacheKeys = await redis.keys('chat:cache:*');
-    if (cacheKeys.length > 0) {
-      await redis.del(cacheKeys);
-      logger.info(`[Refresh] Flushed ${cacheKeys.length} Redis answer-cache entries`);
+    const toDelete = [];
+    for await (const key of redis.scanIterator({ MATCH: 'chat:cache:*', COUNT: 100 })) {
+      toDelete.push(key);
+    }
+    if (toDelete.length > 0) {
+      await redis.del(toDelete);
+      logger.info(`[Refresh] Flushed ${toDelete.length} Redis answer-cache entries`);
     }
   } catch (err) {
     logger.warn(`[Refresh] Redis cache flush failed (non-fatal): ${err.message}`);

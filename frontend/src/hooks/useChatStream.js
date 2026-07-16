@@ -57,7 +57,7 @@ export function useChatStream() {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let source = 'claude';
+      let source = 'gemini';
 
       while (true) {
         const { done, value } = await reader.read();
@@ -68,25 +68,25 @@ export function useChatStream() {
 
         for (const line of lines) {
           if (!line.startsWith('data: ')) continue;
+          let event;
           try {
-            const event = JSON.parse(line.slice(6));
-
-            if (event.type === 'delta') {
-              dispatch(appendStreamDelta({ delta: event.text, sessionId }));
-            } else if (event.type === 'done') {
-              source = event.source || 'claude';
-            } else if (event.type === 'error') {
-              throw new Error(event.message);
-            }
-          } catch (parseErr) {
-            // ignore malformed SSE lines
+            event = JSON.parse(line.slice(6));
+          } catch {
+            continue; // ignore malformed SSE lines
+          }
+          if (event.type === 'delta') {
+            dispatch(appendStreamDelta({ delta: event.text, sessionId }));
+          } else if (event.type === 'done') {
+            source = event.source || 'gemini';
+          } else if (event.type === 'error') {
+            throw new Error(event.message); // propagates to outer catch
           }
         }
       }
 
       dispatch(finalizeStreamMessage({ sessionId, source }));
     } catch (err) {
-      dispatch(setStreaming(false));
+      dispatch(finalizeStreamMessage({ sessionId, source }));
       dispatch(showToast({ message: `Error: ${err.message}`, type: 'error' }));
     }
   }, [dispatch, currentSessionId, isStreaming, history, lang]);

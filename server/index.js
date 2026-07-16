@@ -40,7 +40,6 @@ const { warmInstrumentsCache } = require('./services/marketService');
 const journalRoutes = require('./routes/journal');
 const ragService         = require('./services/ragService');
 const faqDoc             = require('./models/faqDocument');
-const faqs               = require('./data/faq.json');
 const { startScheduler, runRefresh, RAG_STATUS_KEY, RAG_STATUS_TTL } = require('./services/refreshScheduler');
 
 app.use('/api/chat',    chatRoutes);
@@ -85,7 +84,11 @@ async function start() {
         } else {
           // Collection already has data: mark ready and let the cron handle nightly refresh
           logger.info(`[RAG] MongoDB ready ✓  (${existing} docs indexed)`);
-          await redis.setEx(RAG_STATUS_KEY, RAG_STATUS_TTL, 'ready');
+          try {
+            await redis.setEx(RAG_STATUS_KEY, RAG_STATUS_TTL, 'ready');
+          } catch (redisErr) {
+            logger.warn(`[RAG] Could not persist status to Redis: ${redisErr.message}`);
+          }
         }
       } catch (initErr) {
         logger.error('[RAG] Initialisation failed:', initErr.message);
