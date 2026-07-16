@@ -31,8 +31,13 @@ async function loadEnvToken(redis) {
     logger.info('[Zerodha] No ZERODHA_ACCESS_TOKEN in .env — skipping auto-load.');
     return;
   }
-  await redis.setEx(TOKEN_KEY(SYSTEM_UID), TOKEN_TTL, token);
-  logger.info('[Zerodha] ✓ Access token loaded from .env into Redis (8h TTL).');
+
+  try {
+    await redis.setEx(TOKEN_KEY(SYSTEM_UID), TOKEN_TTL, token);
+    logger.info('[Zerodha] ✓ Access token loaded from .env into Redis (8h TTL).');
+  } catch (err) {
+    logger.warn(`[Zerodha] Could not persist env token to Redis: ${err.message}`);
+  }
 }
 
 // ─────────────────────────────────────────────
