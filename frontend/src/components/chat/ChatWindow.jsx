@@ -8,12 +8,12 @@ import MessageBubble from './MessageBubble';
 import { selectCurrentMessages } from '../../store/chatSlice';
 
 const WELCOME_CHIPS = [
-  { label: 'What is OptionSmart?',    q: 'What is OptionSmart and how does it work?',              faqId: 'faq_002' },
-  { label: 'Capital tiers',           q: 'What are the capital tiers and minimum investment?',      faqId: 'faq_001' },
-  { label: 'Market Regime Engine',    q: 'What is the Market Regime Engine?',                       faqId: 'faq_005' },
-  { label: 'Algo strategies',         q: 'Explain the Saturn, Venus, and Pluto strategies',         faqId: 'faq_003' },
+  { label: 'What is OptionSmart?',    q: 'What is OptionSmart and how does it work?',              faqId: 'faq_001' },
+  { label: 'Capital tiers',           q: 'What are the capital tiers and minimum investment?',      faqId: 'faq_002' },
+  { label: 'Market Regime Engine',    q: 'What is the Market Regime Engine?',                       faqId: 'faq_004' },
+  { label: 'Algo strategies',         q: 'What are the algo strategies — Saturn, Venus, and Pluto?', faqId: 'faq_005' },
   { label: 'Risk management',         q: 'What risk management safeguards does OptionSmart have?',  faqId: 'faq_006' },
-  { label: 'About the founders',      q: 'Who are the founders of OptionSmart?',                   faqId: 'faq_037' },
+  { label: 'About the founders',      q: 'Who are the founders of OptionSmart?',                   faqId: 'faq_008' },
 ];
 
 function TypingIndicator() {

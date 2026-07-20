@@ -13,6 +13,7 @@ import InputBar      from '../components/chat/InputBar';
 import MorningCoach  from '../components/chat/MorningCoach';
 import TradeJournal  from '../components/chat/TradeJournal';
 import LeadModal     from '../components/chat/LeadModal';
+import FaqHub        from '../components/chat/FaqHub';
 
 import { useChatStream } from '../hooks/useChatStream';
 import { useFaqLookup }  from '../hooks/useFaqLookup';
@@ -115,9 +116,11 @@ export default function ChatPage() {
   const lang             = useSelector(s => s.chat.lang);
 
   const [sidebarOpen,   setSidebarOpen]   = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [coachOpen,     setCoachOpen]     = useState(false);
   const [journalOpen,   setJournalOpen]   = useState(false);
   const [leadOpen,      setLeadOpen]      = useState(false);
+  const [faqHubOpen,    setFaqHubOpen]    = useState(false);
   const [ctaDismissed,  setCtaDismissed]  = useState(false);
 
   const msgCount = useSelector(s => {
@@ -140,6 +143,14 @@ export default function ChatPage() {
   function handleNewChat() {
     dispatch(startNewSession());
     setSidebarOpen(false);
+  }
+
+  function handleMenuToggle() {
+    if (window.innerWidth <= 660) {
+      setSidebarOpen(o => !o);
+    } else {
+      setSidebarCollapsed(c => !c);
+    }
   }
 
   function handleExport() {
@@ -178,7 +189,7 @@ export default function ChatPage() {
   return (
     <div className="os-page">
       <ChatHeader
-        onMenuToggle={() => setSidebarOpen(o => !o)}
+        onMenuToggle={handleMenuToggle}
         onCoach={() => setCoachOpen(true)}
         onJournal={() => setJournalOpen(true)}
         onExport={handleExport}
@@ -187,10 +198,12 @@ export default function ChatPage() {
       <div className="os-layout">
         <ChatSidebar
           isOpen={sidebarOpen}
+          isCollapsed={sidebarCollapsed}
           onClose={() => setSidebarOpen(false)}
-          onFaqQ={(q) => { setSidebarOpen(false); sendFaqMessage(q); }}
-          onQuickQ={(q) => { setSidebarOpen(false); sendMessage(q); }}
+          onFaqQ={(q) => { setSidebarOpen(false); sendFaqMessage(q.q || q); }}
+          onQuickQ={(q) => { setSidebarOpen(false); sendMessage(q.q || q); }}
           onNewChat={handleNewChat}
+          onOpenFaq={() => setFaqHubOpen(true)}
         />
 
         <div className="os-chat-area">
@@ -220,6 +233,7 @@ export default function ChatPage() {
       <MorningCoach isOpen={coachOpen} onClose={() => setCoachOpen(false)} onAskCoach={handleCoachToChat} />
       <TradeJournal isOpen={journalOpen} onClose={() => setJournalOpen(false)} />
       <LeadModal    isOpen={leadOpen}    onClose={() => setLeadOpen(false)} />
+      <FaqHub       isOpen={faqHubOpen}  onClose={() => setFaqHubOpen(false)} onSelectQuestion={(q) => sendFaqMessage(q)} />
 
       <Toast />
     </div>

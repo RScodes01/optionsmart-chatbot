@@ -1,4 +1,4 @@
-﻿/**
+/**
  * scrapedKnowledge.js
  * MongoDB model for the `scraped_knowledge` collection.
  * Dual-embedding: question embedding + answer embedding for max match coverage.
@@ -37,7 +37,7 @@ async function upsertDoc(db, doc) {
 async function getAllDocs(db) {
   return db.collection(COLLECTION).find(
     {},
-    { projection: { _id: 1, section: 1, content: 1, questions: 1, sourceUrl: 1, embedding: 1, answerEmbedding: 1 } }
+    { projection: { _id: 1, section: 1, content: 1, questions: 1, sourceUrl: 1, embedding: 1, answerEmbedding: 1, tags: 1 } }
   ).toArray();
 }
 

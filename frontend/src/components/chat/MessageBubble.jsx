@@ -13,9 +13,9 @@ import { showToast } from '../../store/chatSlice';
 
 // Maps common follow-up chip questions → FAQ IDs for instant MongoDB lookup
 const FAQ_CHIP_MAP = {
-  'What are the capital tiers and minimum investment?':          'faq_001',
-  'What are the algo strategies — Saturn, Venus, and Pluto?':   'faq_003',
-  'What is the Market Regime Engine?':                          'faq_005',
+  'What are the capital tiers and minimum investment?':          'faq_002',
+  'What are the algo strategies — Saturn, Venus, and Pluto?':   'faq_005',
+  'What is the Market Regime Engine?':                          'faq_004',
   'What risk management safeguards does OptionSmart have?':     'faq_006',
   'How does AI/ML exit intelligence work?':                     'faq_007',
   'Is OptionSmart SEBI regulated and compliant?':               'faq_009',
@@ -127,7 +127,7 @@ function formatHTML(text) {
         code += escapeHTML(lines[i]) + '\n';
         i++;
       }
-      html += `<div class="os-code-block"><div class="os-code-lang">${lang || 'code'}</div><pre><code>${code.trimEnd()}</code></pre></div>`;
+      html += `<div class="os-code-block"><div class="os-code-header"><span class="os-code-lang">${lang || 'code'}</span><button class="os-code-copy-btn" onclick="navigator.clipboard.writeText(decodeURIComponent('${encodeURIComponent(code.trimEnd())}')).then(() => { this.innerText = '✓ Copied'; setTimeout(() => this.innerText = 'Copy', 2000); })">Copy</button></div><pre><code>${code.trimEnd()}</code></pre></div>`;
       i++;
       continue;
     }
@@ -249,6 +249,8 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
   }, [message.ts]);
 
   const [copied, setCopied] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
 
   function handleCopy() {
     navigator.clipboard.writeText(text).then(() => {
@@ -256,6 +258,26 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
       dispatch(showToast({ message: '✓ Copied to clipboard', type: 'info' }));
       setTimeout(() => setCopied(false), 2000);
     });
+  }
+
+  function handleLike() {
+    if (liked) {
+      setLiked(false);
+    } else {
+      setLiked(true);
+      setDisliked(false);
+      dispatch(showToast({ message: 'Thank you for your feedback! 👍', type: 'success' }));
+    }
+  }
+
+  function handleDislike() {
+    if (disliked) {
+      setDisliked(false);
+    } else {
+      setDisliked(true);
+      setLiked(false);
+      dispatch(showToast({ message: 'Thank you for your feedback! 👎', type: 'info' }));
+    }
   }
 
   const BUYING_INTENT_RX = /\b(pricing|price|cost|how much|minimum capital|minimum investment|get started|how to start|onboard|sign up|signup|demo|book a call|talk to (someone|advisor|sales|team)|invest|deposit|open an account)\b/i;
@@ -282,7 +304,7 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
         {/* Tier Cards */}
         {showTierCards && !message.streaming && <TierCards />}
 
-        {/* Copy + timestamp */}
+        {/* Copy + feedback + timestamp */}
         {isBot && !message.streaming && (
           <div className="os-msg-meta">
             <button className="os-maction" onClick={handleCopy} title="Copy response">
@@ -296,6 +318,16 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                 </svg>
               )}
+            </button>
+            <button className="os-maction" onClick={handleLike} title="Good response" style={{ color: liked ? '#10b981' : 'var(--os-muted)' }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill={liked ? "#10b981" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle' }}>
+                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+              </svg>
+            </button>
+            <button className="os-maction" onClick={handleDislike} title="Bad response" style={{ color: disliked ? '#ef4444' : 'var(--os-muted)' }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill={disliked ? "#ef4444" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle' }}>
+                <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm12-3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path>
+              </svg>
             </button>
             <span className="os-ts">{ts}</span>
             {message.source === 'cache' && (

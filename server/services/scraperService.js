@@ -63,6 +63,11 @@ function extractLinks(html, pageUrl) {
       if (!href || href.startsWith('mailto:') || href.startsWith('tel:')) return;
       const resolved = new URL(href, pageUrl);
       if (resolved.hostname !== base.hostname) return; // same domain only
+
+      const pathname = resolved.pathname.toLowerCase();
+      const skipExts = ['.pdf', '.zip', '.png', '.jpg', '.jpeg', '.gif', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.mp3', '.mp4', '.avi', '.mov', '.zip', '.rar', '.gz', '.tar'];
+      if (skipExts.some(ext => pathname.endsWith(ext))) return;
+
       resolved.hash   = '';  // strip fragment
       resolved.search = '';  // strip query params
       const clean = resolved.toString().replace(/\/$/, ''); // strip trailing slash
@@ -71,6 +76,26 @@ function extractLinks(html, pageUrl) {
   });
 
   return [...links];
+}
+
+/** Extract clean readable text from HTML */
+function cleanCheerioText($el, $) {
+  let result = '';
+  $el.contents().each((_, child) => {
+    if (child.type === 'text') {
+      result += child.data;
+    } else if (child.type === 'tag') {
+      const tagName = child.name.toLowerCase();
+      const isBlock = ['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'tr', 'td', 'br', 'section', 'article'].includes(tagName);
+      const childText = cleanCheerioText($(child), $);
+      if (isBlock) {
+        result += '\n' + childText + '\n';
+      } else {
+        result += childText;
+      }
+    }
+  });
+  return result;
 }
 
 /** Extract clean readable text from HTML */
@@ -89,11 +114,15 @@ function extractText(html) {
 
   // Prefer main content containers; fall back to body
   const contentEl = $('main, article, .content, #content, .main, #main, [role="main"], .page-content, .entry-content');
-  const text = (contentEl.length ? contentEl : $('body'))
-    .text()
-    .replace(/[\t ]+/g, ' ')        // collapse whitespace
-    .replace(/\n{3,}/g, '\n\n')     // max 2 consecutive newlines
-    .replace(/\n /g, '\n')           // trim line starts
+  const target = contentEl.length ? contentEl : $('body');
+  
+  const rawText = cleanCheerioText(target, $);
+  const text = rawText
+    .replace(/[ \t]+/g, ' ')                        // collapse spaces/tabs
+    .replace(/\n{3,}/g, '\n\n')                     // max 2 consecutive newlines
+    .replace(/\n /g, '\n')                          // trim line starts
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')         // add space between lowercase/digit and uppercase (e.g. ProductsLEO -> Products LEO)
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')       // add space between consecutive uppercase and a capitalized word (e.g. LEODetails -> LEO Details)
     .trim();
 
   return { title, text };

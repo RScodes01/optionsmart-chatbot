@@ -25,16 +25,18 @@ const crypto = require('crypto');
 const logger  = require('../utils/logger');
 const { embed, cosineSimilarity } = require('./embeddingService');
 const faqDoc  = require('../models/faqDocument');
-const { normalizeQuery }  = require('../utils/queryNormalizer');
+const { normalizeQuery } = require('../utils/queryNormalizer');
 const scrapedModel       = require('../models/scrapedKnowledge');
+const { frameAnswer }    = require('../utils/answerFramer');
 
-// â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ────────────────────────────────────────────────────────────────────────────────────────────────
 const CACHE_KEY_PREFIX         = 'chat:cache:';
-const CACHE_TTL_SECONDS        = 3600;   // 1 hour
-const CURATED_THRESHOLD        = 0.70;   // hand-written curated FAQs threshold
-const SCRAPED_THRESHOLD        = 0.65;   // crawled website content threshold
-const CONTEXT_THRESHOLD        = 0.38;   // Gemini context injection band
-const TOP_K                    = 7;      // more candidates for richer context      // increased for richer context on Claude fallback
+const CACHE_TTL_SECONDS        = 86400;  // 24 hours — FAQs are stable, cache aggressively
+const CURATED_THRESHOLD        = 0.50;   // curated FAQs (extremely generous for slight variations)
+const SCRAPED_THRESHOLD        = 0.50;   // crawled website content
+const GENERATED_THRESHOLD      = 0.68;   // AI-generated answers need higher confidence
+const CONTEXT_THRESHOLD        = 0.35;   // Gemini context injection band (slightly wider)
+const TOP_K                    = 7;      // more candidates for richer context
 
 // ── In-process memory caches (avoids repeated MongoDB reads on each query) ──
 // FAQ docs are small (<300 docs × 384 floats ≈ 450 KB) — safe to keep in RAM
@@ -75,6 +77,7 @@ function cacheKey(question) {
  */
 async function indexFAQs(db, faqs) {
   logger.info(`[RAG] Indexing ${faqs.length} FAQ documents into MongoDBâ€¦`);
+  logger.info(`[RAG] Indexing ${faqs.length} FAQ documents into MongoDB…`);
 
   // Create text + tag indexes (idempotent)
   await faqDoc.createIndexes(db);
@@ -92,14 +95,14 @@ async function indexFAQs(db, faqs) {
   }
 
   const total = await faqDoc.count(db);
-  logger.info(`[RAG] MongoDB indexing complete âœ“  (${total} docs in collection)`);
+  logger.info(`[RAG] MongoDB indexing complete ✓  (${total} docs in collection)`);
 }
 
 /**
  * Query the RAG store for a user question.
  *
- * @param {import('redis').RedisClientType} redisClient  â€” for answer cache
- * @param {import('mongodb').Db}            db           â€” for vector store
+ * @param {import('redis').RedisClientType} redisClient  — for answer cache
+ * @param {import('mongodb').Db}            db           — for vector store
  * @param {string}                          question
  * @returns {Promise<{
  *   hit:        boolean,
@@ -111,22 +114,21 @@ async function indexFAQs(db, faqs) {
  */
 async function query(redisClient, db, question) {
   try {
-    // â”€â”€ 0. Check RAG system status (set by refreshScheduler) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    //   'ready'    â†’ normal operation
-    //   'scraping' â†’ refresh in progress, skip RAG, let Claude answer alone
-    //   'stale'    â†’ KB cleared at midnight, trigger background refresh now
-    //   'error'    â†’ both scraping & fallback failed (very rare)
+    // ── Stage 0: Check RAG system status (set by refreshScheduler) ────────────
+    //   'ready'    → normal operation
+    //   'scraping' → refresh in progress, skip RAG, let Gemini answer alone
+    //   'stale'    → KB cleared at midnight, trigger background refresh now
+    //   'error'    → both scraping & fallback failed (very rare)
     const { RAG_STATUS_KEY, RAG_STATUS_TTL } = require('./refreshScheduler');
     const status = await redisClient.get(RAG_STATUS_KEY).catch(() => null);
 
     if (status === 'scraping') {
-      logger.info('[RAG] Status: scraping â€” skipping RAG for this query');
+      logger.info('[RAG] Status: scraping — skipping RAG for this query');
       return { hit: false, context: [], refreshing: true };
     }
 
     if (status === 'stale') {
-      logger.info('[RAG] Status: stale â€” triggering background refresh');
-      // Lazy-require avoids circular dependency at module load time
+      logger.info('[RAG] Status: stale — triggering background refresh');
       const { runRefresh } = require('./refreshScheduler');
       runRefresh(db, redisClient).catch(err =>
         logger.error(`[RAG] Background refresh failed: ${err.message}`)
@@ -134,27 +136,33 @@ async function query(redisClient, db, question) {
       return { hit: false, context: [], refreshing: true };
     }
 
-    // â”€â”€ 1. Exact-match Redis cache â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Stage 1a: Redis exact-match cache ─────────────────────────────────────
     const key    = cacheKey(question);
     const cached = await redisClient.get(key);
     if (cached) {
-      logger.info('[RAG] Redis cache hit');
+      logger.info('[RAG] Stage 1a: Redis cache hit');
       return { hit: true, cached: true, context: [], ...JSON.parse(cached) };
     }
 
-    // â”€â”€ 2. Check MongoDB has data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Stage 1b: Guard — MongoDB must have data ───────────────────────────────
     const docCount = await faqDoc.count(db);
     if (docCount === 0) {
-      logger.warn('[RAG] No documents in MongoDB â€” run seedMongo.js first');
       logger.warn('[RAG] No documents in MongoDB — run seedMongo.js first');
       return { hit: false, context: [] };
     }
 
-    // ──────────────── 3. Embed the user question ──────────────────────────────────────────
-    const qVec = await embed(question);
+    // Auto-reload RAM cache if DB count differs (keeps multiple running processes in sync)
+    if (!_faqCache || _faqCache.length !== docCount) {
+      logger.info(`[RAG] Cache count out of sync (RAM: ${_faqCache ? _faqCache.length : 0}, DB: ${docCount}) — reloading...`);
+      await warmCaches(db);
+    }
 
-    // ── 4. Load docs from in-memory cache (or MongoDB if cache is cold) ────────
-    const docs = _faqCache || await faqDoc.getAllDocs(db);
+    // ── Stage 1c: Normalize question before embedding ─────────────────────────
+    const normalized = normalizeQuery(question);
+    const qVec      = await embed(normalized || question);
+
+    // ── Stage 1d: FAQ cosine similarity (in-memory, ~0 latency) ──────────────
+    const docs = _faqCache;
     const scored = docs
       .filter(d => Array.isArray(d.embedding) && d.embedding.length > 0)
       .map(d => ({
@@ -168,21 +176,53 @@ async function query(redisClient, db, question) {
     scored.sort((a, b) => b.sim - a.sim);
     const topK = scored.slice(0, TOP_K);
 
-    // â”€â”€ 5. Build context string â€” only include chunks above CONTEXT_THRESHOLD â”€â”€
+    // Build context array from FAQ results above CONTEXT_THRESHOLD
     const contextDocs = topK.filter(d => d.sim >= CONTEXT_THRESHOLD);
-    const context = contextDocs.map(d => `Q: ${d.question}\nA: ${d.answer}`);
+    const context     = contextDocs.map(d => `Q: ${d.question}\nA: ${d.answer}`);
 
-    // â”€â”€ 6. Direct answer if top result clears threshold â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // Direct FAQ hit — apply type-specific threshold
     const best = topK[0];
     if (best) {
-      const threshold = best.type === 'curated' ? CURATED_THRESHOLD : SCRAPED_THRESHOLD;
+      const threshold = best.type === 'generated'
+        ? GENERATED_THRESHOLD
+        : best.type === 'curated'
+          ? CURATED_THRESHOLD
+          : SCRAPED_THRESHOLD;
+
       if (best.sim >= threshold) {
-        logger.info(`[RAG] MongoDB direct hit (${best.type}) â€” ${best.id} sim=${best.sim.toFixed(3)} â†’ skipping API`);
-        return { hit: true, cached: false, directAnswer: true, answer: best.answer, context, similarity: best.sim };
+        logger.info(`[RAG] Stage 1 hit (${best.type}) — sim=${best.sim.toFixed(3)} → skipping Gemini`);
+        const framed = frameAnswer(best, 'faq');
+        return { hit: true, cached: false, directAnswer: true, answer: framed, context, similarity: best.sim, source: 'faq' };
       }
     }
 
-    logger.info(`[RAG] No direct hit â€” best sim=${best?.sim?.toFixed(3) ?? 'n/a'} (context injected for API fallback)`);
+    // ── Stage 2: Scraped knowledge dual-embedding (in-memory, ~0 latency) ─────
+    // Compares query against BOTH question and answer vectors — max score wins.
+    const scrapedResult = await queryScraped(db, qVec, SCRAPED_THRESHOLD);
+    if (scrapedResult && scrapedResult.hit) {
+      logger.info(`[RAG] Stage 2 hit (scraped) — sim=${scrapedResult.similarity?.toFixed(3)} → skipping Gemini`);
+      const mergedContext = [...context, ...(scrapedResult.context || [])];
+      // Adapt the scraped structure to match the framer expectations
+      const docToFrame = {
+        pageTitle: scrapedResult.pageTitle || scrapedResult.section,
+        section: scrapedResult.section,
+        answer: scrapedResult.answer,
+        tags: scrapedResult.tags || []
+      };
+      const framed = frameAnswer(docToFrame, 'scraped');
+      return { hit: true, cached: false, directAnswer: true, answer: framed, context: mergedContext, similarity: scrapedResult.similarity, source: 'scraped' };
+    }
+
+    // Merge scraped context snippets even when no direct hit
+    if (scrapedResult && Array.isArray(scrapedResult.context)) {
+      context.push(...scrapedResult.context);
+    }
+
+    // ── Stage 3: MongoDB $text search fallback (Disabled) ───────────────────
+    // Disabled to prevent low-relevance keyword collisions from bypassing vector thresholds and Gemini reasoning.
+
+    // ── Stage 4: No DB match — return context for Gemini ─────────────────────
+    logger.info(`[RAG] All stages missed — best FAQ sim=${best?.sim?.toFixed(3) ?? 'n/a'} — injecting context for Gemini`);
     return { hit: false, directAnswer: false, context };
 
   } catch (err) {
@@ -235,7 +275,9 @@ async function queryScraped(db, qVec, threshold = 0.58) {
           question:  (d.questions && d.questions[0]) || d.section,
           answer:    d.content,
           section:   d.section,
+          pageTitle: d.pageTitle,
           sourceUrl: d.sourceUrl,
+          tags:      d.tags || [],
           sim, simQ, simA,
         };
       });
@@ -245,7 +287,7 @@ async function queryScraped(db, qVec, threshold = 0.58) {
 
     if (best && best.sim >= threshold) {
       logger.info('[RAG] Scraped KB hit — ' + best.id + ' sim=' + best.sim.toFixed(3) + ' (Q:' + best.simQ.toFixed(3) + ' A:' + best.simA.toFixed(3) + ')');
-      return { hit: true, answer: best.answer, section: best.section, sourceUrl: best.sourceUrl, similarity: best.sim };
+      return { hit: true, answer: best.answer, section: best.section, pageTitle: best.pageTitle, sourceUrl: best.sourceUrl, tags: best.tags, similarity: best.sim };
     }
 
     // Return top context docs for Gemini fallback (inject into system prompt)

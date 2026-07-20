@@ -1,4 +1,4 @@
-﻿/**
+/**
  * privacyGuard.js
  * Detects queries that ask for sensitive/private business data that should
  * NOT be revealed by the chatbot. Returns a structured "talk to advisor"
@@ -43,6 +43,12 @@ const PRIVATE_PATTERNS = [
 
   // Infrastructure details
   { pattern: /\b(server|infrastructure|latency|tech stack|architecture|cloud|aws|azure|database)\b.{0,20}\b(detail|spec|setup|provider|host)\b/i, topic: 'tech_stack' },
+
+  // Recruitment / Careers / Developer Onboarding
+  { pattern: /\b(hiring|recruit|recruitment|recruiting|vacanc(y|ies)|careers?|internships?|jobs?|openings?)\b/i, topic: 'recruitment' },
+  { pattern: /\b(apply|applying)\b.*\b(job|role|position|work|intern|developer)\b/i, topic: 'recruitment' },
+  { pattern: /\b(work|working)\b.*\b(at|with|for)\b.*\b(optionsmart|goalgo)\b/i, topic: 'recruitment' },
+  { pattern: /\b(strategy\s+developer|monetiz(e|ing|ation)\b.*\bstrateg(y|ies)|developer\s+onboarding)\b/i, topic: 'recruitment' },
 ];
 
 const ADVISOR_MESSAGE = `For detailed figures on this — including specific performance numbers, fee structures, and strategy parameters — I'd recommend speaking directly with an OptionSmart advisor. They can walk you through the exact data tailored to your capital tier and goals.
@@ -53,6 +59,15 @@ const ADVISOR_MESSAGE = `For detailed figures on this — including specific per
 - 📱 Call: **+91 8779328028**
 
 An advisor will provide complete, accurate information that is specific to your situation.`;
+
+const RECRUITMENT_ADVISOR_MESSAGE = `For all recruitment, hiring, career opportunities, and strategy developer onboarding queries, please speak directly with an OptionSmart advisor.
+
+📞 **Talk to an Advisor:**
+- 💬 Use the WhatsApp button below to connect instantly
+- 📧 Reach us at: **support@optionsmart.in**
+- 📱 Call: **+91 8779328028**
+
+An advisor will assist you with current openings, developer partnerships, and onboarding requirements.`;
 
 /**
  * Check if a question is asking for sensitive/private information.
@@ -70,7 +85,7 @@ function checkPrivacy(question) {
       return {
         blocked: true,
         topic,
-        message: ADVISOR_MESSAGE,
+        message: topic === 'recruitment' ? RECRUITMENT_ADVISOR_MESSAGE : ADVISOR_MESSAGE,
       };
     }
   }
@@ -78,4 +93,4 @@ function checkPrivacy(question) {
   return { blocked: false };
 }
 
-module.exports = { checkPrivacy, ADVISOR_MESSAGE };
+module.exports = { checkPrivacy, ADVISOR_MESSAGE, RECRUITMENT_ADVISOR_MESSAGE };

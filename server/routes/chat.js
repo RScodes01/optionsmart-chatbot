@@ -1,9 +1,9 @@
-﻿/**
- * chat.js â€" Express router for all chatbot API endpoints
+/**
+ * chat.js — Express router for all chatbot API endpoints
  *
- * POST /api/chat          â†' Main chat (RAG + Claude, SSE streaming)
- * POST /api/chat/coach    â†' Morning Coach AI briefing
- * POST /api/chat/insights â†' Trade Journal AI insights
+ * POST /api/chat          → Main chat (RAG + Claude, SSE streaming)
+ * POST /api/chat/coach    → Morning Coach AI briefing
+ * POST /api/chat/insights → Trade Journal AI insights
  */
 
 const express = require('express');
@@ -16,8 +16,10 @@ const { fetchMarketHeadlines } = require('../services/newsService');
 const { generateAndStoreBrief } = require('../services/coachService');
 const { parseLLMJson } = require('../utils/jsonParser');
 const { checkPrivacy }    = require('../utils/privacyGuard');
+const { checkTopic }      = require('../utils/topicGuard');
 const { embed }            = require('../services/embeddingService');
 const { normalizeQuery }   = require('../utils/queryNormalizer');
+const { storeGeneratedAnswer } = require('../utils/mongoAnswerStore');
 const logger                 = require('../utils/logger');
 const { generateText, streamText } = require('../services/geminiService');
 
@@ -26,9 +28,9 @@ const getRedis = (req) => req.app.locals.redis;
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
-// ─────────────────────────────────────────────
+// ————————————————————————————————————————————————————————
 // SYSTEM PROMPT (server-side, never exposed to browser)
-// â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
+// ————————————————————————————————————————————————————————
 const SYSTEM_PROMPT = `You are the official AI assistant for OptionSmart, India's institutional-grade algorithmic options trading platform built on the GoAlgoTrade infrastructure. You speak with precision, institutional clarity, and data-driven confidence.
 
 CONCISENESS RULES:
@@ -43,7 +45,13 @@ PRIVACY & CONFIDENTIALITY RULES (STRICT - NEVER VIOLATE):
 - NEVER disclose internal algorithm parameters, strategy code logic, threshold values, formula weights, or configuration settings.
 - NEVER share AUM (Assets Under Management), total client count, or total funds managed figures.
 - NEVER provide maximum drawdown numbers or specific historical loss percentages beyond what is publicly documented.
+- NEVER state that other brokers like Zerodha, Angel One, 5Paisa, Upstox, etc., are currently integrated or active. If asked about broker integrations, ALWAYS state clearly that only Motilal Oswal (MOSL) is integrated and supported at this moment, and that others are planned for future integration.
 - If a user asks for any of the above, always respond: "For detailed figures on this, I'd recommend speaking with an OptionSmart advisor directly. 📞 Call +91 8779328028 or use the WhatsApp button below."
+
+BLOCKED TOPICS (ABSOLUTE - NEVER RESPOND TO THESE):
+- NEVER answer any question about jobs, job openings, vacancies, hiring, recruitment, careers, employment, applying for a position, internships, salaries, or working at OptionSmart.
+- If a user asks anything related to the above (e.g. "Are you hiring?", "How do I apply?", "What positions are open?", "What is the salary?", "Can I work at OptionSmart?"), respond ONLY with: "For all recruitment, hiring, career opportunities, and strategy developer onboarding queries, please speak directly with an OptionSmart advisor. Call +91 8779328028 or use the WhatsApp button below."
+- Do NOT provide any job titles, role descriptions, team structure, or hiring information under any circumstances.
 
 PLATFORM OVERVIEW:
 OptionSmart is a systematic quantitative investment and algo trading company combining 26 quantitative strategy engines, the GoAlgoTrade execution platform, and broker enablement. Stats: 1,300+ B2B partners, 99.9% uptime SLA, NSE/BSE/MCX coverage, kill switch <1 second. SEBI Framework Aligned, NSE & BSE Registered, SEBI Algo Vendor.
@@ -81,7 +89,7 @@ ALGO STRATEGIES:
 - Pluto: Aggressive directional strategy for trending regimes. Higher risk-return profile.
 
 GOALGO PLATFORM (goalgotrade.tech):
-Multi-Broker Execution (Zerodha, Angel One, Motilal Oswal, and more), Real-Time Risk Controls, Performance Analytics (PnL, Sharpe ratio, drawdowns, win rate), Smart Order Execution (slippage control, retry logic), Option Greeks & Analytics (live Delta, Gamma, Theta, Vega), Strategy Builder & Backtesting, Compliance-Ready Audit Logs, Multi-Asset Coverage (NSE/BSE/MCX), Broker & Client Enablement.
+Multi-Broker Execution Framework (currently Motilal Oswal is integrated), Real-Time Risk Controls, Performance Analytics (PnL, Sharpe ratio, drawdowns, win rate), Smart Order Execution (slippage control, retry logic), Option Greeks & Analytics (live Delta, Gamma, Theta, Vega), Strategy Builder & Backtesting, Compliance-Ready Audit Logs, Multi-Asset Coverage (NSE/BSE/MCX), Broker & Client Enablement.
 
 COMPLIANCE: SEBI Framework Aligned. White Box architecture â€" fully auditable. NSE & BSE Registered. SEBI Algo Vendor.
 
@@ -116,6 +124,19 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'message is required' });
   }
 
+  // ── Topic Guard: block out-of-scope questions before any DB or API call ────
+  const topicCheck = checkTopic(message);
+  if (topicCheck.blocked) {
+    logger.info('[TopicGuard] Blocked out-of-scope query (topic: ' + topicCheck.topic + '): ' + message.slice(0, 60));
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.write('data: ' + JSON.stringify({ type: 'delta', text: topicCheck.message }) + '\n\n');
+    res.write('data: ' + JSON.stringify({ type: 'done', source: 'topic_guard' }) + '\n\n');
+    return res.end();
+  }
+
   // ── Privacy Guard: block sensitive data queries ─────────────────────────
   const privacyCheck = checkPrivacy(message);
   if (privacyCheck.blocked) {
@@ -131,10 +152,47 @@ router.post('/', async (req, res) => {
   }
 
   const redis = getRedis(req);
+  const db    = req.app.locals.db;
 
-  // 1. RAG lookup (Redis = answer cache, db = MongoDB vector store)
-  const db = req.app.locals.db;
-  const ragResult = await ragService.query(redis, db, message);
+  // 1. Check for live market context first (Kite stock/index quote lookups)
+  const marketCtx = await getMarketContext(message, redis);
+  const isMarketQuery = !!marketCtx;
+
+  // Split prompt into individual sub-questions by punctuation or newlines
+  const queryParts = message.split(/(?:\?|\n|\.\s+)/)
+    .map(p => p.trim())
+    .filter(p => p.length > 8);
+
+  const parts = queryParts.length > 0 ? queryParts : [message];
+
+  // 2. RAG lookup for each sub-question
+  let combinedContext = [];
+  let directHits = [];
+  let allHitsDirect = !isMarketQuery && parts.length > 0;
+  let singleDirectMatch = null;
+
+  if (!isMarketQuery) {
+    for (const part of parts) {
+      const res = await ragService.query(redis, db, normalizeQuery(part) || part);
+      if (res.context && res.context.length > 0) {
+        combinedContext.push(...res.context);
+      }
+      if (res.hit && res.directAnswer) {
+        directHits.push(res.answer);
+        if (parts.length === 1) {
+          singleDirectMatch = res;
+        }
+      } else {
+        allHitsDirect = false;
+      }
+    }
+  } else {
+    allHitsDirect = false;
+    logger.info(`[Chat] Live market query detected — bypassing RAG direct hit and cache`);
+  }
+
+  // Deduplicate retrieved context snippets
+  combinedContext = [...new Set(combinedContext)];
 
   // SSE headers (shared by all streaming paths below)
   function startSSE() {
@@ -145,33 +203,55 @@ router.post('/', async (req, res) => {
   }
 
   async function streamText(text, source) {
-    const chunks = text.match(/.{1,40}/g) || [text];
-    for (const chunk of chunks) {
+    const chunkSize = 40;
+    let index = 0;
+    while (index < text.length) {
+      const chunk = text.slice(index, index + chunkSize);
       res.write(`data: ${JSON.stringify({ type: 'delta', text: chunk })}\n\n`);
+      index += chunkSize;
       await new Promise(r => setTimeout(r, 8));
     }
     res.write(`data: ${JSON.stringify({ type: 'done', source })}\n\n`);
     res.end();
   }
 
-  // 2a. Redis exact-match cache hit -> serve instantly (zero Claude tokens)
-  if (ragResult.hit && ragResult.cached) {
+  // 3a. Single question Redis exact-match cache hit → serve instantly
+  if (parts.length === 1 && !isMarketQuery && singleDirectMatch && singleDirectMatch.cached) {
     startSSE();
-    await streamText(ragResult.answer, 'cache');
+    await streamText(singleDirectMatch.answer, 'cache');
     return;
   }
 
-  // 2b. MongoDB direct hit (similarity â‰¥ 0.72) â†' serve from DB (zero Claude tokens)
-  if (ragResult.hit && ragResult.directAnswer) {
+  // 3b. Combined direct hits for all parts → combine and serve instantly (0 API calls)
+  if (allHitsDirect && directHits.length > 0) {
+    // Merge answers, stripping trailing card and suggestions blocks from sub-answers
+    const combinedAnswer = directHits.map(ans => {
+      return ans.replace(/SUGGESTIONS:.+/i, '').replace(/CARDS:\s*TIERS/i, '').trim();
+    }).filter(Boolean).join('\n\n---\n\n');
+
+    // Build final unified layout
+    let finalAnswer = combinedAnswer;
+    const lower = finalAnswer.toLowerCase();
+    
+    // Auto-inject card if tiers are discussed
+    if ((lower.includes('core') || lower.includes('tier')) && lower.includes('alpha') && !finalAnswer.includes('CARDS: TIERS')) {
+      finalAnswer += '\n\nCARDS: TIERS';
+    }
+    // Auto-inject default suggestions if none are present
+    if (!finalAnswer.includes('SUGGESTIONS:')) {
+      finalAnswer += '\n\nSUGGESTIONS: How do strategies work? | What is the minimum capital? | Is OptionSmart SEBI registered?';
+    }
+
     startSSE();
-    await streamText(ragResult.answer, 'mongodb');
-    // Cache for next time so it comes from Redis
-    ragService.cacheAnswer(redis, message, { answer: ragResult.answer }).catch(() => {});
-    logger.info(`[Chat] Served from MongoDB directly â€" no Claude called`);
+    await streamText(finalAnswer, 'mongodb');
+    
+    // Cache the combined response under the raw multi-question message for next time
+    ragService.cacheAnswer(redis, message, { answer: finalAnswer }).catch(() => {});
+    logger.info(`[Chat] Served combined direct hit from MongoDB — no Claude called`);
     return;
   }
 
-  // 3. Build Gemini messages (role must be 'user' or 'model')
+  // 4. Build Gemini messages (role must be 'user' or 'model')
   const messages = [];
   for (const h of history.slice(-14)) {
     messages.push({ role: 'user',  parts: [{ text: h.user }] });
@@ -179,13 +259,11 @@ router.post('/', async (req, res) => {
   }
   messages.push({ role: 'user', parts: [{ text: message }] });
 
-  // 4. Build system prompt with RAG context + live market data
-  // marketService detects which stocks/indices the user asked about and fetches live Kite quotes
-  const marketCtx = await getMarketContext(message, redis);
+  // 5. Build system prompt with RAG context + live market data
   let systemWithContext = SYSTEM_PROMPT;
 
-  if (ragResult.context && ragResult.context.length > 0) {
-    systemWithContext += '\n\nRELEVANT KNOWLEDGE BASE CONTEXT (use this as reference):\n' + ragResult.context.join('\n---\n');
+  if (combinedContext && combinedContext.length > 0) {
+    systemWithContext += '\n\nRELEVANT KNOWLEDGE BASE CONTEXT (use this as reference):\n' + combinedContext.join('\n---\n');
   }
   if (marketCtx) {
     systemWithContext += marketCtx;
@@ -194,7 +272,7 @@ router.post('/', async (req, res) => {
     systemWithContext += HINDI_DIRECTIVE;
   }
 
-  // 5. Stream from Gemini
+  // 6. Stream from Gemini
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
@@ -222,9 +300,15 @@ router.post('/', async (req, res) => {
     res.write(`data: ${JSON.stringify({ type: 'done', source: 'gemini' })}\n\n`);
     res.end();
 
-    // 6. Cache the result for future identical questions
-    ragService.cacheAnswer(redis, message, { answer: fullText }).catch(() => {});
-    logger.info(`[Chat] Streamed response (${fullText.length} chars) for: "${message.slice(0, 60)}"`);
+    // 7. Persist answer to both Redis (fast, 24h TTL) and MongoDB (permanent self-learning)
+    // ONLY if it's not a dynamic market query, to avoid caching stale prices.
+    if (!isMarketQuery) {
+      ragService.cacheAnswer(redis, message, { answer: fullText }).catch(() => {});
+      storeGeneratedAnswer(db, message, fullText).catch(() => {});
+      logger.info(`[Chat] Streamed response (${fullText.length} chars) → cached in Redis + persisted to MongoDB`);
+    } else {
+      logger.info(`[Chat] Streamed response for live market query (${fullText.length} chars) — not cached`);
+    }
   } catch (err) {
     logger.error(`[Chat] Gemini stream error: ${err.message}`);
     res.write(`data: ${JSON.stringify({ type: 'error', message: err.message })}\n\n`);
@@ -242,7 +326,14 @@ router.post('/faq', async (req, res) => {
     return res.status(400).json({ ok: false, error: 'question is required' });
   }
 
-  // Privacy guard -- redirect sensitive queries to advisor
+  // Topic guard — block out-of-scope questions instantly (no DB/API cost)
+  const topicCheck = checkTopic(question);
+  if (topicCheck.blocked) {
+    logger.info('[TopicGuard/FAQ] Blocked out-of-scope: ' + question.slice(0, 60));
+    return res.json({ ok: true, answer: topicCheck.message, source: 'topic_guard' });
+  }
+
+  // Privacy guard — redirect sensitive queries to advisor
   const privacyCheck = checkPrivacy(question);
   if (privacyCheck.blocked) {
     logger.info('[Privacy/FAQ] Blocked sensitive query: ' + question.slice(0, 60));
@@ -261,11 +352,11 @@ router.post('/faq', async (req, res) => {
       if (ragResult.directAnswer && !ragResult.cached) {
         ragService.cacheAnswer(redis, question, { answer: ragResult.answer }).catch(() => {});
       }
-      logger.info(`[FAQ] Served from ${ragResult.cached ? 'Redis cache' : 'MongoDB'} â€" no Claude`);
+      logger.info(`[FAQ] Served from ${ragResult.cached ? 'Redis cache' : 'MongoDB'} — no Claude`);
       return res.json({ ok: true, answer: ragResult.answer, source: ragResult.cached ? 'cache' : 'mongodb' });
     }
 
-    // â"€â"€ 2. No good match in MongoDB â€" try exact text match as last resort â"€â"€
+    // ── 2. No good match in MongoDB — try exact text match as last resort ──
     const faqDoc = require('../models/faqDocument');
     const exactMatch = await db.collection('faq_documents').findOne(
       { question: { $regex: new RegExp(question.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') } },
@@ -274,7 +365,7 @@ router.post('/faq', async (req, res) => {
 
     if (exactMatch) {
       ragService.cacheAnswer(redis, question, { answer: exactMatch.answer }).catch(() => {});
-      logger.info(`[FAQ] Exact text match found â€" serving from MongoDB`);
+      logger.info(`[FAQ] Exact text match found — serving from MongoDB`);
       return res.json({ ok: true, answer: exactMatch.answer, source: 'mongodb' });
     }
 

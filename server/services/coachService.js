@@ -92,8 +92,8 @@ Generate a market briefing in this EXACT JSON format (no markdown, no backticks,
       { "title": "Event title", "detail": "Detail paragraph." },
       { "title": "Event title", "detail": "Detail paragraph." }
     ],
-    "technicals": "2-3 sentences on Nifty/Sensex technical picture: key levels breached, chart pattern, support/resistance levels for today.",
-    "strategy": "2-3 sentences on the preferred trading approach for today: buy dips / sell rallies, levels to watch, recommended stance for day traders."
+    "technicals": "Use markdown formatting. Start with a **bold one-line summary** of the overall chart bias. Then include a markdown table with exactly 3 rows: | Level | Value | Significance | with support, resistance, and a key level to watch. End with 1-2 bullet points on chart pattern or momentum signal (e.g. '- RSI at 58 — neutral momentum, watch for divergence').",
+    "strategy": "Use markdown formatting. Start with a **bold action headline** (e.g. '**Buy dips near support**'). Then 2-3 bullet points: specific price levels to buy/sell, time-of-day to watch, and the recommended stance. End with a blockquote caution: '> Risk: [specific risk in 1 sentence]'."
   }
 }
 Rules: Use REAL data from the headlines above. Be specific with numbers. Do not hallucinate data not in the headlines.

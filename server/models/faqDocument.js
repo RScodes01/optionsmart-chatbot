@@ -60,7 +60,7 @@ async function upsertDoc(db, doc) {
  * @returns {Promise<Array<{ _id: string, question: string, answer: string, embedding: number[] }>>}
  */
 async function getAllDocs(db) {
-  return col(db).find({}, { projection: { question: 1, answer: 1, embedding: 1, type: 1, sourceUrl: 1 } }).toArray();
+  return col(db).find({}, { projection: { question: 1, answer: 1, embedding: 1, type: 1, sourceUrl: 1, tags: 1 } }).toArray();
 }
 
 /**

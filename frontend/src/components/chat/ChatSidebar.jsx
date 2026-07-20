@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ChatSidebar.jsx — Conversation sessions list + quick questions
  */
 
@@ -10,19 +10,12 @@ import {
 } from '../../store/chatSlice';
 
 const QUICK_QUESTIONS = [
-  { label: '💰 Capital requirements', q: 'What are the capital tiers and minimum investment?',      faqId: 'faq_001' },
-  { label: '🤖 Algo strategies',      q: 'What are the algo strategies — Saturn, Venus, and Pluto?', faqId: 'faq_003' },
-  { label: '🛑 Kill switch',          q: 'What is the kill switch and how fast does it work?',       faqId: 'faq_011' },
-  { label: '📊 Market regime',        q: 'What is the Market Regime Engine?',                        faqId: 'faq_005' },
-  { label: '🛡️ Risk management',      q: 'What risk management safeguards does OptionSmart have?',   faqId: 'faq_006' },
-  { label: '🧠 AI exit',              q: 'How does AI/ML exit intelligence work?',                   faqId: 'faq_007' },
-  { label: '✅ SEBI compliance',      q: 'Is OptionSmart SEBI regulated and compliant?',             faqId: 'faq_009' },
-  { label: '🏦 Broker support',       q: 'What brokers are supported?',                              faqId: 'faq_015' },
-  { label: '🔒 Capital safety',       q: 'Is my capital safe with OptionSmart?',                     faqId: 'faq_030' },
-  { label: '💸 Withdraw anytime',     q: 'Is there a lock-in period or can I withdraw anytime?',     faqId: 'faq_029' },
+  { label: '💰 Capital Tiers',       q: 'What are the capital tiers and minimum investment?',      faqId: 'faq_002' },
+  { label: '🛡️ Loss Protection',     q: 'What risk management safeguards does OptionSmart have?',  faqId: 'faq_006' },
+  { label: '✅ SEBI Compliance',     q: 'Is OptionSmart SEBI regulated and compliant?',           faqId: 'faq_009' },
 ];
 
-export default function ChatSidebar({ isOpen, onClose, onFaqQ, onQuickQ, onNewChat }) {
+export default function ChatSidebar({ isOpen, isCollapsed, onClose, onFaqQ, onQuickQ, onNewChat, onOpenFaq }) {
   const dispatch = useDispatch();
   const sessions = useSelector((s) => s.chat.sessions);
   const currentSessionId = useSelector((s) => s.chat.currentSessionId);
@@ -38,6 +31,32 @@ export default function ChatSidebar({ isOpen, onClose, onFaqQ, onQuickQ, onNewCh
     dispatch(deleteSession(id));
   }
 
+  // Group conversations by date boundaries
+  const groups = {
+    today: [],
+    yesterday: [],
+    last7Days: [],
+    older: [],
+  };
+
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const startOfYesterday = startOfToday - 24 * 60 * 60 * 1000;
+  const startOf7DaysAgo = startOfToday - 7 * 24 * 60 * 60 * 1000;
+
+  sessions.forEach(s => {
+    const ts = s.updatedAt || Date.now();
+    if (ts >= startOfToday) {
+      groups.today.push(s);
+    } else if (ts >= startOfYesterday) {
+      groups.yesterday.push(s);
+    } else if (ts >= startOf7DaysAgo) {
+      groups.last7Days.push(s);
+    } else {
+      groups.older.push(s);
+    }
+  });
+
   return (
     <>
       {/* Backdrop for mobile */}
@@ -45,7 +64,7 @@ export default function ChatSidebar({ isOpen, onClose, onFaqQ, onQuickQ, onNewCh
         <div className="os-sidebar-backdrop" onClick={onClose} />
       )}
 
-      <aside className={`os-sidebar${isOpen ? ' os-sidebar--open' : ''}`}>
+      <aside className={`os-sidebar${isOpen ? ' os-sidebar--open' : ''}${isCollapsed ? ' os-sidebar--collapsed' : ''}`}>
         {/* New chat */}
         <div className="os-sidebar-section">
           <button className="os-sidebar-new-btn" onClick={onNewChat}>
@@ -53,28 +72,48 @@ export default function ChatSidebar({ isOpen, onClose, onFaqQ, onQuickQ, onNewCh
           </button>
         </div>
 
-        {/* Quick questions dropdown — answered from MongoDB, no Claude API */}
+        {/* FAQ Hub Trigger — answered from MongoDB with zero API calls */}
         <div className="os-sidebar-section">
-          <div className="os-s-label">Quick Questions</div>
-          <select
-            className="os-qselect"
-            defaultValue=""
-            onChange={(e) => {
-              const selectedQ = e.target.value;
-              if (selectedQ) {
-                const match = QUICK_QUESTIONS.find(qq => qq.q === selectedQ);
-                const handler = onFaqQ || onQuickQ;
-                // Pass { q, faqId } object so the hook can do exact ID lookup
-                handler?.({ q: selectedQ, faqId: match?.faqId });
-                e.target.value = '';
-              }
+          <div className="os-s-label">FAQ Knowledge Base</div>
+          
+          <button 
+            className="os-sidebar-new-btn" 
+            style={{ 
+              background: 'rgba(22,163,74,0.06)', 
+              borderColor: 'rgba(22,163,74,0.3)', 
+              color: '#4ade80',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              fontWeight: '600'
+            }}
+            onClick={() => {
+              onClose?.();
+              onOpenFaq?.();
             }}
           >
-            <option value="" disabled>Select a question…</option>
-            {QUICK_QUESTIONS.map(({ label, q }) => (
-              <option key={q} value={q}>{label}</option>
+            🔍 Browse FAQ Hub
+          </button>
+
+          {/* Quick-click pills */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginTop: '6px' }}>
+            {QUICK_QUESTIONS.map(qq => (
+              <button
+                key={qq.faqId}
+                className="os-convo-item"
+                style={{ margin: 0, padding: '7px 9px', fontSize: '11.5px', justifyContent: 'space-between' }}
+                onClick={() => {
+                  onClose?.();
+                  const handler = onFaqQ || onQuickQ;
+                  handler?.({ q: qq.q, faqId: qq.faqId });
+                }}
+              >
+                <span>{qq.label}</span>
+                <span style={{ opacity: 0.5 }}>→</span>
+              </button>
             ))}
-          </select>
+          </div>
         </div>
 
         {/* Conversation history */}
@@ -83,22 +122,36 @@ export default function ChatSidebar({ isOpen, onClose, onFaqQ, onQuickQ, onNewCh
           {!sessions.length && (
             <div className="os-convo-empty">No conversations yet.</div>
           )}
-          {sessions.map((s) => (
-            <button
-              key={s.id}
-              className={`os-convo-item${s.id === currentSessionId ? ' os-convo-item--active' : ''}`}
-              onClick={() => handleLoad(s.id)}
-            >
-              <span className="os-convo-title">{s.title || 'Conversation'}</span>
-              <span
-                className="os-convo-del"
-                onClick={(e) => handleDelete(e, s.id)}
-                title="Delete"
-              >
-                ✕
-              </span>
-            </button>
-          ))}
+
+          {Object.entries({
+            'Today': groups.today,
+            'Yesterday': groups.yesterday,
+            'Previous 7 Days': groups.last7Days,
+            'Older': groups.older
+          }).map(([label, groupList]) => {
+            if (!groupList.length) return null;
+            return (
+              <React.Fragment key={label}>
+                <div className="os-sidebar-group-label">{label}</div>
+                {groupList.map((s) => (
+                  <button
+                    key={s.id}
+                    className={`os-convo-item${s.id === currentSessionId ? ' os-convo-item--active' : ''}`}
+                    onClick={() => handleLoad(s.id)}
+                  >
+                    <span className="os-convo-title">{s.title || 'Conversation'}</span>
+                    <span
+                      className="os-convo-del"
+                      onClick={(e) => handleDelete(e, s.id)}
+                      title="Delete"
+                    >
+                      ✕
+                    </span>
+                  </button>
+                ))}
+              </React.Fragment>
+            );
+          })}
         </div>
 
         {/* Portfolio stats placeholder */}

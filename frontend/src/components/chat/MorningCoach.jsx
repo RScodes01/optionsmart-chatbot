@@ -5,6 +5,7 @@
 
 import React, { useState, useCallback } from 'react';
 import axios from 'axios';
+import { formatHTML } from '../../utils/markdownUtils';
 
 function Spinner() {
   return (
@@ -47,7 +48,10 @@ function MarketMorningBrief({ brief }) {
                 <span className="os-market-brief-pin">📌</span>
                 {ev.title}
               </div>
-              <div className="os-market-brief-event-detail">{ev.detail}</div>
+              <div
+                className="os-market-brief-event-detail os-md-content"
+                dangerouslySetInnerHTML={{ __html: formatHTML(ev.detail || '') }}
+              />
             </div>
           ))}
         </div>
@@ -56,14 +60,20 @@ function MarketMorningBrief({ brief }) {
       {brief.technicals && (
         <div className="os-market-brief-section">
           <div className="os-market-brief-section-label">📈 Technical Picture</div>
-          <div className="os-market-brief-section-text">{brief.technicals}</div>
+          <div
+            className="os-market-brief-section-text os-md-content"
+            dangerouslySetInnerHTML={{ __html: formatHTML(brief.technicals) }}
+          />
         </div>
       )}
 
       {brief.strategy && (
         <div className="os-market-brief-section os-market-brief-section--strategy">
           <div className="os-market-brief-section-label">⚡ Today's Strategy</div>
-          <div className="os-market-brief-section-text">{brief.strategy}</div>
+          <div
+            className="os-market-brief-section-text os-md-content"
+            dangerouslySetInnerHTML={{ __html: formatHTML(brief.strategy) }}
+          />
         </div>
       )}
     </div>

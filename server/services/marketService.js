@@ -413,6 +413,14 @@ function detectFromAliases(message) {
   return [...found];
 }
 
+const GENERIC_BLOCKLIST = new Set([
+  'internet', 'power', 'key', 'day', 'line', 'cap', 'home', 'best', 'good', 
+  'free', 'news', 'trade', 'live', 'mind', 'rate', 'value', 'price', 'plan', 
+  'core', 'pro', 'elite', 'lakh', 'crore', 'rupee', 'hold', 'money', 'stock', 
+  'share', 'account', 'cash', 'loan', 'pledge', 'broker', 'tax', 'fees', 'cost',
+  'loss', 'profit', 'charge', 'charges', 'trial', 'demo', 'setup', 'timings'
+]);
+
 // ─────────────────────────────────────────────
 // TIER 2: Scan the full NSE/BSE instruments map
 // Whole-word fuzzy scan — catches any stock not in the alias dict
@@ -430,6 +438,7 @@ function detectFromInstrumentsMap(message, instrumentsMap) {
 
   for (const key of keys) {
     if (key.length < 3) continue; // skip noise like "of", "in"
+    if (GENERIC_BLOCKLIST.has(key)) continue; // skip generic terms to avoid false-positives
 
     const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex   = new RegExp(`(?:^|\\s)${escaped}(?:\\s|$)`, 'i');

@@ -115,6 +115,36 @@ function generateQuestions(heading, content, pageTitle) {
 
 // ── HTML Structural Extraction ────────────────────────────────────────────────
 
+function cleanCheerioText($el, $) {
+  let result = '';
+  $el.contents().each((_, child) => {
+    if (child.type === 'text') {
+      result += child.data;
+    } else if (child.type === 'tag') {
+      const tagName = child.name.toLowerCase();
+      const isBlock = ['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'tr', 'td', 'br', 'section', 'article'].includes(tagName);
+      const childText = cleanCheerioText($(child), $);
+      if (isBlock) {
+        result += '\n' + childText + '\n';
+      } else {
+        result += childText;
+      }
+    }
+  });
+  return result;
+}
+
+function getCleanText($el, $) {
+  const raw = cleanCheerioText($el, $);
+  return raw
+    .replace(/[ \t]+/g, ' ')                        // collapse spaces/tabs
+    .replace(/\n{3,}/g, '\n\n')                     // max 2 consecutive newlines
+    .replace(/\n /g, '\n')                          // trim line starts
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')         // add space between lowercase/digit and uppercase
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')       // add space between consecutive uppercase and a capitalized word
+    .trim();
+}
+
 function extractSections(html, pageUrl) {
   const $ = cheerio.load(html);
 
@@ -122,7 +152,7 @@ function extractSections(html, pageUrl) {
   $('.cookie, .popup, .modal, .nav, .menu, .footer, .header, .breadcrumb, .sidebar').remove();
   $('[aria-hidden="true"], [role="navigation"], [role="banner"]').remove();
 
-  const rawTitle = $('title').text().trim() || $('h1').first().text().trim() || 'Untitled';
+  const rawTitle = getCleanText($('title'), $) || getCleanText($('h1').first(), $) || 'Untitled';
   const cleanTitle = rawTitle.replace(/OptionSmart\s*\|?\s*/gi, '').trim() || rawTitle;
 
   const sections  = [];
@@ -131,7 +161,7 @@ function extractSections(html, pageUrl) {
   // Extract heading → body pairs
   $('h1, h2, h3, h4').each((_, headingEl) => {
     const $h = $(headingEl);
-    const headingText = $h.text().replace(/\s+/g, ' ').trim();
+    const headingText = getCleanText($h, $);
     if (!headingText || headingText.length < 3 || headingText.length > 150) return;
 
     const contentParts = [];
@@ -142,7 +172,7 @@ function extractSections(html, pageUrl) {
     while ($next.length && depth < 20) {
       const tag = $next.prop('tagName')?.toLowerCase();
       if (tag && /^h[1-4]$/.test(tag)) break;
-      const text = $next.text().replace(/\s+/g, ' ').trim();
+      const text = getCleanText($next, $);
       if (text) contentParts.push(text);
       $next = $next.next();
       depth++;
@@ -154,7 +184,7 @@ function extractSections(html, pageUrl) {
       let ps = 0;
       while ($pNext.length && ps < 8) {
         if ($pNext.find('h1,h2,h3,h4').length) break;
-        const text = $pNext.text().replace(/\s+/g, ' ').trim();
+        const text = getCleanText($pNext, $);
         if (text) contentParts.push(text);
         $pNext = $pNext.next();
         ps++;
@@ -174,7 +204,7 @@ function extractSections(html, pageUrl) {
   // Fallback to paragraph-based chunking if heading extraction yields too little
   if (sections.length < 2) {
     const bodyEl = $('main, article, .content, #content, [role="main"], body').first();
-    const bodyText = bodyEl.text().replace(/\s+/g, ' ').trim();
+    const bodyText = getCleanText(bodyEl, $);
 
     if (bodyText.length > MIN_SECTION_LENGTH) {
       const sentences = bodyText.split(/(?<=[.!?])\s+/);
@@ -219,6 +249,11 @@ function extractLinks(html, pageUrl) {
       if (!href || href.startsWith('mailto:') || href.startsWith('tel:')) return;
       const resolved = new URL(href, pageUrl);
       if (resolved.hostname !== base.hostname) return;
+
+      const pathname = resolved.pathname.toLowerCase();
+      const skipExts = ['.pdf', '.zip', '.png', '.jpg', '.jpeg', '.gif', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.mp3', '.mp4', '.avi', '.mov', '.zip', '.rar', '.gz', '.tar'];
+      if (skipExts.some(ext => pathname.endsWith(ext))) return;
+
       resolved.hash = ''; resolved.search = '';
       links.add(resolved.toString().replace(/\/$/, ''));
     } catch { /* ignore */ }

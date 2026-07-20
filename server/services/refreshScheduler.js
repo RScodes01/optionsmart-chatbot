@@ -112,16 +112,18 @@ async function runRefresh(db, redis) {
   }
 
   // ── Phase 4b: Index curated FAQs + generated Q&As ──────────────────────
-  logger.info('[Refresh] Seeding static curated FAQs into MongoDB...');
-  const curatedDocs = faqs.map(f => ({ ...f, type: 'curated' }));
+  logger.info('[Refresh] Seeding static curated FAQs + extended FAQs into MongoDB...');
+  const { getAllCuratedDocs } = require('../utils/faqSeederHelper');
+  const curatedDocs = getAllCuratedDocs();
   
   const allDocsToIndex = [...curatedDocs, ...qaDocs];
 
   if (allDocsToIndex.length > 0) {
     try {
       await ragService.indexFAQs(db, allDocsToIndex);
+      await ragService.warmCaches(db);
       await redis.setEx(RAG_STATUS_KEY, RAG_STATUS_TTL, 'ready');
-      logger.info(`[Refresh] ✓ Knowledge base refreshed — ${allDocsToIndex.length} total Q&As indexed (${curatedDocs.length} curated, ${qaDocs.length} scraped)`);
+      logger.info(`[Refresh] ✓ Knowledge base refreshed — ${allDocsToIndex.length} total Q&As indexed (${curatedDocs.length} curated/extended, ${qaDocs.length} scraped)`);
       logger.info('[Refresh] ─────────────────────────────────────────');
       return;
     } catch (indexErr) {
@@ -131,13 +133,14 @@ async function runRefresh(db, redis) {
     logger.warn('[Refresh] No documents to index — using fallback');
   }
 
-  // ── Phase 4c: Fallback to static faq.json only ────────────────────────
-  logger.info(`[Refresh] Falling back to static faq.json (${faqs.length} entries)…`);
+  // ── Phase 4c: Fallback to static curated FAQs only ────────────────────────
+  logger.info(`[Refresh] Falling back to static curated FAQs…`);
   try {
-    const fallbackCuratedDocs = faqs.map(f => ({ ...f, type: 'curated' }));
+    const fallbackCuratedDocs = getAllCuratedDocs();
     await ragService.indexFAQs(db, fallbackCuratedDocs);
+    await ragService.warmCaches(db);
     await redis.setEx(RAG_STATUS_KEY, RAG_STATUS_TTL, 'ready');
-    logger.info(`[Refresh] ✓ Fallback complete — ${faqs.length} static FAQ docs indexed`);
+    logger.info(`[Refresh] ✓ Fallback complete — ${fallbackCuratedDocs.length} static curated FAQ docs indexed`);
   } catch (fallbackErr) {
     logger.error(`[Refresh] Fallback indexing failed: ${fallbackErr.message}`);
     await redis.setEx(RAG_STATUS_KEY, RAG_STATUS_TTL, 'error').catch(() => {});

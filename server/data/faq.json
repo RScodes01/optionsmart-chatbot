@@ -86,7 +86,7 @@
   {
     "id": "faq_010",
     "question": "What is the GoAlgo platform and what does it offer?",
-    "answer": "GoAlgoTrade (goalgotrade.tech) is the execution platform underlying OptionSmart. It offers: Multi-Broker Execution (Zerodha, Angel One, Motilal Oswal, and more), Real-Time Risk Controls, Performance Analytics (PnL, Sharpe ratio, drawdowns, win rate), Smart Order Execution (slippage control, retry logic), Option Greeks & Analytics (live Delta, Gamma, Theta, Vega), Strategy Builder & Backtesting, Compliance-Ready Audit Logs, Multi-Asset Coverage (NSE/BSE/MCX), Broker & Client Enablement.",
+    "answer": "GoAlgoTrade (goalgotrade.tech) is the execution platform underlying OptionSmart. It offers: Multi-Broker Execution Framework (currently Motilal Oswal is integrated), Real-Time Risk Controls, Performance Analytics (PnL, Sharpe ratio, drawdowns, win rate), Smart Order Execution (slippage control, retry logic), Option Greeks & Analytics (live Delta, Gamma, Theta, Vega), Strategy Builder & Backtesting, Compliance-Ready Audit Logs, Multi-Asset Coverage (NSE/BSE/MCX), Broker & Client Enablement.",
     "tags": ["goalgo", "platform", "execution", "features"]
   },
   {
@@ -116,8 +116,8 @@
   {
     "id": "faq_015",
     "question": "What brokers are supported?",
-    "answer": "OptionSmart's GoAlgoTrade platform supports multiple brokers including Zerodha, Angel One, Motilal Oswal, and more. Multi-broker execution is a core feature, allowing clients to connect their existing broker accounts.",
-    "tags": ["brokers", "zerodha", "angel one", "motilal", "connect"]
+    "answer": "OptionSmart's GoAlgoTrade platform currently has Motilal Oswal (MOSL) integrated as the supported broker. Multi-broker execution is a core feature of the platform framework, and for now, clients connect their Motilal Oswal broker account via API.",
+    "tags": ["brokers", "motilal", "mosl", "connect"]
   },
   {
     "id": "faq_016",
@@ -206,7 +206,7 @@
   {
     "id": "faq_030",
     "question": "Is my capital safe with OptionSmart? Who holds my money?",
-    "answer": "Your capital is always held in your own broker account (Zerodha, Angel One, Motilal Oswal, etc.). OptionSmart never takes custody of your funds. The algo strategies run via API access to your broker account — they can place and exit trades, but cannot transfer money out. Your capital is protected by your broker's SEBI-regulated framework and insurance (up to ₹15 Lakh by SEBI's Investor Protection Fund).",
+    "answer": "Your capital is always held in your own broker account (specifically Motilal Oswal / MOSL). OptionSmart never takes custody of your funds. The algo strategies run via API access to your broker account — they can place and exit trades, but cannot transfer money out. Your capital is protected by your broker's SEBI-regulated framework and insurance (up to ₹15 Lakh by SEBI's Investor Protection Fund).",
     "tags": ["safety", "capital safe", "money", "broker account", "custody", "sebi", "investor protection"]
   },
   {
@@ -241,9 +241,9 @@
   },
   {
     "id": "faq_036",
-    "question": "Can I use OptionSmart with Zerodha?",
-    "answer": "Yes. Zerodha is one of the primary supported brokers on the GoAlgoTrade platform. You connect your existing Zerodha account via the Kite API. Once connected, OptionSmart's algorithms can place, monitor, and exit trades in your Zerodha account automatically. Your funds stay in your Zerodha account at all times.",
-    "tags": ["zerodha", "kite", "api", "broker", "connect", "integration"]
+    "question": "Can I use OptionSmart with Zerodha, Angel One, or other brokers?",
+    "answer": "Currently, only Motilal Oswal (MOSL) is integrated and supported on the OptionSmart platform. Integrations with other brokers like Zerodha or Angel One are not active at this moment. You will need a Motilal Oswal broker account to connect with OptionSmart.",
+    "tags": ["zerodha", "angel one", "brokers", "motilal", "mosl", "connect", "integration"]
   },
   {
     "id": "faq_037",
@@ -268,5 +268,53 @@
     "question": "Does OptionSmart work for B2B partners or sub-brokers?",
     "answer": "Yes. OptionSmart has over 1,300 B2B partners including sub-brokers, financial advisors, and wealth managers. The GoAlgoTrade platform offers Broker & Client Enablement tools and white-label options for Institutional tier clients. B2B partners can offer OptionSmart's algo strategies to their own clients under their brand, with full compliance and audit trails.",
     "tags": ["b2b", "sub-broker", "partner", "white label", "wealth manager", "financial advisor"]
+  },
+  {
+    "id": "faq_041",
+    "question": "How does OptionSmart work? How does algo trading work?",
+    "answer": "OptionSmart works by connecting your existing broker account (currently Motilal Oswal / MOSL) to the GoAlgoTrade platform via API. Once connected, the platform's 26 quantitative strategy engines automatically place, monitor, and exit trades on your behalf — 100% intraday. The Market Regime Engine continuously analyzes market conditions and selects the best strategy (Saturn, Venus, or Pluto) to deploy. You don't need to manually watch charts or place orders — the algorithms handle everything.",
+    "tags": ["how it works", "algo trading", "how does it work", "automated", "process"]
+  },
+  {
+    "id": "faq_042",
+    "question": "Is OptionSmart safe? Is my investment safe?",
+    "answer": "Yes, OptionSmart is designed with multiple safety layers: (1) Your capital always stays in your own broker account — OptionSmart never holds your funds. (2) A 2% MTM loss cap per session automatically triggers a kill switch if losses exceed that limit. (3) 100% intraday square-off — zero overnight exposure. (4) SEBI-aligned, NSE & BSE registered, White Box architecture. (5) Your capital is protected by your broker's SEBI Investor Protection Fund (up to ₹15 Lakh).",
+    "tags": ["safe", "safety", "is it safe", "secure", "protection", "risk"]
+  },
+  {
+    "id": "faq_043",
+    "question": "Can I lose money with OptionSmart? What is the risk?",
+    "answer": "All trading, including algorithmic trading, involves market risk and capital can be at risk. OptionSmart's risk controls are designed to minimize losses: the 2% MTM cap limits any single-session loss to 2% of capital, the kill switch stops trading instantly if this cap is breached, and all positions are squared off intraday (no overnight gap risk). However, no system can eliminate risk entirely. OptionSmart does not guarantee returns as per SEBI regulations.",
+    "tags": ["lose money", "risk", "loss", "downside", "can i lose", "market risk"]
+  },
+  {
+    "id": "faq_044",
+    "question": "Does OptionSmart have overnight risk? Do positions carry overnight?",
+    "answer": "No. OptionSmart operates with 100% intraday square-off — all positions are closed before the market closes every day. This means there is zero overnight positional risk. You will never have any open position overnight, which eliminates gap risk from global events, news, or overnight price movements.",
+    "tags": ["overnight", "overnight risk", "positions", "carry", "intraday", "gap risk"]
+  },
+  {
+    "id": "faq_045",
+    "question": "What is the fee structure? How much does OptionSmart charge?",
+    "answer": "For detailed information on OptionSmart's fee structure and pricing, we recommend speaking directly with an OptionSmart advisor. They can share the current fee details tailored to your capital tier and trading volume. You can reach the team via the advisor chat or WhatsApp on the platform.",
+    "tags": ["fee", "fees", "charge", "cost", "pricing", "subscription", "fee structure"]
+  },
+  {
+    "id": "faq_046",
+    "question": "How many clients does OptionSmart have?",
+    "answer": "OptionSmart operates with 1,300+ B2B partners (sub-brokers, financial advisors, and wealth managers). The platform runs on a 99.9% uptime SLA and covers NSE, BSE, and MCX markets with 26 quantitative strategy engines.",
+    "tags": ["clients", "users", "how many clients", "partners", "scale", "size"]
+  },
+  {
+    "id": "faq_047",
+    "question": "What is the success rate or win rate of OptionSmart strategies?",
+    "answer": "OptionSmart tracks strategy performance including win rate, PnL, Sharpe ratio, and drawdown metrics in the GoAlgoTrade Performance Analytics dashboard. However, past performance does not guarantee future results, and SEBI regulations prohibit guaranteeing specific returns or win rates. For detailed performance data and historical results for each strategy, please speak with an OptionSmart advisor directly.",
+    "tags": ["success rate", "win rate", "performance", "accuracy", "returns", "track record"]
+  },
+  {
+    "id": "faq_048",
+    "question": "How to start with OptionSmart? How to get started? What is the process?",
+    "answer": "Getting started with OptionSmart is straightforward: (1) Choose your capital tier — minimum ₹9 Lakh for the Core plan. (2) Talk to an advisor to complete your onboarding and KYC. (3) Connect your broker account (currently Motilal Oswal / MOSL) to the GoAlgoTrade platform via API. (4) The algorithms start trading automatically — 100% intraday, fully managed. Contact the OptionSmart team via the advisor chat to begin.",
+    "tags": ["how to start", "get started", "onboarding", "process", "begin", "steps"]
   }
 ]

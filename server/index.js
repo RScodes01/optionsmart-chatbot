@@ -1,4 +1,4 @@
-﻿/**
+/**
  * index.js — Express server entry point for the OptionSmart Chatbot
  * Run: node server/index.js
  */
@@ -69,6 +69,13 @@ async function start() {
     await mongoClient.connect();
     app.locals.db = mongoClient.db(process.env.MONGO_DB_NAME || 'optionsmart_chat');
     logger.info('[MongoDB] Connected ✓');
+
+    // Pre-warm in-memory RAG caches (FAQ + scraped KB loaded into RAM once at startup)
+    // This ensures every query scores against embeddings without hitting MongoDB per request
+    ragService.warmCaches(app.locals.db).catch(err =>
+      logger.warn('[RAG] warmCaches failed (non-fatal):', err.message)
+    );
+
 
     // ── RAG Initialisation ──────────────────────────────────────────────
     // Runs in background — server starts immediately, seeding/scraping happens async.
