@@ -1,4 +1,4 @@
-﻿/**
+/**
  * queryNormalizer.js
  * Cleans user questions without altering their natural grammatical structure.
  * Stuffs keywords/synonyms should be avoided because sentence transformer models
@@ -25,15 +25,15 @@ function normalizeQuery(question) {
 
   let q = question.toLowerCase().trim();
 
+  // Expand common short abbreviations
   for (const [pattern, replacement] of CLEANUPS) {
     q = q.replace(pattern, replacement);
   }
 
-  for (const pattern of FILLER_PATTERNS) {
-    q = q.replace(pattern, ' ');
-  }
+  // Remove trailing punctuation and extra spaces while preserving grammatical structure
+  q = q.replace(/[?!.,;:]+$/g, '').replace(/\s{2,}/g, ' ').trim();
 
-  return q.replace(/\s{2,}/g, ' ').trim();
+  return q;
 }
 
 module.exports = { normalizeQuery };

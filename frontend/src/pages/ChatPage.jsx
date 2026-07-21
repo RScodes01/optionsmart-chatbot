@@ -45,10 +45,7 @@ function Toast() {
 }
 
 // ── Header ───────────────────────────────────────────
-function ChatHeader({ onMenuToggle, onCoach, onJournal, onExport }) {
-  const lang    = useSelector(s => s.chat.lang);
-  const dispatch = useDispatch();
-
+function ChatHeader({ onMenuToggle, onCoach, onFaq, onExport }) {
   return (
     <header className="os-header">
       <button className="os-menu-btn" onClick={onMenuToggle}>☰</button>
@@ -69,21 +66,8 @@ function ChatHeader({ onMenuToggle, onCoach, onJournal, onExport }) {
       </div>
 
       <div className="os-header-actions">
-        {/* Language toggle */}
-        <div className="os-lang-toggle">
-          {['en', 'hi'].map(l => (
-            <button
-              key={l}
-              className={`os-lang-btn${lang === l ? ' os-lang-btn--active' : ''}`}
-              onClick={() => dispatch(setLang(l))}
-            >
-              {l === 'en' ? 'EN' : 'हिं'}
-            </button>
-          ))}
-        </div>
-
+        <button className="os-hbtn" onClick={onFaq}>🔍 Browse FAQs</button>
         <button className="os-hbtn os-hbtn--coach" onClick={onCoach}>☀ Morning Coach</button>
-        <button className="os-hbtn os-hbtn--journal" onClick={onJournal}>📒 Trade Journal</button>
         <button className="os-hbtn" onClick={onExport}>↓ Export</button>
       </div>
     </header>
@@ -190,8 +174,8 @@ export default function ChatPage() {
     <div className="os-page">
       <ChatHeader
         onMenuToggle={handleMenuToggle}
+        onFaq={() => setFaqHubOpen(true)}
         onCoach={() => setCoachOpen(true)}
-        onJournal={() => setJournalOpen(true)}
         onExport={handleExport}
       />
 

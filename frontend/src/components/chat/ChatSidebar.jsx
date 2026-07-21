@@ -65,12 +65,6 @@ export default function ChatSidebar({ isOpen, isCollapsed, onClose, onFaqQ, onQu
       )}
 
       <aside className={`os-sidebar${isOpen ? ' os-sidebar--open' : ''}${isCollapsed ? ' os-sidebar--collapsed' : ''}`}>
-        {/* New chat */}
-        <div className="os-sidebar-section">
-          <button className="os-sidebar-new-btn" onClick={onNewChat}>
-            + New Conversation
-          </button>
-        </div>
 
         {/* FAQ Hub Trigger — answered from MongoDB with zero API calls */}
         <div className="os-sidebar-section">

@@ -282,7 +282,7 @@ router.post('/', async (req, res) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-3.5-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
       systemInstruction: systemWithContext,
       generationConfig: { maxOutputTokens: 1024 },
     });
@@ -310,9 +310,12 @@ router.post('/', async (req, res) => {
       logger.info(`[Chat] Streamed response for live market query (${fullText.length} chars) — not cached`);
     }
   } catch (err) {
-    logger.error(`[Chat] Gemini stream error: ${err.message}`);
-    res.write(`data: ${JSON.stringify({ type: 'error', message: err.message })}\n\n`);
-    res.end();
+    logger.error(`[Chat] Gemini stream error: ${err.message} — falling back to Knowledge Base answer`);
+    const fallbackAnswer = (combinedContext && combinedContext.length > 0)
+      ? combinedContext[0].replace(/^Q:.+\nA:\s*/, '')
+      : "OptionSmart is India's institutional-grade algorithmic options trading platform combining 26 quantitative strategy engines, the GoAlgoTrade execution platform, and broker enablement. It offers 5 capital tiers (Core, Alpha, Pro, Elite, Institutional) with real-time risk management and SEBI compliance.\n\nSUGGESTIONS: What are the capital tiers? | What is the Market Regime Engine? | How do strategies work?";
+
+    await streamText(fallbackAnswer, 'mongodb');
   }
 });
 
@@ -432,7 +435,7 @@ Focus on: time-of-day patterns, early exit of profits, letting losses run, strat
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-3.5-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
       generationConfig: { responseMimeType: 'application/json' },
     });
     const result = await model.generateContent(prompt);

@@ -494,7 +494,7 @@ If no specific stock is mentioned, return: []
 Return ONLY the JSON array — no explanation, no markdown.`;
 
     const model = genAI.getGenerativeModel({
-      model: 'gemini-3.5-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
       generationConfig: { responseMimeType: 'application/json' },
     });
     const result = await model.generateContent(prompt);

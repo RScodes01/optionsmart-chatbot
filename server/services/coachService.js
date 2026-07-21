@@ -102,7 +102,7 @@ ${dayName === 'Thursday' ? 'Thursday is weekly expiry — factor in theta burn a
 ${dayName === 'Monday' ? 'Monday often has gap opens — factor in weekend premium.' : ''}`;
 
   const model = genAI.getGenerativeModel({
-    model: 'gemini-3.5-flash',
+    model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
     generationConfig: { responseMimeType: 'application/json' },
   });
   const result = await model.generateContent(prompt);

@@ -2,9 +2,10 @@
  * MessageBubble.jsx
  * Renders a single chat message (user or bot) with:
  * - Typewriter reveal for new bot messages
+ * - Text-to-Speech (audio response reader)
  * - Follow-up suggestion chips
  * - Tier cards (when CARDS: TIERS in response)
- * - Copy button
+ * - Copy + Thumbs Up/Down Feedback
  */
 
 import React, { useMemo, useState } from 'react';
@@ -27,9 +28,6 @@ const FAQ_CHIP_MAP = {
   'Is my capital safe with OptionSmart?':                       'faq_030',
 };
 
-// ─────────────────────────────────────────
-// Tier data (mirrored from HTML)
-// ─────────────────────────────────────────
 const TIER_DATA = [
   { name: 'Core',          price: '₹9 Lakh',    popular: false, features: ['Non-Directional Strategy access', 'AI/ML exit intelligence', 'Basic risk management'] },
   { name: 'Alpha',         price: '₹25 Lakh',   popular: false, features: ['Everything in Core', 'Increased directional strategies', 'Advanced risk controls'] },
@@ -38,9 +36,6 @@ const TIER_DATA = [
   { name: 'Institutional', price: '₹5 Crore+',  popular: false, features: ['Full strategy suite', 'Adaptive non-correlated strategies', 'Enterprise-grade solutions'] },
 ];
 
-// ─────────────────────────────────────────
-// Parse SUGGESTIONS + CARDS from bot text
-// ─────────────────────────────────────────
 function parseResponse(raw = '') {
   const sugMatch = raw.match(/SUGGESTIONS:\s*(.+)/i);
   const chips = sugMatch
@@ -51,12 +46,6 @@ function parseResponse(raw = '') {
   return { text, chips, showTierCards };
 }
 
-// ─────────────────────────────────────────
-// Full Markdown → safe HTML renderer
-// Supports: tables, ordered/unordered lists,
-// code blocks, headings, bold, italic,
-// horizontal rules, blockquotes, inline code
-// ─────────────────────────────────────────
 function escapeHTML(str) {
   return str
     .replace(/&/g, '&amp;')
@@ -65,15 +54,11 @@ function escapeHTML(str) {
 }
 
 function inlineFormat(text) {
-  // Inline code (must come before bold/italic to avoid conflicts)
   text = text.replace(/`([^`]+)`/g, '<code class="os-inline-code">$1</code>');
-  // Bold
   text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   text = text.replace(/__([^_]+)__/g, '<strong>$1</strong>');
-  // Italic
   text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
   text = text.replace(/_([^_]+)_/g, '<em>$1</em>');
-  // Highlight ₹ amounts and percentages
   text = text.replace(/(₹[\d,]+(?:\.\d+)?(?:\s?(?:Lakh|Crore|L|Cr|K))?)/g, '<span class="os-highlight-price">$1</span>');
   text = text.replace(/(\+[\d.]+%|[-][\d.]+%)/g, (m) => {
     const cls = m.startsWith('+') ? 'os-pct-up' : 'os-pct-down';
@@ -87,7 +72,6 @@ function parseTable(lines) {
   if (rows.length < 2) return null;
 
   const headerCells = rows[0].trim().slice(1, -1).split('|').map(c => c.trim());
-  // rows[1] is the separator line (---|---|---)
   const bodyRows = rows.slice(2);
 
   let html = '<div class="os-table-wrap"><table class="os-table"><thead><tr>';
@@ -118,7 +102,6 @@ function formatHTML(text) {
     const line = lines[i];
     const trimmed = line.trim();
 
-    // ── Fenced code block ────────────────────────────────────────────
     if (trimmed.startsWith('```')) {
       const lang = trimmed.slice(3).trim();
       i++;
@@ -132,14 +115,12 @@ function formatHTML(text) {
       continue;
     }
 
-    // ── Horizontal rule ───────────────────────────────────────────────
     if (/^[-*_]{3,}$/.test(trimmed)) {
       html += '<hr class="os-hr" />';
       i++;
       continue;
     }
 
-    // ── Headings ─────────────────────────────────────────────────────
     if (/^###\s/.test(trimmed)) {
       html += `<h4 class="os-bubble-h4">${inlineFormat(trimmed.replace(/^###\s/, ''))}</h4>`;
       i++; continue;
@@ -153,7 +134,6 @@ function formatHTML(text) {
       i++; continue;
     }
 
-    // ── Markdown table (detect block) ─────────────────────────────────
     if (trimmed.startsWith('|') && i + 1 < lines.length && /^\|[-| :]+\|$/.test(lines[i + 1]?.trim())) {
       const tableLines = [];
       while (i < lines.length && lines[i].trim().startsWith('|')) {
@@ -164,7 +144,6 @@ function formatHTML(text) {
       if (tableHTML) { html += tableHTML; continue; }
     }
 
-    // ── Blockquote ───────────────────────────────────────────────────
     if (trimmed.startsWith('> ')) {
       let quote = '';
       while (i < lines.length && lines[i].trim().startsWith('> ')) {
@@ -175,7 +154,6 @@ function formatHTML(text) {
       continue;
     }
 
-    // ── Unordered list ───────────────────────────────────────────────
     if (/^[-•*]\s/.test(trimmed)) {
       html += '<ul class="os-bubble-ul">';
       while (i < lines.length && /^[-•*]\s/.test(lines[i].trim())) {
@@ -186,7 +164,6 @@ function formatHTML(text) {
       continue;
     }
 
-    // ── Ordered list ─────────────────────────────────────────────────
     if (/^\d+\.\s/.test(trimmed)) {
       html += '<ol class="os-bubble-ol">';
       while (i < lines.length && /^\d+\.\s/.test(lines[i].trim())) {
@@ -197,17 +174,14 @@ function formatHTML(text) {
       continue;
     }
 
-    // ── Empty line ───────────────────────────────────────────────────
     if (!trimmed) { i++; continue; }
 
-    // ── Regular paragraph ─────────────────────────────────────────────
     html += `<p class="os-bubble-p">${inlineFormat(trimmed)}</p>`;
     i++;
   }
 
   return html;
 }
-
 
 function TierCards() {
   return (
@@ -228,9 +202,6 @@ function TierCards() {
   );
 }
 
-// ─────────────────────────────────────────
-// Main component
-// ─────────────────────────────────────────
 export default function MessageBubble({ message, onChipClick, onAdvisorClick }) {
   const dispatch = useDispatch();
   const isBot  = message.role === 'assistant';
@@ -248,9 +219,10 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
     return d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
   }, [message.ts]);
 
-  const [copied, setCopied] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const [disliked, setDisliked] = useState(false);
+  const [copied, setCopied]         = useState(false);
+  const [liked, setLiked]           = useState(false);
+  const [disliked, setDisliked]     = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   function handleCopy() {
     navigator.clipboard.writeText(text).then(() => {
@@ -258,6 +230,41 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
       dispatch(showToast({ message: '✓ Copied to clipboard', type: 'info' }));
       setTimeout(() => setCopied(false), 2000);
     });
+  }
+
+  function handleSpeakToggle() {
+    if (!('speechSynthesis' in window)) {
+      dispatch(showToast({ message: 'Text-to-speech not supported in this browser.', type: 'info' }));
+      return;
+    }
+
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const cleanText = text
+      .replace(/SUGGESTIONS:.+/i, '')
+      .replace(/CARDS:\s*TIERS/i, '')
+      .replace(/[*#_`~|]/g, '')
+      .replace(/https?:\/\/\S+/g, '')
+      .trim();
+
+    if (!cleanText) return;
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'en-US';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    setIsSpeaking(true);
+    window.speechSynthesis.speak(utterance);
   }
 
   function handleLike() {
@@ -301,12 +308,31 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
           <div className="os-bubble os-bubble--user">{text}</div>
         )}
 
-        {/* Tier Cards */}
         {showTierCards && !message.streaming && <TierCards />}
 
-        {/* Copy + feedback + timestamp */}
         {isBot && !message.streaming && (
           <div className="os-msg-meta">
+            {/* Text-to-Speech Audio Button */}
+            <button
+              className={`os-maction ${isSpeaking ? 'os-maction--speaking' : ''}`}
+              onClick={handleSpeakToggle}
+              title={isSpeaking ? 'Stop audio' : 'Listen to response'}
+              style={{ color: isSpeaking ? '#34d399' : 'var(--os-muted)' }}
+            >
+              {isSpeaking ? (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style={{ verticalAlign: 'middle' }}>
+                  <rect x="6" y="6" width="12" height="12" rx="2" />
+                </svg>
+              ) : (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle' }}>
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                </svg>
+              )}
+            </button>
+
+            {/* Copy button */}
             <button className="os-maction" onClick={handleCopy} title="Copy response">
               {copied ? (
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle' }}>
@@ -319,6 +345,8 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
                 </svg>
               )}
             </button>
+
+            {/* Feedback buttons */}
             <button className="os-maction" onClick={handleLike} title="Good response" style={{ color: liked ? '#10b981' : 'var(--os-muted)' }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill={liked ? "#10b981" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle' }}>
                 <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
@@ -329,18 +357,12 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
                 <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm12-3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path>
               </svg>
             </button>
+
             <span className="os-ts">{ts}</span>
-            {message.source === 'cache' && (
-              <span className="os-cache-badge" title="Served from Redis cache">⚡ cached</span>
-            )}
-            {message.source === 'mongodb' && (
-              <span className="os-mongodb-badge" title="Answered directly from Knowledge Base — no AI used">📚 Knowledge Base</span>
-            )}
           </div>
         )}
         {isUser && <div className="os-ts os-ts--user">{ts}</div>}
 
-        {/* Follow-up chips */}
         {chips.length > 0 && !message.streaming && (
           <div className="os-follow-chips">
             {chips.map((c) => (
@@ -349,7 +371,6 @@ export default function MessageBubble({ message, onChipClick, onAdvisorClick }) 
           </div>
         )}
 
-        {/* Advisor CTA */}
         {showAdvisorCTA && !message.streaming && (
           <div className="os-inline-cta">
             <p className="os-inline-cta-text">

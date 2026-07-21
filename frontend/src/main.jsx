@@ -7,6 +7,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import chatReducer from './store/chatSlice';
 import ChatPage from './pages/ChatPage';
+import BlankDemoPage from './pages/BlankDemoPage';
 
 // Initialize anonymous device session ID
 let uid = localStorage.getItem('os_uid');
@@ -26,8 +27,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/chat" replace />} />
+          <Route path="/" element={<BlankDemoPage />} />
           <Route path="/chat" element={<ChatPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </Provider>

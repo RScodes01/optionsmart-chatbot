@@ -40,6 +40,8 @@ export function useChatStream() {
     dispatch(addUserMessage({ text, sessionId }));
     dispatch(setStreaming(true));
 
+    let source = 'gemini';
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -57,7 +59,6 @@ export function useChatStream() {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let source = 'gemini';
 
       while (true) {
         const { done, value } = await reader.read();

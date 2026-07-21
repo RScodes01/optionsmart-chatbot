@@ -32,10 +32,10 @@ const { frameAnswer }    = require('../utils/answerFramer');
 // ────────────────────────────────────────────────────────────────────────────────────────────────
 const CACHE_KEY_PREFIX         = 'chat:cache:';
 const CACHE_TTL_SECONDS        = 86400;  // 24 hours — FAQs are stable, cache aggressively
-const CURATED_THRESHOLD        = 0.50;   // curated FAQs (extremely generous for slight variations)
-const SCRAPED_THRESHOLD        = 0.50;   // crawled website content
-const GENERATED_THRESHOLD      = 0.68;   // AI-generated answers need higher confidence
-const CONTEXT_THRESHOLD        = 0.35;   // Gemini context injection band (slightly wider)
+const CURATED_THRESHOLD        = 0.40;   // curated FAQs (extremely generous for natural question variations)
+const SCRAPED_THRESHOLD        = 0.40;   // crawled website content
+const GENERATED_THRESHOLD      = 0.60;   // AI-generated answers
+const CONTEXT_THRESHOLD        = 0.25;   // Gemini context injection band (wider coverage)
 const TOP_K                    = 7;      // more candidates for richer context
 
 // ── In-process memory caches (avoids repeated MongoDB reads on each query) ──
