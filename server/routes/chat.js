@@ -282,7 +282,7 @@ router.post('/', async (req, res) => {
 
   try {
     const model = genAI.getGenerativeModel({
-      model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-flash-latest',
       systemInstruction: systemWithContext,
       generationConfig: { maxOutputTokens: 1024 },
     });
@@ -435,7 +435,7 @@ Focus on: time-of-day patterns, early exit of profits, letting losses run, strat
 
   try {
     const model = genAI.getGenerativeModel({
-      model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-flash-latest',
       generationConfig: { responseMimeType: 'application/json' },
     });
     const result = await model.generateContent(prompt);

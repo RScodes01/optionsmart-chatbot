@@ -57,7 +57,21 @@ const IN_SCOPE_PATTERNS = [
   /\bhello\b|\bhi\b|\bhey\b|\bnamaste\b/i,        // greetings always pass
   /\bthank\b|\bthanks\b|\bthank\s*you\b/i,
   /\bwhat\s+is\s+(a\s+)?(put|call)\b/i,           // options basics
-  /\bequity\b/i,
+  /\bequity\b|\bequities\b|\bindex\b|\bindices\b|\bshare\b|\bshares\b/i,
+  // Stock price queries — must pass through so marketService can fetch live data
+  /\bstock\s*price\b|\bshare\s*price\b|\blive\s*price\b|\bcurrent\s*price\b|\bprice\s*of\b/i,
+  /\bstock\b/i,
+  /\bprice\b/i,
+  /\bquote\b/i,
+  /\breliance\b|\btcs\b|\binfosys\b|\bhdfcbank\b|\bicicibank\b|\bsbin\b|\bwipro\b/i,
+  /\bhcl\b|\bkotak\b|\baxis\b|\bajaj\b|\bmaruti\b|\btatamotors\b|\badani\b/i,
+  /\bzomato\b|\bpaytm\b|\bairtel\b|\bltimindtree\b|\bmrf\b|\bdlf\b|\bntpc\b/i,
+  /\bsunpharma\b|\bcipla\b|\bdrreddy\b|\bbajajfinance\b|\bltimindtree\b/i,
+  /\baaj\s*ka\b|\bka\s*price\b|\bka\s*bhav\b|\bkitna\s*chal\b|\bkya\s*chal\b/i,
+  /\b(what|whats|what's).*(stock|share|price|trading|worth|value)\b/i,
+  /\b(how|where).*(stock|share|price|trading)\b/i,
+  /\bgainers?\b|\blosers?\b|\b52\s*week\b|\ball\s*time\s*high\b/i,
+  /\bipo\b|\bdividend\b|\bcircuit\b|\bvolume\b/i,
 ];
 
 // ── Block-list: clear out-of-scope topics ────────────────────────────────────

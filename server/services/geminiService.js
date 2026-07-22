@@ -16,7 +16,7 @@ function getApiKey() {
 
 async function generateText(prompt, options = {}) {
   const apiKey = getApiKey();
-  const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const model = process.env.GEMINI_MODEL || 'gemini-flash-latest';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   try {
@@ -42,7 +42,7 @@ async function generateText(prompt, options = {}) {
  */
 async function* streamText(prompt, options = {}) {
   const apiKey = getApiKey();
-  const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const model = process.env.GEMINI_MODEL || 'gemini-flash-latest';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?key=${apiKey}&alt=sse`;
 
   const response = await axios.post(url, {
