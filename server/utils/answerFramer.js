@@ -5,12 +5,14 @@
  * suggestions chips, and action cards) with ZERO API cost.
  */
 
+const CONTACT_INFO = require('../config/contact');
+
 const SUGGESTION_MAP = {
   tiers: 'What is the Core tier? | Can I withdraw anytime? | Is my capital safe?',
   strategies: 'How does Saturn work? | What is Pluto strategy? | What is the MTM cap?',
-  risk: 'What is the MTM cap? | Is OptionSmart SEBI registered? | What is the kill switch?',
+  risk: 'What is the MTM cap? | Is OptionSmart SEBI compliant? | What is the kill switch?',
   onboarding: 'How do I start onboarding? | Which brokers are supported? | What is the minimum capital?',
-  default: 'How do strategies work? | What is the minimum capital? | Is OptionSmart SEBI registered?'
+  default: 'How do strategies work? | What is the minimum capital? | Is OptionSmart SEBI compliant?'
 };
 
 /**
@@ -33,11 +35,15 @@ function frameAnswer(doc, source) {
     const section = doc.section || 'General Information';
     formatted += `## ${section}\n*Source: ${title}*\n\n`;
     
-    // Clean content of common web scraping artifacts
+    // Clean content of common web scraping artifacts and performance statistics
     let cleanContent = answerContent
       .replace(/Explore Strategy FrameworkView GoAlgo Platform ↗/gi, '')
       .replace(/\d+\s*Strategy Engines\s*\d+,\d+\+Users\s*\d+\.\d+%Uptime/gi, '')
       .replace(/Live Market ActivityNIFTY Options Flow.*Active/gi, '')
+      .replace(/\d+\.?\d*%\s*(CAGR|Return|ROI|Drawdown|Win Rate|Yield|Profit)[^\n.]*/gi, '')
+      .replace(/(CAGR|Sharpe Ratio|Max Drawdown|Beta to NIFTY)[^\n.]*/gi, '')
+      .replace(/45\.3%|2\.11|−20\.8%|0\.52 Beta/gi, '')
+      .replace(/vs \d+\.?\d*% NIFTY 50/gi, '')
       .trim();
 
     // Clean up run-on newlines or single short words on newlines
@@ -65,12 +71,11 @@ function frameAnswer(doc, source) {
     if (doc.question) {
       formatted += `## ${doc.question}\n\n`;
     }
-    
     // Format contact numbers / lines in blockquotes for premium highlighted presentation
     let lines = answerContent.split('\n');
     lines = lines.map(line => {
       const trimmedLine = line.trim();
-      if ((trimmedLine.includes('+91 8779328028') || trimmedLine.includes('support@optionsmart.in')) && !trimmedLine.startsWith('>')) {
+      if ((trimmedLine.includes(CONTACT_INFO.phoneDisplay) || trimmedLine.includes(CONTACT_INFO.phoneNumber) || trimmedLine.includes(CONTACT_INFO.email)) && !trimmedLine.startsWith('>')) {
         return `> ${line}`;
       }
       return line;

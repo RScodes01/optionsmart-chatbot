@@ -316,7 +316,7 @@
   },
   {
     "_id": "sk_0014",
-    "content": "Systematic Factor Equity Portfolio\nA rules-based, factor-driven equity portfolio of 35 NSE-listed companies, selected using a proprietary Quality, Momentum, and Low Volatility model — with a market breadth regime filter to manage drawdowns.\nView Product",
+    "content": "Systematic Factor Equity Portfolio A rules-based, factor-driven equity portfolio of 35 NSE-listed companies, selected using a proprietary Quality, Momentum, and Low Volatility model — with a market breadth regime filter to manage drawdowns. View Product",
     "createdAt": "2026-07-16T04:04:53.661Z",
     "pageTitle": "Algorithmic Options Trading",
     "questions": [
@@ -341,7 +341,7 @@
   },
   {
     "_id": "sk_0015",
-    "content": "NIFTY & SENSEX Options Trading\nSystematic intraday algo trading on NIFTY and SENSEX weekly options — combining short volatility and directional momentum models across capital tiers from ₹9L to ₹5Cr+.\nView Details",
+    "content": "NIFTY & SENSEX Options Trading Systematic intraday algo trading on NIFTY and SENSEX weekly options — combining short volatility and directional momentum models across capital tiers from ₹9L to ₹5Cr+. View Details",
     "createdAt": "2026-07-16T04:04:53.674Z",
     "pageTitle": "Algorithmic Options Trading",
     "questions": [
@@ -366,7 +366,7 @@
   },
   {
     "_id": "sk_0016",
-    "content": "MCX Options Trading\nSystematic algo trading on MCX commodity options, using the same tiered capital structure and risk framework as our equity indices offering.\nView Details",
+    "content": "MCX Options Trading Systematic algo trading on MCX commodity options, using the same tiered capital structure and risk framework as our equity indices offering. View Details",
     "createdAt": "2026-07-16T04:04:53.685Z",
     "pageTitle": "Algorithmic Options Trading",
     "questions": [
@@ -391,7 +391,7 @@
   },
   {
     "_id": "sk_0017",
-    "content": "Nebula Short Cluster\nA systematic, short-only intraday breakdown strategy across NSE F&O stocks — fully intraday with zero overnight risk, a hard daily trade quota, and automatic same-day square-off.\nView Details",
+    "content": "Nebula Short Cluster A systematic, short-only intraday breakdown strategy across NSE F&O stocks — fully intraday with zero overnight risk, a hard daily trade quota, and automatic same-day square-off. View Details",
     "createdAt": "2026-07-16T04:04:53.698Z",
     "pageTitle": "Algorithmic Options Trading",
     "questions": [
@@ -985,7 +985,7 @@
   },
   {
     "_id": "sk_0046",
-    "content": "A single-page investor summary — stats, methodology, and terms at a glance.\nOpen One-Pager",
+    "content": "A single-page investor summary — stats, methodology, and terms at a glance. Open One-Pager",
     "createdAt": "2026-07-16T04:04:55.077Z",
     "pageTitle": "Algorithmic Options Trading",
     "questions": [
@@ -1008,7 +1008,7 @@
   },
   {
     "_id": "sk_0047",
-    "content": "Get in touch with our team to discuss the strategy, historical performance, and onboarding process.\nContact UsBack to Products",
+    "content": "Get in touch with our team to discuss the strategy, historical performance, and onboarding process. Contact UsBack to Products",
     "createdAt": "2026-07-16T04:04:55.086Z",
     "pageTitle": "Algorithmic Options Trading",
     "questions": [
@@ -1058,7 +1058,7 @@
   },
   {
     "_id": "sk_0049",
-    "content": "The LEO strategy overview, one-pager, and pitch deck are being finalised. This page will update automatically once they're published.\nBack to Products",
+    "content": "The LEO strategy overview, one-pager, and pitch deck are being finalised. This page will update automatically once they're published. Back to Products",
     "createdAt": "2026-07-16T04:04:55.101Z",
     "pageTitle": "Algorithmic Options Trading",
     "questions": [
@@ -1133,7 +1133,7 @@
   },
   {
     "_id": "sk_0052",
-    "content": "Get in touch with our team to find the right capital tier and onboarding path.\nContact UsBack to Products",
+    "content": "Get in touch with our team to find the right capital tier and onboarding path. Contact UsBack to Products",
     "createdAt": "2026-07-16T04:04:55.144Z",
     "pageTitle": "Algorithmic Options Trading",
     "questions": [
@@ -1329,7 +1329,7 @@
   },
   {
     "_id": "sk_0060",
-    "content": "Every safeguard below is enforced automatically — not by a trader's judgment in the moment.\nPer-Trade Stop-Loss, Always OnEvery position carries a fixed 2% stop-loss from entry, set the moment the trade is placed.Hard Daily Trade QuotaA strict cap of 5 trades per day bounds how much capital can ever be deployed at once — exposure is structurally limited, not just monitored.Guaranteed Same-Day Square-OffAny position still open is force-closed shortly after 3:15 PM. No trade is ever allowed to carry risk into the next session.Systematic, Model-Driven EntriesSignals are generated and ranked by a validated rules engine — removing emotion, hesitation, and ad-hoc decision-making from execution.",
+    "content": "Every safeguard below is enforced automatically — not by a trader's judgment in the moment. Per-Trade Stop-Loss, Always OnEvery position carries a fixed 2% stop-loss from entry, set the moment the trade is placed.Hard Daily Trade QuotaA strict cap of 5 trades per day bounds how much capital can ever be deployed at once — exposure is structurally limited, not just monitored.Guaranteed Same-Day Square-OffAny position still open is force-closed shortly after 3:15 PM. No trade is ever allowed to carry risk into the next session.Systematic, Model-Driven EntriesSignals are generated and ranked by a validated rules engine — removing emotion, hesitation, and ad-hoc decision-making from execution.",
     "createdAt": "2026-07-16T04:04:55.248Z",
     "pageTitle": "Algorithmic Options Trading",
     "questions": [
@@ -1448,7 +1448,7 @@
   },
   {
     "_id": "sk_0065",
-    "content": "Get in touch with our team to discuss the strategy and onboarding process.\nContact UsBack to Products",
+    "content": "Get in touch with our team to discuss the strategy and onboarding process. Contact UsBack to Products",
     "createdAt": "2026-07-16T04:04:55.298Z",
     "pageTitle": "Algorithmic Options Trading",
     "questions": [

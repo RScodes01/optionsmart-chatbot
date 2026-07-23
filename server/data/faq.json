@@ -2,7 +2,7 @@
   {
     "id": "faq_001",
     "question": "What is OptionSmart and how does it work?",
-    "answer": "OptionSmart is India's institutional-grade algorithmic options trading platform built on the GoAlgoTrade infrastructure. It is a systematic quantitative investment and algo trading company combining 26 quantitative strategy engines, the GoAlgoTrade execution platform, and broker enablement. Key stats: 1,300+ B2B partners, 99.9% uptime SLA, NSE/BSE/MCX coverage, kill switch under 1 second. SEBI Framework Aligned, NSE & BSE Registered, SEBI Algo Vendor.",
+    "answer": "OptionSmart is India's institutional-grade algorithmic options trading platform built on the GoAlgoTrade infrastructure. It is a systematic quantitative investment and algo trading company combining 26 quantitative strategy engines, the GoAlgoTrade execution platform, and broker enablement. Key stats: 1,300+ B2B partners, 99.9% uptime SLA, NSE/BSE/MCX coverage, kill switch under 1 second. SEBI Framework Aligned (White Box Architecture; formal SEBI registration & licensing in progress).",
     "tags": ["overview", "platform", "intro", "what is optionsmart"]
   },
   {
@@ -80,7 +80,7 @@
   {
     "id": "faq_009",
     "question": "Is OptionSmart SEBI regulated and compliant?",
-    "answer": "Yes. OptionSmart is SEBI Framework Aligned, NSE & BSE Registered, and a SEBI Algo Vendor. The platform uses a White Box architecture — fully auditable with documented logic. This means regulators and clients can trace every decision made by the algorithms.",
+    "answer": "OptionSmart is SEBI Framework Aligned using a White Box architecture — fully auditable with documented logic. Formal SEBI registration and licensing are currently in progress. All trades execute directly through your connected broker account under existing SEBI frameworks.",
     "tags": ["sebi", "compliance", "regulation", "nse", "bse", "legal"]
   },
   {

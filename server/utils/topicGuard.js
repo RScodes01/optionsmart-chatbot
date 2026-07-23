@@ -119,6 +119,8 @@ const OUT_OF_SCOPE_PATTERNS = [
   { pattern: /\b(photosynthesis|periodic\s+table|element|atom|molecule|gravity|physics|chemistry|biology|geography|planet|solar\s+system)\b/i, topic: 'science' },
 ];
 
+const CONTACT_INFO = require('../config/contact');
+
 const OUT_OF_SCOPE_MESSAGE = `I'm OptionSmart's AI assistant — I can only answer questions related to **OptionSmart**, algo trading, investment strategies, platform features, and financial markets.
 
 For anything outside this scope, I'm not the right resource. 😊
@@ -132,9 +134,9 @@ For anything outside this scope, I'm not the right resource. 😊
 - SEBI compliance and legal queries
 
 **Need to speak to a person?**
-📞 **+91 8779328028** | WhatsApp button below
+📞 **${CONTACT_INFO.phoneDisplay}** | WhatsApp button below
 
-SUGGESTIONS: How do strategies work? | What is minimum capital? | Is OptionSmart SEBI registered?`;
+SUGGESTIONS: How do strategies work? | What is minimum capital? | Is OptionSmart SEBI compliant?`;
 
 /**
  * Check if a question is outside OptionSmart's domain.

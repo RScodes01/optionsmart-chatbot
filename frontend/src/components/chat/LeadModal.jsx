@@ -4,8 +4,9 @@
  */
 
 import React, { useState } from 'react';
+import CONTACT_INFO from '../../config/contact';
 
-const WHATSAPP_NUMBER = '918779328028';
+const WHATSAPP_NUMBER = CONTACT_INFO.whatsappNumber;
 
 export default function LeadModal({ isOpen, onClose }) {
   const [form, setForm]       = useState({ name: '', email: '', phone: '' });

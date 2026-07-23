@@ -51,12 +51,14 @@ const PRIVATE_PATTERNS = [
   { pattern: /\b(strategy\s+developer|monetiz(e|ing|ation)\b.*\bstrateg(y|ies)|developer\s+onboarding)\b/i, topic: 'recruitment' },
 ];
 
+const CONTACT_INFO = require('../config/contact');
+
 const ADVISOR_MESSAGE = `For detailed figures on this — including specific performance numbers, fee structures, and strategy parameters — I'd recommend speaking directly with an OptionSmart advisor. They can walk you through the exact data tailored to your capital tier and goals.
 
 📞 **Talk to an Advisor:**
 - 💬 Use the WhatsApp button below to connect instantly
-- 📧 Reach us at: **support@optionsmart.in**
-- 📱 Call: **+91 8779328028**
+- 📧 Reach us at: **${CONTACT_INFO.email}**
+- 📱 Call: **${CONTACT_INFO.phoneDisplay}**
 
 An advisor will provide complete, accurate information that is specific to your situation.`;
 
@@ -64,8 +66,8 @@ const RECRUITMENT_ADVISOR_MESSAGE = `For all recruitment, hiring, career opportu
 
 📞 **Talk to an Advisor:**
 - 💬 Use the WhatsApp button below to connect instantly
-- 📧 Reach us at: **support@optionsmart.in**
-- 📱 Call: **+91 8779328028**
+- 📧 Reach us at: **${CONTACT_INFO.email}**
+- 📱 Call: **${CONTACT_INFO.phoneDisplay}**
 
 An advisor will assist you with current openings, developer partnerships, and onboarding requirements.`;
 
