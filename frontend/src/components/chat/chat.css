@@ -819,12 +819,27 @@
   to   { opacity:1; transform:scale(1); }
 }
 
-/* ── FAQ loading typing row ──────────────────────── */
+/* ── FAQ loading state ───────────────────────────── */
 .os-faq-loading {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 8px 0;
+  justify-content: center;
+  gap: 14px;
+  padding: 48px 0;
+  color: var(--os-muted);
+  font-size: 13px;
+}
+.os-faq-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(16, 185, 129, 0.2);
+  border-top-color: #10b981;
+  border-radius: 50%;
+  animation: os-spin 0.75s linear infinite;
+}
+@keyframes os-spin {
+  to { transform: rotate(360deg); }
 }
 .os-faq-loading-text {
   font-size: 12px;

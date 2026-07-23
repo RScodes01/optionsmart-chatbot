@@ -3,246 +3,664 @@
     "id": "faq_q01",
     "question": "Why choose OptionSmart over other algo trading platforms?",
     "answer": "OptionSmart stands apart for these key reasons:\n- **Institutional-grade infrastructure**: Built on GoAlgoTrade — 26 quantitative engines, 99.9% uptime SLA, NSE/BSE/MCX coverage.\n- **SEBI-aligned, White Box**: Every algo decision is auditable and documented. Not a black box.\n- **Your capital stays with you**: Funds never leave your broker account — OptionSmart only has API trade access, not withdrawal access.\n- **2% MTM cap + kill switch <1 second**: Hard-coded loss protection on every session.\n- **No coding needed**: Fully managed — you connect your broker account once; algorithms do the rest.\n- **No overnight risk**: 100% intraday square-off every session.\n- **1,300+ B2B partners** and deep market expertise from 20+ years of founders' experience.\n\nFor performance comparisons and historical data, speak with an advisor: 📞 +91 8779328028.",
-    "tags": ["why choose", "advantages", "benefits", "optionsmart vs others", "differentiator", "best algo platform"]
+    "tags": [
+      "why choose",
+      "advantages",
+      "benefits",
+      "optionsmart vs others",
+      "differentiator",
+      "best algo platform"
+    ],
+    "category": "why_choose",
+    "categoryLabel": "Why OptionSmart"
   },
   {
     "id": "faq_q02",
     "question": "How do OptionSmart strategies work? Strategy mechanism, investment schemes, product information.",
     "answer": "OptionSmart runs **26 quantitative strategy engines**, with three named flagship strategies:\n\n| Strategy | Type | Best In | Mechanism |\n|---|---|---|---|\n| **Saturn** | Non-Directional | Range-Bound | Sells options (straddles/strangles), harvests theta decay |\n| **Venus** | Hybrid | Trending + Range | Defined-risk spreads (bull/bear spreads, iron condors) |\n| **Pluto** | Directional | Trending | Captures momentum moves with trailing stops |\n\n**How it works end-to-end:**\n1. Market Regime Engine classifies market every minute: Trending / Range-Bound / Volatility Expansion.\n2. Based on regime, the right strategy is deployed automatically.\n3. AI/ML Exit Intelligence monitors Greeks (Delta, Theta, Vega) and exits positions when probability shifts — not at fixed stop-loss.\n4. Kill switch (< 1 second) exits everything if 2% MTM loss is hit.\n5. 100% intraday square-off — no overnight exposure.\n\n**Investment tiers**: Core (₹9L) → Alpha (₹25L) → Pro (₹50L) → Elite (₹1Cr) → Institutional (₹5Cr+).",
-    "tags": ["how strategies work", "mechanism", "investment scheme", "product", "saturn venus pluto", "how algo works", "strategy functioning"]
+    "tags": [
+      "how strategies work",
+      "mechanism",
+      "investment scheme",
+      "product",
+      "saturn venus pluto",
+      "how algo works",
+      "strategy functioning"
+    ],
+    "category": "strategies",
+    "categoryLabel": "Algo Strategies"
   },
   {
     "id": "faq_q03",
     "question": "What are OptionSmart's platform charges, fees, and subscription cost?",
     "answer": "OptionSmart's specific fee structure, profit-sharing arrangements, and subscription pricing are shared directly by an advisor — tailored to your capital tier and trading volume.\n\n> For detailed fee information, please contact an advisor: 📞 **+91 8779328028** or use the WhatsApp button.\n\nGeneral framework:\n- Fees vary by capital tier (Core/Alpha/Pro/Elite/Institutional).\n- Brokerage costs are separate — charged by your connected broker (Motilal Oswal).\n- No hidden fees — all charges are disclosed upfront during onboarding.",
-    "tags": ["platform charges", "fees", "subscription", "cost", "pricing", "how much does it cost", "fee structure"]
+    "tags": [
+      "platform charges",
+      "fees",
+      "subscription",
+      "cost",
+      "pricing",
+      "how much does it cost",
+      "fee structure"
+    ],
+    "category": "pricing",
+    "categoryLabel": "Capital & Pricing"
   },
   {
     "id": "faq_q04",
     "question": "Is there a mobile application for OptionSmart?",
     "answer": "The **GoAlgoTrade platform** (which powers OptionSmart) is accessible via web browser on both desktop and mobile. For specific information on a dedicated iOS or Android app and its current availability, please contact the OptionSmart team:\n\n📞 **+91 8779328028** | WhatsApp button in the chat.\n\nThe platform is optimized for real-time monitoring of trades, PnL, and Greeks — functionality that is available whether accessed on desktop or mobile browser.",
-    "tags": ["mobile app", "mobile application", "ios", "android", "app", "phone", "mobile"]
+    "tags": [
+      "mobile app",
+      "mobile application",
+      "ios",
+      "android",
+      "app",
+      "phone",
+      "mobile"
+    ],
+    "category": "platform",
+    "categoryLabel": "Platform"
   },
   {
     "id": "faq_q05",
     "question": "Do I need coding knowledge to use OptionSmart? Is programming required?",
     "answer": "**No coding knowledge is required** to use OptionSmart.\n\nOptionSmart is a **fully managed algo trading service**. You simply:\n1. Connect your broker account once (via GoAlgoTrade platform — a few clicks).\n2. The algorithms trade automatically on your behalf.\n\nYou don't write any code, build strategies, or manage execution. Everything is handled by OptionSmart's team and its 26 automated strategy engines.\n\n> Coding knowledge is only relevant if you are a **strategy developer** looking to build and list your own strategies on the GoAlgoTrade marketplace — that is a separate, advanced use case.",
-    "tags": ["coding", "programming", "no coding", "technical knowledge", "beginner", "do i need to code"]
+    "tags": [
+      "coding",
+      "programming",
+      "no coding",
+      "technical knowledge",
+      "beginner",
+      "do i need to code"
+    ],
+    "category": "beginner",
+    "categoryLabel": "Beginner Friendly"
   },
   {
     "id": "faq_q06",
     "question": "Does OptionSmart support backtesting of strategies?",
     "answer": "**Yes.** The **GoAlgoTrade platform** includes a built-in **Strategy Builder & Backtesting** module.\n\nKey features:\n- Test strategies against NSE/BSE/MCX **historical market data**.\n- Evaluate PnL, drawdown, win rate, and Sharpe ratio on past data before deploying real capital.\n- Validate strategy logic and parameters — reduces live deployment risk.\n- Available to OptionSmart clients and B2B partners.\n\nBacktesting is a critical step before any strategy goes live on the platform. All three core strategies (Saturn, Venus, Pluto) have been extensively backtested before deployment.",
-    "tags": ["backtesting", "backtest", "historical data", "test strategy", "strategy testing", "past performance testing"]
+    "tags": [
+      "backtesting",
+      "backtest",
+      "historical data",
+      "test strategy",
+      "strategy testing",
+      "past performance testing"
+    ],
+    "category": "platform",
+    "categoryLabel": "Platform"
   },
   {
     "id": "faq_q07",
     "question": "Which trading segments are supported? Does OptionSmart trade equity, F&O, commodities?",
     "answer": "OptionSmart via GoAlgoTrade supports the following trading segments:\n\n| Segment | Exchange | Details |\n|---|---|---|\n| **Equity Derivatives (F&O)** | NSE | Nifty, BankNifty, individual stock options/futures |\n| **Equity Cash** | NSE/BSE | Cash equity trading |\n| **Commodity Derivatives** | MCX | Gold, Silver, Crude Oil, etc. |\n| **Currency Derivatives** | NSE/BSE | USD-INR, EUR-INR, etc. |\n\nPrimary focus: **NSE F&O** (options on Nifty/BankNifty) — this is where Saturn, Venus, and Pluto operate. MCX commodity strategies are available for higher tiers. Contact an advisor for specific segment availability by tier.",
-    "tags": ["trading segments", "equity", "f&o", "commodities", "mcx", "nse", "bse", "currency", "what markets"]
+    "tags": [
+      "trading segments",
+      "equity",
+      "f&o",
+      "commodities",
+      "mcx",
+      "nse",
+      "bse",
+      "currency",
+      "what markets"
+    ],
+    "category": "platform",
+    "categoryLabel": "Platform"
   },
   {
     "id": "faq_q08",
     "question": "How beginner-friendly is OptionSmart? Can a beginner use it?",
     "answer": "**OptionSmart is designed to be fully accessible to beginners.** You do not need:\n- Trading experience\n- Coding knowledge\n- Knowledge of options Greeks\n- Time to monitor markets\n\n**What you need:**\n- A Motilal Oswal broker account\n- Minimum capital: ₹9 Lakh (Core tier)\n- Complete KYC with OptionSmart\n\nAn **executive support team** guides you through onboarding step-by-step. The algorithms handle all execution, risk management, and exits. You see your PnL and positions on the GoAlgoTrade dashboard.\n\n> Beginners are advised to start with the Core tier (Saturn — non-directional) which is the most conservative strategy.",
-    "tags": ["beginner friendly", "beginner", "newbie", "no experience", "can i use", "easy to use", "for beginners"]
+    "tags": [
+      "beginner friendly",
+      "beginner",
+      "newbie",
+      "no experience",
+      "can i use",
+      "easy to use",
+      "for beginners"
+    ],
+    "category": "beginner",
+    "categoryLabel": "Beginner Friendly"
   },
   {
     "id": "faq_q09",
     "question": "Does OptionSmart integrate with TradingView?",
     "answer": "For specific details on **TradingView integration** with the GoAlgoTrade platform (chart linking, alert-based execution, webhook support), please contact the OptionSmart team directly:\n\n📞 **+91 8779328028** | WhatsApp button in the chat.\n\nThe GoAlgoTrade platform has its own built-in **Performance Analytics, Option Greeks, and PnL dashboards** which provide live monitoring without requiring TradingView. Strategy execution is fully automated — no chart monitoring is needed for standard OptionSmart use.",
-    "tags": ["tradingview", "trading view", "chart", "integration", "webhook", "alert"]
+    "tags": [
+      "tradingview",
+      "trading view",
+      "chart",
+      "integration",
+      "webhook",
+      "alert"
+    ],
+    "category": "platform",
+    "categoryLabel": "Platform"
   },
   {
     "id": "faq_q10",
     "question": "Can I be a strategy developer on OptionSmart? Can I monetize my strategies? What is SmartAlgos?",
     "answer": "**Yes.** The GoAlgoTrade platform supports a **strategy marketplace model** where developers can:\n\n- **Build** custom algorithmic strategies using the Strategy Builder.\n- **Backtest** on NSE/BSE/MCX historical data.\n- **List** strategies on the GoAlgoTrade marketplace.\n- **Monetize** — earn revenue when other traders subscribe to and run your strategy.\n\n**SmartAlgos** is OptionSmart's framework for curated, vetted algorithmic strategies available to all clients.\n\nFor onboarding as a strategy developer, eligibility criteria, and revenue-sharing structure, contact the team:\n📞 **+91 8779328028**",
-    "tags": ["strategy developer", "monetize strategies", "smartalgos", "build strategy", "marketplace", "earn from strategy", "strategy creator"]
+    "tags": [
+      "strategy developer",
+      "monetize strategies",
+      "smartalgos",
+      "build strategy",
+      "marketplace",
+      "earn from strategy",
+      "strategy creator"
+    ],
+    "category": "strategies",
+    "categoryLabel": "Algo Strategies"
   },
   {
     "id": "faq_q11",
     "question": "What is the ROC (Return on Capital) for OptionSmart strategies?",
     "answer": "OptionSmart cannot disclose specific ROC (Return on Capital) figures publicly as per **SEBI regulations** — guaranteeing or advertising specific return percentages is prohibited.\n\n> For actual strategy performance data, historical ROC, and detailed figures: please speak with an OptionSmart advisor directly.\n> 📞 **+91 8779328028** | WhatsApp button.\n\n**What we can say:**\n- Saturn targets consistent **theta-income** in range-bound markets.\n- Pluto targets larger gains in strong **trending regimes**.\n- All strategies have a **2% daily MTM cap** — maximum single-session loss is bounded.\n- Risk-adjusted returns (Sharpe ratio, drawdown) are tracked in the GoAlgoTrade dashboard.",
-    "tags": ["ROC", "return on capital", "returns", "how much return", "profit percentage", "yield", "performance"]
+    "tags": [
+      "ROC",
+      "return on capital",
+      "returns",
+      "how much return",
+      "profit percentage",
+      "yield",
+      "performance"
+    ],
+    "category": "pricing",
+    "categoryLabel": "Capital & Pricing"
   },
   {
     "id": "faq_q12",
     "question": "What is hedge, position market information, risk, and directional vs non-directional trading?",
     "answer": "**Hedging** in OptionSmart's context:\n- All strategies use **defined-risk structures** — the maximum loss per trade is known before entry.\n- Venus uses **spread structures** (bull spread, bear spread, iron condor) that inherently cap downside.\n- The 2% MTM cap is the portfolio-level hedge — no single session can lose more than 2%.\n\n**Directional vs Non-Directional:**\n\n| | Directional | Non-Directional |\n|---|---|---|\n| **Strategy** | Pluto | Saturn |\n| **Profits when** | Market moves strongly up or down | Market stays range-bound |\n| **Risk** | Direction risk | IV spike risk |\n| **Market regime** | Trending | Range-Bound |\n\n**Position sizing**: Managed automatically by the Market Regime Engine based on your capital tier and live volatility conditions. You don't manually size positions.",
-    "tags": ["hedge", "hedging", "position", "directional", "non-directional", "risk", "market information", "position sizing"]
+    "tags": [
+      "hedge",
+      "hedging",
+      "position",
+      "directional",
+      "non-directional",
+      "risk",
+      "market information",
+      "position sizing"
+    ],
+    "category": "risk",
+    "categoryLabel": "Risk & Safety"
   },
   {
     "id": "faq_q13",
     "question": "What strategy indices and markets does OptionSmart operate in?",
     "answer": "**Primary markets and indices:**\n\n| Index/Market | Exchange | Strategies |\n|---|---|---|\n| **Nifty 50** | NSE | Saturn, Venus, Pluto |\n| **Bank Nifty** | NSE | Saturn, Venus, Pluto |\n| **Fin Nifty** | NSE | Available on select tiers |\n| **Commodity** (Gold, Crude) | MCX | Available on higher tiers |\n| **Currency** (USD-INR) | NSE/BSE | Available on request |\n\nThe **Market Regime Engine** monitors all these indices simultaneously, classifying regime and deploying the appropriate strategy. Weekly F&O expiries (Thursday for Nifty, Wednesday for BankNifty) are high-priority events — especially for Saturn's theta harvesting.\n\nFor full market coverage by tier, contact an advisor: 📞 +91 8779328028.",
-    "tags": ["strategy index", "markets", "nifty", "banknifty", "indices", "which markets", "nifty 50", "bank nifty", "mcx"]
+    "tags": [
+      "strategy index",
+      "markets",
+      "nifty",
+      "banknifty",
+      "indices",
+      "which markets",
+      "nifty 50",
+      "bank nifty",
+      "mcx"
+    ],
+    "category": "strategies",
+    "categoryLabel": "Algo Strategies"
   },
   {
     "id": "faq_q14",
     "question": "What are the Risk-Reward, Stop-Loss, margin, capital, collateral, and pledge-related features?",
     "answer": "**Risk-Reward & Stop-Loss:**\n- No fixed stop-loss — AI/ML Exit Intelligence exits dynamically based on probability shift, not a fixed price level.\n- Saturn and Venus use defined-risk structures with known max loss per trade.\n- Portfolio-level: **2% MTM cap** per session — kill switch fires if breached.\n\n**Capital & Margin:**\n- Capital stays in your own broker account at all times.\n- Margin requirements follow SEBI/exchange norms for F&O positions.\n- Collateral: Pledged stocks, ETFs, or liquid funds can be used as collateral margin with Motilal Oswal. OptionSmart strategies can work with collateral margin — confirm with Motilal Oswal.\n- Loan against securities (LAS): Some brokers offer margin against pledged stocks. Eligibility depends on your broker's policy.\n- **Higher cut margin / SPAN margin**: Strategies are designed within SEBI's margin framework.\n\nFor specific margin utilization by strategy and tier, speak with an advisor: 📞 +91 8779328028.",
-    "tags": ["risk reward", "stop loss", "margin", "capital", "collateral", "pledge", "loan against stocks", "higher cut margin", "SPAN", "features on capital"]
+    "tags": [
+      "risk reward",
+      "stop loss",
+      "margin",
+      "capital",
+      "collateral",
+      "pledge",
+      "loan against stocks",
+      "higher cut margin",
+      "SPAN",
+      "features on capital"
+    ],
+    "category": "risk",
+    "categoryLabel": "Risk & Safety"
   },
   {
     "id": "faq_q15",
     "question": "What is the drawdown of OptionSmart strategies? Maximum drawdown?",
     "answer": "**Daily drawdown** is hard-capped at **2% of deployed capital per session** — the MTM cap triggers the kill switch automatically if this is breached. This is the maximum single-session drawdown by design.\n\n**Strategy-level drawdown:**\n- Saturn (non-directional): Lower drawdown — theta harvesting in range-bound markets is a conservative approach.\n- Venus (hybrid): Moderate drawdown — defined-risk spreads cap both profit and loss.\n- Pluto (directional): Higher drawdown potential — aggressive directional strategy in trending regimes.\n\nHistorical maximum drawdown figures across strategies are shared by advisors (not disclosed publicly per SEBI guidelines).\n\n📞 For specific drawdown data: **+91 8779328028**\n\n> No strategy eliminates drawdown entirely — all trading involves market risk.",
-    "tags": ["drawdown", "maximum drawdown", "max drawdown", "loss", "strategy drawdown", "how much can i lose"]
+    "tags": [
+      "drawdown",
+      "maximum drawdown",
+      "max drawdown",
+      "loss",
+      "strategy drawdown",
+      "how much can i lose"
+    ],
+    "category": "risk",
+    "categoryLabel": "Risk & Safety"
   },
   {
     "id": "faq_q16",
     "question": "What are the returns? Why choose OptionSmart if returns are less than 15%? Why not a mutual fund?",
     "answer": "**Why OptionSmart over a mutual fund?**\n\n| Factor | Mutual Fund | OptionSmart |\n|---|---|---|\n| **Risk type** | Market-linked (no intraday protection) | Bounded daily loss (2% MTM cap) |\n| **Liquidity** | T+1 to T+3 redemption | Intraday — capital available same day |\n| **Strategy** | Passive/active equity | Algorithmic F&O (Theta + Directional) |\n| **Customization** | None | Capital tier + strategy mix |\n| **Overnight risk** | Full | Zero (100% intraday square-off) |\n| **Manager** | Fund manager (discretionary) | Algorithmic (rules-based, auditable) |\n\n**On returns:** OptionSmart cannot disclose specific return % per SEBI regulations. However, the **risk-adjusted return** (Sharpe ratio) is a more meaningful metric than absolute return — OptionSmart strategies are designed for consistent, bounded performance rather than high-risk high-return speculation.\n\n> For actual historical performance data and comparison: 📞 **+91 8779328028**",
-    "tags": ["returns", "mutual fund", "why choose", "less than 15 percent", "ROI", "why not mutual fund", "comparison", "performance"]
+    "tags": [
+      "returns",
+      "mutual fund",
+      "why choose",
+      "less than 15 percent",
+      "ROI",
+      "why not mutual fund",
+      "comparison",
+      "performance"
+    ],
+    "category": "why_choose",
+    "categoryLabel": "Why OptionSmart"
   },
   {
     "id": "faq_q17",
     "question": "How does the strategy function when government news or market events affect stocks?",
     "answer": "OptionSmart's **Market Regime Engine** and risk controls are specifically designed for event-driven volatility:\n\n**During high-impact news (RBI policy, Budget, elections, global events):**\n1. The Market Regime Engine detects **Volatility Expansion regime** — IV spikes, wide bid-ask spreads.\n2. **Response**: Conservative positioning is activated — wider stops, reduced lot sizes, gamma-aware structures.\n3. Saturn's straddle/strangle positions have defined risk — IV spike risk is bounded.\n4. **15+ volatility filters** run continuously and can pause strategy deployment if conditions are dangerous.\n5. If MTM loss hits 2%, the **kill switch fires in <1 second** — full exit, no exceptions.\n6. **100% intraday** — no overnight exposure means no gap-down risk from after-market news.\n\n> The system never fights the market. When regime is unclear, it reduces exposure or exits early.",
-    "tags": ["government news", "market events", "news impact", "budget", "RBI", "elections", "volatility events", "news affecting market", "how strategy handles news"]
+    "tags": [
+      "government news",
+      "market events",
+      "news impact",
+      "budget",
+      "RBI",
+      "elections",
+      "volatility events",
+      "news affecting market",
+      "how strategy handles news"
+    ],
+    "category": "pricing",
+    "categoryLabel": "Capital & Pricing"
   },
   {
     "id": "faq_q18",
     "question": "What is the brokerage cost with OptionSmart?",
     "answer": "**Brokerage costs are separate from OptionSmart's fees** and are charged directly by Motilal Oswal (MOSL). Brokerage rates will follow your Motilal Oswal plan. STT, exchange transaction charges, and GST apply on all F&O trades as per exchange norms.\n\nAlgo strategies execute multiple intraday orders — brokerage cost is a factor in net returns. OptionSmart's strategies are designed to account for transaction costs in strategy evaluation.\n\n> For a net-of-brokerage performance estimate for your capital tier: 📞 **+91 8779328028**",
-    "tags": ["brokerage", "brokerage cost", "transaction cost", "motilal oswal brokerage", "mosl brokerage", "STT", "charges"]
+    "tags": [
+      "brokerage",
+      "brokerage cost",
+      "transaction cost",
+      "motilal oswal brokerage",
+      "mosl brokerage",
+      "STT",
+      "charges"
+    ],
+    "category": "pricing",
+    "categoryLabel": "Capital & Pricing"
   },
   {
     "id": "faq_q19",
     "question": "Does OptionSmart deal in F&O equity markets? How does F&O trading work?",
     "answer": "**Yes — F&O (Futures & Options) on equity indices is OptionSmart's primary market.**\n\n**What F&O means:**\n- **Options**: Right (not obligation) to buy/sell at a price. OptionSmart primarily **sells** options (Saturn) and uses spreads (Venus).\n- **Futures**: Obligation to buy/sell at a future date. Used selectively for directional exposure (Pluto).\n\n**Key F&O concepts in OptionSmart's approach:**\n- **Weekly expiry** (Thursday for Nifty): Saturn strategy harvests maximum theta on expiry day.\n- **SPAN margin**: Required for options selling — managed within your broker's available margin.\n- **Square-off**: All F&O positions are closed intraday — no delivery or settlement risk.\n\n**Eligible markets**: Nifty 50, Bank Nifty, Fin Nifty options (NSE). Equity stock options for higher tiers.",
-    "tags": ["F&O", "futures and options", "equity", "options trading", "how F&O works", "options selling", "weekly expiry"]
+    "tags": [
+      "F&O",
+      "futures and options",
+      "equity",
+      "options trading",
+      "how F&O works",
+      "options selling",
+      "weekly expiry"
+    ],
+    "category": "why_choose",
+    "categoryLabel": "Why OptionSmart"
   },
   {
     "id": "faq_q20",
     "question": "What is OptionSmart's commodity trading model? Does it trade MCX?",
     "answer": "**OptionSmart via GoAlgoTrade supports MCX (commodity) trading.**\n\n**Commodities covered** (subject to tier and availability):\n- Gold (GOLD, GOLDM)\n- Silver (SILVER)\n- Crude Oil (CRUDEOIL)\n- Natural Gas (NATURALGAS)\n- Base metals (Copper, Aluminium, Zinc)\n\n**Commodity model approach:**\n- Regime-based, similar to equity F&O — trending regimes trigger directional strategies; range-bound regimes favour theta or spread strategies.\n- MCX options are available on Gold and Crude — enabling theta harvesting similar to Saturn on equity.\n\n> Commodity strategy details, availability by capital tier, and specific instruments are discussed during advisor onboarding.\n📞 **+91 8779328028**",
-    "tags": ["commodity", "MCX", "gold", "silver", "crude oil", "commodity model", "commodity trading"]
+    "tags": [
+      "commodity",
+      "MCX",
+      "gold",
+      "silver",
+      "crude oil",
+      "commodity model",
+      "commodity trading"
+    ],
+    "category": "why_choose",
+    "categoryLabel": "Why OptionSmart"
   },
   {
     "id": "faq_q21",
     "question": "How did you find the OptionSmart website? What is the source of OptionSmart?",
     "answer": "OptionSmart's primary websites are:\n- 🌐 **optionsmart.in** — Main platform website with strategy details, capital tiers, and contact information.\n- 🌐 **goalgotrade.tech** — The execution technology platform (GoAlgoTrade) that powers OptionSmart's algo infrastructure.\n\nYou may have discovered OptionSmart through:\n- A **B2B partner or sub-broker** referral (1,300+ partners across India).\n- **Digital marketing** — Google, social media, or financial content platforms.\n- **Direct referral** from an existing OptionSmart client.\n\nFor any queries about the platform or to get started: 📞 **+91 8779328028**",
-    "tags": ["website", "source", "how did you find", "optionsmart website", "url", "website source"]
+    "tags": [
+      "website",
+      "source",
+      "how did you find",
+      "optionsmart website",
+      "url",
+      "website source"
+    ],
+    "category": "onboarding",
+    "categoryLabel": "Onboarding"
   },
   {
     "id": "faq_q22",
     "question": "Which sector should I invest in? Which stocks should I buy?",
     "answer": "OptionSmart **does not provide stock-picking or sector advisory services**.\n\nOptionSmart operates **index-level F&O strategies** on Nifty, BankNifty, and FinNifty — not individual stock recommendations. The algorithms trade on the index level, not on specific companies or sectors.\n\n**Why index-level?**\n- Index options are more liquid, have tighter spreads, and are easier to execute at scale.\n- Eliminates company-specific risk (earnings surprises, management issues, etc.).\n- SEBI regulations govern what registered algo vendors can recommend.\n\n> For individual stock advisory, please consult a SEBI-registered Investment Adviser (IA). OptionSmart's strength is systematic algorithmic F&O, not stock selection.",
-    "tags": ["which sector", "which stock", "stock advice", "buy stocks", "sector recommendation", "stock picking", "investment advice"]
+    "tags": [
+      "which sector",
+      "which stock",
+      "stock advice",
+      "buy stocks",
+      "sector recommendation",
+      "stock picking",
+      "investment advice"
+    ],
+    "category": "onboarding",
+    "categoryLabel": "Onboarding"
   },
   {
     "id": "faq_q23",
     "question": "What does the OptionSmart website offer? What are all the features?",
     "answer": "**OptionSmart (optionsmart.in + GoAlgoTrade platform) offers:**\n\n**For traders/investors:**\n- Access to 26 quantitative algo strategies (Saturn, Venus, Pluto + more)\n- 5 capital tiers: Core (₹9L) → Institutional (₹5Cr+)\n- Real-time PnL, Greeks, and performance analytics dashboard\n- AI/ML exit intelligence for adaptive trade management\n- Motilal Oswal (MOSL) broker integration\n- 100% intraday, zero overnight risk\n- 2% MTM cap + kill switch protection\n\n**For B2B partners:**\n- White-label algo solutions\n- Strategy marketplace (list and monetize custom strategies)\n- Broker & client enablement tools\n- Compliance-ready audit logs\n\n**For strategy developers:**\n- Strategy Builder & Backtesting module\n- SmartAlgos marketplace listing\n- Revenue sharing on strategy subscriptions",
-    "tags": ["what does website offer", "features", "what is optionsmart", "platform features", "what you get", "services"]
+    "tags": [
+      "what does website offer",
+      "features",
+      "what is optionsmart",
+      "platform features",
+      "what you get",
+      "services"
+    ],
+    "category": "strategies",
+    "categoryLabel": "Algo Strategies"
   },
   {
     "id": "faq_q24",
     "question": "What is the risk comparison between equity trading and options trading?",
     "answer": "**Equity (Cash) vs Options Risk Comparison:**\n\n| Factor | Equity (Cash) | Options (F&O) |\n|---|---|---|\n| **Max loss** | Full capital (stock goes to 0) | Premium paid (buyers) or unlimited (naked sellers) |\n| **Leverage** | None (spot price) | High (5x–20x typical) |\n| **Overnight risk** | Full exposure | Full exposure if positional |\n| **Complexity** | Low | High (Greeks, IV, expiry) |\n\n**How OptionSmart manages options risk:**\n- Never naked selling without a hedge — Venus uses spreads (defined max loss).\n- Saturn sells straddles/strangles with defined margin and 2% MTM cap protecting against adverse moves.\n- AI/ML exit exits before losses escalate beyond the cap.\n- 100% intraday — zero overnight options risk.\n\n> OptionSmart's approach makes options risk **predictable and bounded** — unlike raw options trading which can be unlimited-loss without controls.",
-    "tags": ["equity vs options", "risk comparison", "options risk", "equity risk", "which is safer", "options trading risk"]
+    "tags": [
+      "equity vs options",
+      "risk comparison",
+      "options risk",
+      "equity risk",
+      "which is safer",
+      "options trading risk"
+    ],
+    "category": "risk",
+    "categoryLabel": "Risk & Safety"
   },
   {
     "id": "faq_q25",
     "question": "What are the risk, capital requirements, legality, and SEBI registration details of OptionSmart?",
     "answer": "**Risk:**\n- All trading involves market risk — capital can be at risk.\n- Maximum daily loss bounded by **2% MTM cap** — kill switch auto-fires if breached.\n- No guaranteed returns per SEBI regulations.\n\n**Capital Requirements:**\n- Minimum: ₹9 Lakh (Core tier)\n- Full tier structure: Core (₹9L) → Alpha (₹25L) → Pro (₹50L) → Elite (₹1Cr) → Institutional (₹5Cr+)\n\n**Legality & SEBI Regulatory Alignment:**\n- ✅ SEBI Framework Aligned\n- ⏳ Formal SEBI Registration & Licensing in Progress\n- ✅ White Box Architecture — fully auditable, documented logic\n- Capital protected under your Motilal Oswal broker's SEBI Investor Protection Fund framework\n\nOptionSmart operates strictly in alignment with SEBI's algorithmic trading regulatory framework.",
-    "tags": ["risk", "capital requirements", "legality", "SEBI registered", "SEBI", "legal", "is it legal", "compliance", "NSE registered"]
+    "tags": [
+      "risk",
+      "capital requirements",
+      "legality",
+      "SEBI registered",
+      "SEBI",
+      "legal",
+      "is it legal",
+      "compliance",
+      "NSE registered"
+    ],
+    "category": "why_choose",
+    "categoryLabel": "Why OptionSmart"
   },
   {
     "id": "faq_q26",
     "question": "Which brokers are connected to OptionSmart? What are the supported brokers?",
     "answer": "OptionSmart's GoAlgoTrade platform currently has **Motilal Oswal (MOSL)** integrated as the supported broker:\n\n| Broker | Status |\n|---|---|\n| **Motilal Oswal** | ✅ Integrated & Supported |\n| **Zerodha** | ⏳ Integration Planned |\n| **Angel One** | ⏳ Integration Planned |\n\nYour capital **always remains in your own broker account** — OptionSmart only has API-level trade execution access (cannot transfer funds). You continue using your Motilal Oswal account.",
-    "tags": ["connected brokers", "brokers", "motilal oswal", "mosl", "supported brokers", "which broker", "broker list"]
+    "tags": [
+      "connected brokers",
+      "brokers",
+      "motilal oswal",
+      "mosl",
+      "supported brokers",
+      "which broker",
+      "broker list"
+    ],
+    "category": "platform",
+    "categoryLabel": "Platform"
   },
   {
     "id": "faq_q27",
     "question": "Who are the fund managers at OptionSmart?",
     "answer": "OptionSmart is not a **fund** (PMS/AIF) — it is an **algorithmic trading service**. Therefore, there are no traditional 'fund managers'. Instead:\n\n**Co-Founders who lead strategy:**\n- **Madhur Dahale** — Leads quantitative research and fintech strategy. 20+ years experience (Religare, Sharekhan, Indiabulls). MBA Pune | MDP IIM Lucknow.\n- **Aakash Gupta** — Leads product strategy, GTM, and broker partnerships. Quant trading specialist (Kotak, PNB Paribas, HDFC). MBA Finance, University of Wales UK (2013).\n\n**Who 'manages' your account:**\n- The **algorithms manage trades** — fully automated, rules-based, no human discretion in trade execution.\n- White Box architecture: every algorithmic decision is documented and auditable.\n\n> This is a key advantage over human fund managers — no emotional bias, no manual errors, 24/7 risk monitoring.",
-    "tags": ["fund managers", "who manages", "management team", "portfolio manager", "who runs strategies", "founders"]
+    "tags": [
+      "fund managers",
+      "who manages",
+      "management team",
+      "portfolio manager",
+      "who runs strategies",
+      "founders"
+    ],
+    "category": "why_choose",
+    "categoryLabel": "Why OptionSmart"
   },
   {
     "id": "faq_q28",
     "question": "Is there a referral commission or affiliation program at OptionSmart?",
     "answer": "**Yes.** OptionSmart has a **B2B partner and referral commission model** for sub-brokers, financial advisors, and wealth managers.\n\n**How it works:**\n- Register as an OptionSmart B2B partner.\n- Refer clients to OptionSmart's capital tiers.\n- Earn commission/revenue share on referred client trading activity.\n\nWith **1,300+ B2B partners** across India, the partner program is a significant part of OptionSmart's distribution model.\n\n> For specific commission rates, partner eligibility, onboarding as an affiliate, and the full affiliate agreement:\n📞 **+91 8779328028** | WhatsApp button in the chat.\n\n> Commission and revenue-sharing percentages are disclosed during the partner onboarding process.",
-    "tags": ["referral commission", "affiliation", "affiliate program", "partner", "refer and earn", "commission", "B2B partner", "sub-broker commission"]
+    "tags": [
+      "referral commission",
+      "affiliation",
+      "affiliate program",
+      "partner",
+      "refer and earn",
+      "commission",
+      "B2B partner",
+      "sub-broker commission"
+    ],
+    "category": "pricing",
+    "categoryLabel": "Capital & Pricing"
   },
   {
     "id": "faq_q29",
     "question": "What are the advantages of the OptionSmart platform?",
     "answer": "**Key advantages of OptionSmart:**\n\n1. 🏛️ **Institutional-grade infrastructure** — GoAlgoTrade platform, 99.9% uptime SLA, <1s kill switch.\n2. 🔐 **Your capital stays in your broker account** — OptionSmart never holds your funds.\n3. 📊 **26 quantitative strategy engines** — Saturn, Venus, Pluto + 23 more.\n4. 🧠 **AI/ML exit intelligence** — adaptive exits based on probability shifts, not fixed stops.\n5. 🛡️ **2% MTM cap** — hard daily loss limit, automatically enforced.\n6. 🌙 **Zero overnight risk** — 100% intraday square-off every session.\n7. ⚖️ **SEBI compliant + White Box** — fully auditable, legally compliant.\n8. 🤝 **1,300+ B2B partners** — trusted by sub-brokers, advisors, and wealth managers.\n9. 💡 **No coding or trading experience needed** — fully managed service.\n10. 📈 **Motilal Oswal (MOSL) Integration** — trade automatically via your MOSL broker account.",
-    "tags": ["advantages", "benefits", "why optionsmart", "platform advantages", "pros", "strengths", "why choose"]
+    "tags": [
+      "advantages",
+      "benefits",
+      "why optionsmart",
+      "platform advantages",
+      "pros",
+      "strengths",
+      "why choose"
+    ],
+    "category": "why_choose",
+    "categoryLabel": "Why OptionSmart"
   },
   {
     "id": "faq_q30",
     "question": "Is there software, a subscription plan, a demo, or a trial available for OptionSmart?",
     "answer": "**Software / Subscription:**\n- OptionSmart is a **managed algo service** — not a DIY software you install.\n- Access is via the **GoAlgoTrade web platform** (browser-based, no installation).\n- Subscription structure is tied to your capital tier (Core/Alpha/Pro/Elite/Institutional).\n\n**Demo / Trial:**\n- For demo access, paper trading, or trial arrangements, please contact the OptionSmart team directly — these are handled on a case-by-case basis during the advisory consultation.\n\n📞 **+91 8779328028** | WhatsApp button in the chat.\n\n> Note: Given the algorithmic trading nature of the platform, any trial or demo requires advisor guidance to ensure correct setup and expectations.",
-    "tags": ["software", "subscription", "demo", "trial", "free trial", "paper trading", "access", "how to access"]
+    "tags": [
+      "software",
+      "subscription",
+      "demo",
+      "trial",
+      "free trial",
+      "paper trading",
+      "access",
+      "how to access"
+    ],
+    "category": "pricing",
+    "categoryLabel": "Capital & Pricing"
   },
   {
     "id": "faq_q31",
     "question": "What course planning or educational content does OptionSmart offer?",
     "answer": "OptionSmart focuses on **algo trading as a managed service** rather than a trading education platform. However:\n\n**Available learning resources:**\n- Onboarding education: During the advisor consultation, clients are walked through how strategies work, risk management, and what to expect.\n- Platform training: GoAlgoTrade's dashboard, analytics, and monitoring tools are explained during onboarding.\n- Strategy documentation: White Box architecture means clients receive documented explanations of how Saturn, Venus, and Pluto work.\n\n**For structured courses on options trading, algo trading theory, or F&O mechanics:**\n- These are discussed as part of the broader OptionSmart ecosystem — contact an advisor for availability.\n\n📞 **+91 8779328028**\n\n> If you are looking for trading education specifically, clarify this with the advisor — OptionSmart may have relevant resources or partnerships.",
-    "tags": ["course", "education", "training", "learning", "course planning", "educational content", "trading course"]
+    "tags": [
+      "course",
+      "education",
+      "training",
+      "learning",
+      "course planning",
+      "educational content",
+      "trading course"
+    ],
+    "category": "beginner",
+    "categoryLabel": "Beginner Friendly"
   },
   {
     "id": "faq_q32",
     "question": "How does registration and onboarding work at OptionSmart? What is the process and executive support?",
     "answer": "**OptionSmart Onboarding Process — Step by Step:**\n\n1. **Contact an advisor** — via WhatsApp, phone, or this chatbot: 📞 +91 8779328028.\n2. **Discovery call** — advisor understands your capital, risk appetite, and goals.\n3. **Capital tier selection** — choose Core (₹9L), Alpha (₹25L), Pro (₹50L), Elite (₹1Cr), or Institutional (₹5Cr+).\n4. **KYC completion** — standard identity verification as per SEBI requirements.\n5. **Broker account connection** — link your existing Zerodha/Angel One/Motilal account to GoAlgoTrade via API key.\n6. **Platform walkthrough** — advisor guides you through the GoAlgoTrade dashboard, analytics, and monitoring.\n7. **Go live** — algorithms start trading on your account automatically.\n\n**Executive support:**\n- Dedicated executive support throughout onboarding.\n- Ongoing support via WhatsApp and phone for queries, monitoring, and escalations.\n- Priority support for Elite and Institutional tier clients.",
-    "tags": ["registration", "onboarding", "sign up", "how to register", "executive support", "process", "getting started", "onboarding steps"]
+    "tags": [
+      "registration",
+      "onboarding",
+      "sign up",
+      "how to register",
+      "executive support",
+      "process",
+      "getting started",
+      "onboarding steps"
+    ],
+    "category": "onboarding",
+    "categoryLabel": "Onboarding"
   },
   {
     "id": "faq_q33",
     "question": "Can you explain OptionSmart's strategies in depth? How do they function in detail?",
     "answer": "**In-depth strategy breakdown:**\n\n### Saturn — Theta Harvesting\n- **Mechanism**: Sells options (straddles/strangles) at high IV Rank (>50). Profits from time decay.\n- **Entry**: When Market Regime Engine classifies Range-Bound + IV Rank above threshold.\n- **Exit**: AI/ML exit fires when IV spikes, premium moves against position, or 2% MTM cap hit.\n- **Best on**: Thursday expiry (weekly Nifty/BankNifty) — theta accelerates near expiry.\n\n### Venus — Balanced Spread\n- **Mechanism**: Defined-risk spreads — Bull Call Spread, Bear Put Spread, Iron Condor.\n- **Advantage**: Maximum loss is always known before entry — no unlimited loss risk.\n- **Versatile**: Works in both Trending and Range-Bound regimes.\n- **Exit**: Spread expires worthless (max profit) or exit at AI/ML signal.\n\n### Pluto — Directional Momentum\n- **Mechanism**: Buys options or futures in direction of trend detected by regime engine.\n- **Entry**: Strong trending regime with momentum confirmation.\n- **Risk**: Higher than Saturn/Venus — directional trades can lose the full premium.\n- **Exit**: Trailing stop-loss + AI/ML adaptive exit.\n\n**All three strategies are governed by the 2% MTM cap at the portfolio level — even if individual strategy trades are open.**",
-    "tags": ["strategy in depth", "strategy details", "how strategies work", "saturn depth", "venus depth", "pluto depth", "strategy mechanism", "deep dive"]
+    "tags": [
+      "strategy in depth",
+      "strategy details",
+      "how strategies work",
+      "saturn depth",
+      "venus depth",
+      "pluto depth",
+      "strategy mechanism",
+      "deep dive"
+    ],
+    "category": "strategies",
+    "categoryLabel": "Algo Strategies"
   },
   {
     "id": "faq_q34",
     "question": "What are the trading runs, timings, and can I create my own strategy?",
     "answer": "**Trading Runs & Timings:**\n\n| Event | Time (IST) |\n|---|---|\n| Market open | 9:15 AM |\n| Strategy start | 9:15 AM – 9:30 AM (after initial volatility settles) |\n| Active trading window | 9:30 AM – 3:00 PM |\n| Square-off begins | 3:00 PM – 3:15 PM |\n| All positions closed | By 3:15 PM |\n| Market close | 3:30 PM |\n\n**Expiry day (Thursday for Nifty)**: Saturn operates more actively in the final 2–3 hours for maximum theta harvest.\n\n**Creating Your Own Strategy:**\n- Yes — GoAlgoTrade's **Strategy Builder** allows custom strategy creation.\n- Backtest on NSE/BSE/MCX historical data.\n- List on the SmartAlgos marketplace and earn revenue when others use your strategy.\n- Requires technical understanding of algo logic and risk parameters.\n\nFor strategy developer onboarding: 📞 **+91 8779328028**",
-    "tags": ["trading runs", "timings", "market timings", "own strategy", "create strategy", "strategy creation", "trading hours", "when does algo run"]
+    "tags": [
+      "trading runs",
+      "timings",
+      "market timings",
+      "own strategy",
+      "create strategy",
+      "strategy creation",
+      "trading hours",
+      "when does algo run"
+    ],
+    "category": "platform",
+    "categoryLabel": "Platform"
   },
   {
     "id": "faq_q35",
     "question": "How do I start trading with OptionSmart? What are the starting instructions?",
     "answer": "**Getting started with OptionSmart — complete instructions:**\n\n### Step 1 — Prerequisites\n- ✅ A Motilal Oswal (MOSL) broker account\n- ✅ F&O trading enabled on your broker account\n- ✅ Minimum capital available: ₹9 Lakh (Core tier)\n- ✅ PAN card and KYC completed with your broker\n\n### Step 2 — Contact OptionSmart\n📞 **+91 8779328028** | WhatsApp | Chat with advisor\n\n### Step 3 — Choose Your Plan\n| Tier | Capital | Strategies Included |\n|---|---|---|\n| Core | ₹9 Lakh | Saturn (non-directional) |\n| Alpha | ₹25 Lakh | Saturn + Venus + Pluto |\n| Pro | ₹50 Lakh | All + Adaptive Selection |\n| Elite | ₹1 Crore | All + Custom + Auto Delta |\n| Institutional | ₹5 Crore+ | Full suite + Enterprise |\n\n### Step 4 — KYC & Broker API Connection\n- Complete KYC with OptionSmart.\n- Connect your broker account to GoAlgoTrade via API key (guided by advisor).\n\n### Step 5 — Go Live\n- Algorithms start automatically. Monitor via GoAlgoTrade dashboard.\n- Executive support available for all queries.",
-    "tags": ["how to start", "starting instructions", "get started", "begin trading", "step by step", "onboarding", "trading start", "how to begin", "first steps"]
+    "tags": [
+      "how to start",
+      "starting instructions",
+      "get started",
+      "begin trading",
+      "step by step",
+      "onboarding",
+      "trading start",
+      "how to begin",
+      "first steps"
+    ],
+    "category": "onboarding",
+    "categoryLabel": "Onboarding"
   },
   {
     "id": "faq_q36",
     "question": "What happens if my internet connection goes down during a live trade?",
     "answer": "**Your local internet connection has zero impact on live active trades.**\n\nBecause OptionSmart's quantitative strategies execute entirely on the **GoAlgoTrade cloud server infrastructure**:\n- Once a strategy is activated in the morning, order placements, stop-loss calculations, trailing updates, and risk management square-offs run directly on the cloud server.\n- If your phone or laptop loses internet connection or powers off, the trades will continue running safely and will be squared off automatically by 3:15 PM.\n- You can log back in from any device at any point to check PnL or manually trigger the kill switch.",
-    "tags": ["internet down", "internet connection", "connection lost", "live trade offline", "server execution", "safety"]
+    "tags": [
+      "internet down",
+      "internet connection",
+      "connection lost",
+      "live trade offline",
+      "server execution",
+      "safety"
+    ],
+    "category": "strategies",
+    "categoryLabel": "Algo Strategies"
   },
   {
     "id": "faq_q37",
     "question": "Where do my trading profits get credited after a trade?",
     "answer": "**All profits and losses are credited or debited directly in your personal broker account.**\n\nSince OptionSmart never takes custody of your capital:\n- The money stays in your personal SEBI-regulated Demat/Trading account at Motilal Oswal at all times.\n- When the algo exits a trade, the settlement occurs directly in your broker's ledger.\n- Brokers usually complete their F&O ledger settlement cycle on a **T+1 day** basis (by the night of the trading day or next morning).\n- You can withdraw settled profits directly from your broker's dashboard at any time.",
-    "tags": ["profits credit", "where do profits go", "profit settlement", "capital account", "funds withdrawal", "ledger"]
+    "tags": [
+      "profits credit",
+      "where do profits go",
+      "profit settlement",
+      "capital account",
+      "funds withdrawal",
+      "ledger"
+    ],
+    "category": "strategies",
+    "categoryLabel": "Algo Strategies"
   },
   {
     "id": "faq_q38",
     "question": "Can I pause trading manually in the middle of a session?",
     "answer": "**Yes. You retain full control over your account at all times.**\n\nDirectly from the **GoAlgoTrade dashboard** or via your broker terminal, you can:\n- **Pause a strategy**: Prevents the algorithm from entering new positions for the rest of the session.\n- **Manual Kill Switch**: Instantly exits and squares off all active positions across all instruments in under 1 second and halts trading for the day.\n- You can also manually close individual positions directly inside your broker app if needed (though it is recommended to let the algorithms handle exits to avoid breaking the strategy logic).",
-    "tags": ["pause trading", "stop trading", "manual exit", "kill switch manual", "halt trading", "control"]
+    "tags": [
+      "pause trading",
+      "stop trading",
+      "manual exit",
+      "kill switch manual",
+      "halt trading",
+      "control"
+    ],
+    "category": "pricing",
+    "categoryLabel": "Capital & Pricing"
   },
   {
     "id": "faq_q39",
     "question": "How is F&O trading taxed in India?",
     "answer": "In India, income from Futures & Options (F&O) trading is classified as **Business Income (Non-Speculative)** under the Income Tax Act:\n\n- **Tax Slabs**: Net profits are added to your other income sources and taxed according to your individual income tax slab rate.\n- **Business Expenses**: You can claim deductions on business expenses like brokerage charges, transaction taxes (STT), internet/electricity bills used for trading, and platform subscription fees.\n- **Loss Carry Forward**: Any net business loss from F&O trading in a year can be carried forward for up to 8 years and set off against future non-speculative business gains.\n- Consult a Chartered Accountant (CA) to file ITR-3.",
-    "tags": ["taxation", "f&o tax", "business income", "non-speculative", "tax slab", "income tax india", "write-off"]
+    "tags": [
+      "taxation",
+      "f&o tax",
+      "business income",
+      "non-speculative",
+      "tax slab",
+      "income tax india",
+      "write-off"
+    ],
+    "category": "risk",
+    "categoryLabel": "Risk & Safety"
   },
   {
     "id": "faq_q40",
     "question": "What is the difference between algo trading and manual trading?",
     "answer": "The key differences between algorithmic and manual trading are:\n\n| Feature | Manual Trading | Algorithmic Trading (OptionSmart) |\n|---|---|---|\n| **Execution Speed** | Slow (seconds to minutes) | Ultra-fast (under 1 second latency) |\n| **Emotional Bias** | High (greed, fear, revenge trading) | Zero (strictly rules-based execution) |\n| **Risk Control** | Hard to enforce consistently | Hard-coded loss ceilings (2% MTM cap) |\n| **Regime Switching** | Subjective / slow | Automatic via Market Regime Engine |\n| **Monitoring** | Screen-time intensive | 100% automated (hands-free) |",
-    "tags": ["algo vs manual", "difference", "manual trading vs algo", "algorithmic advantages", "emotional bias", "benefits"]
+    "tags": [
+      "algo vs manual",
+      "difference",
+      "manual trading vs algo",
+      "algorithmic advantages",
+      "emotional bias",
+      "benefits"
+    ],
+    "category": "onboarding",
+    "categoryLabel": "Onboarding"
   },
   {
     "id": "faq_q41",
     "question": "What products does OptionSmart offer? Tell me about OptionSmart products.",
     "answer": "OptionSmart offers four core quantitative investment and trading products (detailed on **https://optionsmart.in/products**):\n\n### 1. AXIOM — Systematic Factor Equity Portfolio\nA rules-based, factor-driven equity portfolio of 35 NSE-listed companies, selected using a proprietary Quality, Momentum, and Low Volatility model — integrated with a market breadth regime filter to manage drawdowns.\n\n### 2. Equity Indices Trading (NIFTY & SENSEX Options Trading)\nSystematic intraday algo trading on NIFTY and SENSEX weekly options powered by three flagship quantitative engines:\n- **Saturn**: Non-directional theta harvesting (writing option straddles and strangles in range-bound regimes).\n- **Venus**: Defined-risk hybrid spreads (bull/bear spreads, iron condors).\n- **Pluto**: Aggressive directional momentum strategy using dynamic trailing stops.\n\n### 3. MCX Commodity Options Trading\nSystematic algo trading on MCX commodity options (Gold, Silver, Crude Oil, Natural Gas) using the same regime-based execution algorithms and risk controls as equity indices.\n\n### 4. Equity Intraday Stocks\nShort-only breakdown engine for stock trading with 100% intraday square-off and hard risk limits.\n\n*Note: Per OptionSmart policy, specific statistics and historical performance metrics are shared directly during advisory calls.*",
-    "tags": ["products", "optionsmart products", "axiom", "product list", "offerings", "investment products", "what products", "trading products"]
+    "tags": [
+      "products",
+      "optionsmart products",
+      "axiom",
+      "product list",
+      "offerings",
+      "investment products",
+      "what products",
+      "trading products"
+    ],
+    "category": "strategies",
+    "categoryLabel": "Algo Strategies"
   }
 ]

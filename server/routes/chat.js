@@ -463,4 +463,32 @@ Focus on: time-of-day patterns, early exit of profits, letting losses run, strat
   }
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+// GET /api/chat/faqs
+// Returns all curated FAQ entries (id, question, category, categoryLabel) from
+// MongoDB so the FaqHub UI can be data-driven rather than hardcoded.
+// ─────────────────────────────────────────────────────────────────────────────
+router.get('/faqs', async (req, res) => {
+  try {
+    const db = req.app.locals.db;
+    if (!db) return res.status(503).json({ ok: false, error: 'Database not ready' });
+
+    // Fetch only the 35 primary curated docs (faq_q01..faq_q41), exclude aliases
+    const faqs = await db
+      .collection('faq_documents')
+      .find(
+        { type: 'curated', id: { $regex: /^faq_q\d+$/ } },
+        { projection: { _id: 0, id: 1, question: 1, category: 1, categoryLabel: 1 } }
+      )
+      .sort({ id: 1 })
+      .toArray();
+
+    res.json({ ok: true, count: faqs.length, faqs });
+  } catch (err) {
+    logger.error(`[FAQ API] ${err.message}`);
+    res.status(500).json({ ok: false, error: 'Failed to fetch FAQs' });
+  }
+});
+
 module.exports = router;
+
